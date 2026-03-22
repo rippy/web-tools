@@ -1,13 +1,17 @@
 import { describe, it, expect } from 'vitest'
 import { cipher, encode, decode } from '../../../docs/tools/rot13/caesar.js'
 
-describe('cipher', () => {
+describe('caesar', () => {
   it('ROT13 encode: Hello → Uryyb', () => {
     expect(encode('Hello', 13)).toBe('Uryyb')
   })
 
   it('ROT13 decode: Uryyb → Hello', () => {
     expect(decode('Uryyb', 13)).toBe('Hello')
+  })
+
+  it('decode with non-13 shift', () => {
+    expect(decode('Bcd', 1)).toBe('Abc')
   })
 
   it('round-trip: decode(encode(text, n), n) === text', () => {

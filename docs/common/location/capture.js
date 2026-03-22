@@ -24,17 +24,9 @@ export async function captureLocation() {
   }
 
   const id = generateId()
+  const name = displayName ?? 'Unknown'
   const now = new Date().toISOString()
-  save({
-    id,
-    name: displayName ?? 'Unknown',
-    lat,
-    lng,
-    firstSeen: now,
-    lastSeen: now,
-    visitCount: 0,
-    visits: [],
-  })
+  save({ id, name, lat, lng, firstSeen: now, lastSeen: now, visitCount: 0, visits: [] })
   recordVisit(id)
-  return { id, name: displayName ?? 'Unknown' }
+  return { id, name }
 }

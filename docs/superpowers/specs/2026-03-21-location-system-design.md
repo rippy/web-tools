@@ -116,7 +116,7 @@ explicit header is set in code.
 
 1. `response.name` if present and non-empty — POI name (e.g. `"The Rusty Nail"`)
 2. `address.road + ", " + address.city` if both present
-3. `response.display_name` hard-truncated at 60 characters (no ellipsis)
+3. `response.display_name` if non-empty — hard-truncated at 60 characters (no ellipsis)
 4. `null`
 
 Returns `null` on any network error or non-200 response.
@@ -130,6 +130,8 @@ CRUD operations for location records, persisted via `state.js`.
 ```js
 getAll()
 // Returns all location records as an array, sorted by lastSeen descending
+// Tie-breaking order for records with equal lastSeen is unspecified;
+//   tests must not rely on the relative order of such records
 // Returns [] if no records exist
 
 get(id)
@@ -263,6 +265,8 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
 - Returns truncated `display_name` (≤ 60 chars) when address fields are missing
 - Returns `null` when fetch throws a network error
 - Returns `null` on non-200 HTTP response
+- Returns `null` when `display_name` is an empty string and other name
+  fields are absent
 
 **`location-store.test.js`**
 

@@ -21,25 +21,33 @@ This sub-project establishes the repository scaffolding, development environment
     state.js                  ← namespaced localStorage helpers
     user-profile.js           ← shared user attributes (gender, weight, age, height)
     export-import.js          ← full state export/import as JSON
-    /location/                ← sub-project 2 (empty placeholder)
+    /location/                ← sub-project 2 (empty, .gitkeep only)
   /tools/
-    /bmr/                     ← placeholder
-    /bac/                     ← placeholder
-    /rot13/                   ← placeholder
-    /flip-text/               ← placeholder
-    /emoji/                   ← placeholder
-    /meals/                   ← placeholder
-    /exercise/                ← placeholder
-    /mood/                    ← placeholder
+    /bmr/                     ← placeholder (.gitkeep only)
+    /bac/                     ← placeholder (.gitkeep only)
+    /rot13/                   ← placeholder (.gitkeep only)
+    /flip-text/               ← placeholder (.gitkeep only)
+    /emoji/                   ← placeholder (.gitkeep only)
+    /meals/                   ← placeholder (.gitkeep only)
+    /exercise/                ← placeholder (.gitkeep only)
+    /mood/                    ← placeholder (.gitkeep only)
 /tests/
   /common/
     state.test.js
     user-profile.test.js
     export-import.test.js
+/.gitignore
 /shell.nix
 /package.json
+/package-lock.json            ← committed for reproducible installs
 /vitest.config.js
 ```
+
+**`.gitignore`** will be created or replaced as part of this sub-project to exclude `node_modules/`, `.DS_Store`, and common editor artifacts (`.vscode/`, `*.swp`, etc.). The existing `.gitignore` in the repo is a Python template and will be replaced with a JS/Node-appropriate one.
+
+`node_modules/` is created at the repo root after `npm install` and is never committed. `package-lock.json` is the version pin mechanism for Node dependencies and is always committed.
+
+**`common/location/`** is placed under `common/` rather than `tools/` because the location system is shared infrastructure used by multiple tools, not a tool itself. It follows the same pattern as `user-profile.js` and `state.js`. Sub-project 2 will populate this directory.
 
 GitHub Pages is configured to serve from `/docs`. The repo lives at `github.com/rippy/web-tools` and is served at `rippy.github.io/web-tools/`. The top-level `rippy.github.io` site links to tools here by URL.
 
@@ -49,9 +57,13 @@ GitHub Pages is configured to serve from `/docs`. The repo lives at `github.com/
 
 **`shell.nix`** provides Node.js via Nix, allowing any machine with Nix installed to enter a working dev environment with `nix-shell` without requiring a globally installed Node. Tested on SteamOS with Nix.
 
-**`package.json`** declares Vitest as a dev dependency and defines a `test` script. Dependencies are installed with `npm install` after entering the Nix shell.
+**`package.json`** declares the following dev dependencies and defines a `test` script:
+- `vitest` — test runner
+- `jsdom` — peer dependency required by Vitest for browser environment simulation; must be installed explicitly
 
-**`vitest.config.js`** configures Vitest to find test files under `/tests/` and to run in Node environment (no browser required for unit tests of pure JS functions).
+Specific versions are pinned via `package-lock.json`. No minimum version is otherwise mandated by this spec.
+
+**`vitest.config.js`** configures Vitest to use the `jsdom` environment for all tests. This provides `localStorage`, `document`, `URL`, `File`, and other browser globals needed by the common modules without requiring a real browser.
 
 ---
 
@@ -63,82 +75,123 @@ Thin wrapper around `localStorage`. All keys are namespaced under `web-tools.*` 
 
 **Interface:**
 ```js
-state.get(toolKey)          // returns parsed object or null
-state.set(toolKey, value)   // serialises and stores
-state.remove(toolKey)       // deletes a key
-state.getAllKeys()           // returns all web-tools.* keys
+state.get(toolKey)          // returns parsed object or null if key absent or JSON parse fails
+state.set(toolKey, value)   // JSON-serialises value and stores under "web-tools.<toolKey>"; overwrites any existing value
+state.remove(toolKey)       // deletes "web-tools.<toolKey>"
+state.getAllKeys()           // returns array of short keys e.g. ["bac", "user-profile"]; returns [] if none exist
 ```
 
-Each tool uses a consistent key (e.g. `web-tools.bac`, `web-tools.user-profile`). The user profile uses `web-tools.user-profile` and is accessed by any tool that needs it.
+`toolKey` is always the short name (e.g. `"bac"`). Internally the stored key is `"web-tools.<toolKey>"`. `getAllKeys()` scans localStorage and returns only keys matching exactly `web-tools.<segment>` where `<segment>` contains no dots — keys like `web-tools.foo.bar` are excluded. Returned values are the short key only (no prefix). Callers always use `state.get(shortKey)` to retrieve values and never access `localStorage` directly.
 
-Cookies are not used as primary storage — localStorage is sufficient for same-device persistence. The export/import mechanism handles cross-device portability.
+The user profile uses short key `"user-profile"` (stored internally as `"web-tools.user-profile"`).
+
+Cookies are not used — localStorage is sufficient for same-device persistence. Export/import handles cross-device portability.
 
 ### `common/user-profile.js`
 
-Stores and retrieves the shared user attributes used by health-related tools (BMR, BAC, meals, exercise).
+Stores and retrieves shared user attributes used by health-related tools (BMR, BAC, meals, exercise).
 
 **Fields:**
-- `gender` — `"male"` | `"female"`
-- `weight` — number (kg)
-- `height` — number (cm)
-- `age` — number (years)
+- `gender` — must be exactly `"male"` or `"female"` (case-sensitive; `"Male"` is invalid and not normalised)
+- `weight` — number, must be > 0 (kg)
+- `height` — number, must be > 0 (cm)
+- `age` — number, must be a positive integer (> 0, no decimals)
 
 **Interface:**
 ```js
-userProfile.get()           // returns profile object or null
-userProfile.set(profile)    // validates and saves
-userProfile.isComplete()    // true if all required fields present
+userProfile.get()           // returns stored profile object or null if not set
+userProfile.set(profile)    // validates all fields; throws TypeError with descriptive message on any invalid input; saves on success
+userProfile.isComplete()    // true if a profile is stored and all four field keys are present with non-null values (presence check only)
 ```
 
-Internally delegates to `state.js` using key `web-tools.user-profile`. Tools that require profile data check `isComplete()` and render an inline profile form if not.
+`set()` throws rather than silently dropping bad input. All four fields are required — partial profiles are rejected. `isComplete()` checks only that the four field keys exist with non-null values and does not re-run type/range validation. This means a profile written via import that bypasses `set()` could pass `isComplete()` with invalid values — this is an accepted limitation. Tools must not assume that `isComplete() === true` implies the values are valid beyond being present. Internally delegates to `state.js` using short key `"user-profile"`.
+
+Tools that require profile data call `isComplete()` on load and render an inline profile form if it returns false.
 
 ### `common/export-import.js`
 
-Collects all `web-tools.*` keys from localStorage into a single JSON object and triggers a browser file download. Import reads a user-selected file, validates that it contains expected keys, and writes values back to localStorage.
+Collects all tool state into a single JSON file for download and restores it from a file on import.
 
 **Interface:**
 ```js
-exportState()               // triggers download of web-tools-export.json
-importState(file)           // returns Promise, resolves on success, rejects on invalid file
+exportState(triggerDownload)   // triggerDownload is an optional positional argument: function(blob, filename)
+importState(file)              // accepts a File object; returns Promise<void>; rejects with Error on invalid input
 ```
 
-Export format:
+`triggerDownload` is an optional positional argument. When passed, it is called with `(blob, filename)` — tests pass a no-op here. When omitted (`exportState()` called with no arguments), the default behavior creates an anchor element, sets its `href` to a Blob URL, and clicks it. The default anchor-click path is not unit-tested (jsdom does not implement `URL.createObjectURL`) — it is verified manually. Unit tests always pass an explicit `triggerDownload` stub.
+
+**Export process:** Calls `state.getAllKeys()` to get all short keys, calls `state.get(key)` for each to retrieve parsed objects, builds the export JSON with those objects as values. Non-object values (strings, numbers, arrays) stored via `state.set` are included as-is in the export — the export does not enforce that values are objects.
+
+**Export format:**
 ```json
 {
-  "exported": "2026-03-21T14:00:00Z",
+  "exported": "2026-03-21T14:00:00.000Z",
   "version": 1,
   "data": {
-    "web-tools.user-profile": { ... },
-    "web-tools.bac": { ... }
+    "user-profile": { "gender": "male", "weight": 80, "height": 178, "age": 35 },
+    "bac": { ... }
   }
 }
 ```
 
-The `version` field allows future migrations if the format changes.
+The `exported` field is generated with `new Date().toISOString()`. Keys in `data` are short keys (no `web-tools.` prefix).
+
+**Import process:** Reads the file as text, parses JSON, validates, then calls `state.set(shortKey, value)` for each accepted key in `data`. Import overwrites any existing localStorage values unconditionally. Values are passed to `state.set` as-is — per-key value validation is out of scope. Non-object values (strings, numbers, arrays) stored in the export are written back unchanged.
+
+**Import validation rules:**
+- File must be valid JSON — reject with `Error` if parse fails
+- `version` must be present and exactly `1` — reject with `Error` if absent or any other value
+- `data` must be a non-null object — reject with `Error` if absent or not an object
+- `exported` field is ignored during import
+- Only keys in `data` matching `^[a-z0-9-]+$` are written; all others are silently ignored
+- An empty `data` object is valid and results in no writes
+
+**Version migration:** Version 1 is the initial format. Future format changes add a migration function. Any version other than `1` is rejected outright.
 
 ---
 
 ## Landing Page
 
-`docs/index.html` is a minimal styled page listing all tools with links. Tools not yet implemented show as disabled/greyed links. No framework — plain HTML and CSS.
+`docs/index.html` is a minimal styled page listing all tools with links. Implemented tools link to relative paths (e.g. `./tools/bac/`). Tools not yet implemented are rendered as `<span>` elements (not anchor tags) styled to appear greyed-out. The landing page is not unit tested — its correctness is verified manually via GitHub Pages.
 
 ---
 
 ## Testing
 
-Vitest runs in Node environment against the three common modules. Tests cover:
+All tests use Vitest with `jsdom` environment. Each test file clears `localStorage` in a `beforeEach` hook to prevent state from bleeding between tests.
 
-- `state.test.js` — get/set/remove/getAllKeys, namespacing, null returns for missing keys
-- `user-profile.test.js` — get/set, isComplete logic, validation of field types
-- `export-import.test.js` — export JSON shape, version field, import round-trip, rejection of malformed input
+Tests cover:
 
-Tool implementations are not tested in this sub-project.
+- **`state.test.js`**
+  - `get`/`set`/`remove`/`getAllKeys` basic behavior
+  - `set` overwrites an existing key silently
+  - Key namespacing: `set("bac", ...)` stores under `"web-tools.bac"`; `getAllKeys()` returns `["bac"]` not `["web-tools.bac"]`
+  - `get` returns null for absent key
+  - `getAllKeys` returns `[]` when no `web-tools.*` keys exist
+  - `getAllKeys` excludes keys with multiple segments (e.g. `web-tools.foo.bar` is not returned)
+  - `get` returns null when stored value is not valid JSON (simulated by writing directly via `localStorage.setItem("web-tools.foo", "not-json")`, bypassing `state.set`)
+
+- **`user-profile.test.js`**
+  - `get`/`set` round-trip
+  - `isComplete` returns false when no profile stored, true after valid `set`
+  - `isComplete` returns true if all four keys are present even with invalid values (presence-only — accepted limitation)
+  - `set` throws for invalid gender (wrong string, wrong case)
+  - `set` throws for non-positive weight, height, age
+  - `set` throws for non-integer age
+  - `set` throws when any required field is missing
+
+- **`export-import.test.js`**
+  - Exported JSON contains `version: 1`, `exported` matching ISO 8601 pattern (`/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/`), and correct `data` keys
+  - Import round-trip: set state → export (with stub) → clear localStorage → import → verify state restored
+  - Import rejects non-JSON content with `Error`
+  - Import rejects wrong version number with `Error`
+  - Import rejects missing `data` field with `Error`
+  - Import silently ignores keys in `data` not matching `^[a-z0-9-]+$`
+  - Import overwrites existing values unconditionally
 
 ---
 
 ## Out of Scope
-
-The following are explicitly deferred to later sub-projects:
 
 - `common/location/` — location system (sub-project 2)
 - All tool implementations — BMR, BAC, rot13, flip-text, emoji, meals, exercise, mood (sub-projects 3+)
@@ -148,7 +201,7 @@ The following are explicitly deferred to later sub-projects:
 
 ## Success Criteria
 
-- `nix-shell` drops into an environment where `npm test` works
+- `nix-shell` drops into an environment where `npm test` runs and all tests pass
 - All three common modules have passing unit tests
-- `docs/index.html` is reachable via GitHub Pages
-- Export produces valid JSON; import round-trips cleanly
+- `docs/index.html` is reachable via GitHub Pages at `rippy.github.io/web-tools/`
+- Export produces valid JSON; import round-trips cleanly in automated tests

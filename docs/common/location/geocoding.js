@@ -6,7 +6,7 @@ export async function reverseGeocode({ lat, lng }) {
     if (!res.ok) return null
     const data = await res.json()
 
-    if (data.name && data.name.length > 0) {
+    if (data.name) {
       return data.name
     }
 
@@ -14,7 +14,7 @@ export async function reverseGeocode({ lat, lng }) {
       return `${data.address.road}, ${data.address.city}`
     }
 
-    if (data.display_name && data.display_name.length > 0) {
+    if (data.display_name) {
       return data.display_name.substring(0, 60)
     }
 

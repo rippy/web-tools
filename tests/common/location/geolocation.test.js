@@ -1,11 +1,7 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, afterEach, vi } from 'vitest'
 import { getCurrentPosition } from '../../../docs/common/location/geolocation.js'
 
 describe('getCurrentPosition', () => {
-  beforeEach(() => {
-    localStorage.clear()
-  })
-
   afterEach(() => {
     vi.unstubAllGlobals()
   })

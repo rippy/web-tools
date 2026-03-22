@@ -288,7 +288,9 @@ function renderHistory() {
     const dateStr = new Date(session.startedAt).toLocaleDateString('en-US', {
       month: 'short', day: 'numeric', year: 'numeric',
     })
-    const peak = peakBAC(session.drinks, session.weightKg, session.biologicalSex).toFixed(3)
+    const peak = (session.weightKg && session.biologicalSex)
+      ? peakBAC(session.drinks, session.weightKg, session.biologicalSex).toFixed(3)
+      : '—'
     const count = session.drinks.length
 
     const li = document.createElement('li')
@@ -307,7 +309,12 @@ function renderHistory() {
       const row = document.createElement('div')
       row.className = 'history-drink-row'
       const time = formatHoursToHHMM(0, Date.parse(drink.loggedAt))
-      row.innerHTML = `<span>${DRINK_EMOJI[drink.type]} ${drink.brand}${drink.isDouble ? ' (double)' : ''}</span><span style="color:#868e96">${time}</span>`
+      const nameSpan = document.createElement('span')
+      nameSpan.textContent = `${DRINK_EMOJI[drink.type] ?? ''} ${drink.brand}${drink.isDouble ? ' (double)' : ''}`
+      const timeSpan = document.createElement('span')
+      timeSpan.style.color = '#868e96'
+      timeSpan.textContent = time
+      row.append(nameSpan, timeSpan)
       drinkList.appendChild(row)
     }
 

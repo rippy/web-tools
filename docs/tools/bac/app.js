@@ -100,6 +100,8 @@ function onSaveProfile() {
 }
 
 function showTool() {
+  sectionProfilePrompt.hidden = true
+  divTool.hidden = false
   applyAutoClose()
   wireEvents()
   renderAll()

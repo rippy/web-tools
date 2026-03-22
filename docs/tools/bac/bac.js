@@ -18,7 +18,7 @@ export const BAC_LEVELS = [
   { min: 0.30, max: 0.35, description: 'Complete loss of consciousness. Equivalent to surgical anesthesia. Medical emergency, risk of sudden death.' },
   { min: 0.36, max: Infinity, description: 'Coma likely. Respiratory arrest and death are probable. This is a lethal BAC level.' },
 ]
-export const DRINK_EMOJI = {}
+export const DRINK_EMOJI = { shot: '🥃', cocktail: '🍹', beer: '🍺', cider: '🍎', wine: '🍷' }
 
 export function alcoholGrams(volumeMl, abv) {
   return volumeMl * abv * 0.789

@@ -51,6 +51,10 @@ export async function importState(file) {
     throw new Error('Import failed: missing or invalid "data" field')
   }
 
+  // Additive: only keys present in the file are written.
+  // Keys already in localStorage but absent from the file are left untouched.
+  // This is a merge/overlay, not a restore. Tools that need a clean restore
+  // should call localStorage.clear() before importState().
   for (const [key, value] of Object.entries(parsed.data)) {
     if (KEY_PATTERN.test(key)) {
       set(key, value)

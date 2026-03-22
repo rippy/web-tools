@@ -32,6 +32,8 @@ export function set(profile) {
     throw new TypeError('pronouns must be a non-empty string if provided')
   }
 
+  // Explicit allowlist: only known fields are persisted.
+  // To add a new profile field, add it to both the destructuring above and here.
   const data = { biologicalSex, weight, height, age }
   if (genderIdentity !== undefined) data.genderIdentity = genderIdentity
   if (pronouns !== undefined) data.pronouns = pronouns

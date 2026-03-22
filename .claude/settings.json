@@ -1,0 +1,19 @@
+{
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // .tool_response.filePath'); echo \"$f\" | grep -q '\\.md$' && npx markdownlint-cli2 \"$f\" 2>&1 || true",
+            "statusMessage": "Linting markdown..."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -16,7 +16,7 @@ A simple Caesar cipher tool. The user types or pastes text into a single textare
 Follows the same three-file pattern as the BMR tool:
 
 | File | Purpose |
-|---|---|
+| --- | --- |
 | `docs/tools/rot13/caesar.js` | Pure cipher functions — no DOM, no side effects |
 | `docs/tools/rot13/app.js` | DOM wiring and localStorage persistence via `state.js` |
 | `docs/tools/rot13/index.html` | HTML structure and inline CSS |
@@ -37,6 +37,7 @@ decode(text, shift)   // cipher(text, -shift)
 Shift normalisation: `((shift % 26) + 26) % 26` — handles negative values and values ≥ 26 correctly, so `decode` is implemented simply as `cipher(text, -shift)` with no special casing.
 
 Character handling:
+
 - Uppercase A–Z: shifted within `A`–`Z`
 - Lowercase a–z: shifted within `a`–`z`
 - All other characters (digits, punctuation, spaces): passed through unchanged
@@ -48,21 +49,24 @@ Character handling:
 **Element IDs:**
 
 | Element | ID |
-|---|---|
+| --- | --- |
 | Shift number input | `input-shift` |
 | Main textarea | `input-text` |
 | Encode button | `btn-encode` |
 | Decode button | `btn-decode` |
 
 **On load:**
+
 - Read stored object via `state.get('rot13')`; extract shift with `stored?.shift ?? 13`
 - Populate `#input-shift` with that value
 
 **On shift input (`input` event on `#input-shift`):**
+
 - Parse the value as an integer with `parseInt`
 - Only call `state.set('rot13', { shift: n })` if `Number.isFinite(n)` — skip saving if the field is empty or mid-edit invalid
 
 **Shift validation (before Encode / Decode):**
+
 - Read `#input-shift` as an integer with `parseInt`
 - If `Number.isFinite(n)` is false (empty field, non-numeric), fall back to `13`
 - Otherwise clamp: `Math.min(25, Math.max(1, Math.round(n)))`
@@ -70,10 +74,12 @@ Character handling:
 - Then proceed with the resolved shift
 
 **Encode button (`#btn-encode`):**
+
 - Read textarea content and current (clamped) shift
 - Replace textarea content with `encode(text, shift)`
 
 **Decode button (`#btn-decode`):**
+
 - Read textarea content and current (clamped) shift
 - Replace textarea content with `decode(text, shift)`
 
@@ -81,7 +87,7 @@ Character handling:
 
 ## HTML Layout (`index.html`)
 
-```
+```text
 ← Back to Tools        (link to ../../index.html)
 
 Caesar Cipher / ROT13  (h1)
@@ -113,7 +119,7 @@ Stored under the `rot13` key in `state.js`:
 ## Testing (`caesar.test.js`)
 
 | Test | What it checks |
-|---|---|
+| --- | --- |
 | ROT13 encode | `encode("Hello", 13)` → `"Uryyb"` |
 | ROT13 decode | `decode("Uryyb", 13)` → `"Hello"` |
 | Round-trip | `decode(encode(text, n), n)` equals original for arbitrary shift |

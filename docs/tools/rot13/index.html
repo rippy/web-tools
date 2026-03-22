@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caesar Cipher / ROT13</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 520px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: #212529;
+    }
+    a.back { color: #0070f3; text-decoration: none; font-size: 0.9rem; }
+    a.back:hover { text-decoration: underline; }
+    h1 { margin: 0.5rem 0 1.5rem; }
+
+    .field-label {
+      display: block;
+      font-size: 0.7rem;
+      color: #868e96;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.03em;
+    }
+    input[type=number] {
+      width: 5rem;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    .shift-row { margin-bottom: 1rem; }
+
+    textarea {
+      width: 100%;
+      min-height: 160px;
+      padding: 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      margin-bottom: 0.75rem;
+    }
+    .btn-row { display: flex; gap: 0.5rem; }
+    button {
+      flex: 1;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #0070f3;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button:hover { background: #005fd1; }
+  </style>
+</head>
+<body>
+  <a class="back" href="../../index.html">← Back to Tools</a>
+  <h1>Caesar Cipher / ROT13</h1>
+
+  <div class="shift-row">
+    <label class="field-label" for="input-shift">Shift</label>
+    <input type="number" id="input-shift" min="1" max="25" value="13">
+  </div>
+
+  <textarea id="input-text" placeholder="Type or paste text here…"></textarea>
+
+  <div class="btn-row">
+    <button id="btn-encode">Encode</button>
+    <button id="btn-decode">Decode</button>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

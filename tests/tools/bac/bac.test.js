@@ -99,3 +99,26 @@ describe('formatHoursToHHMM', () => {
     expect(formatHoursToHHMM(1, base)).toBe('12:00 PM')
   })
 })
+
+describe('peakBAC', () => {
+  const T0 = new Date('2026-03-22T20:00:00').getTime()
+  const beer = (t) => ({ loggedAt: new Date(t).toISOString(), volumeMl: 355, abv: 0.05, type: 'beer', brand: 'house', isDouble: false })
+
+  it('returns 0 when drinks is empty', () => {
+    expect(peakBAC([], 80, 'male')).toBe(0)
+  })
+
+  it('equals calculateBAC with nowMs = firstDrinkMs (hoursElapsed = 0)', () => {
+    const drinks = [beer(T0), beer(T0)]
+    // hoursElapsed = 0 → no burn-off
+    // 28.0095 / (80 × 0.68 × 10) ≈ 0.051488
+    const expected = calculateBAC(drinks, 80, 'male', T0)
+    expect(peakBAC(drinks, 80, 'male')).toBeCloseTo(expected, 6)
+  })
+
+  it('uses first drink timestamp even when drinks have different times', () => {
+    const drinks = [beer(T0), beer(T0 + 3_600_000)]
+    // peakBAC always uses firstDrinkMs → hoursElapsed = 0
+    expect(peakBAC(drinks, 80, 'male')).toBeCloseTo(calculateBAC(drinks, 80, 'male', T0), 6)
+  })
+})

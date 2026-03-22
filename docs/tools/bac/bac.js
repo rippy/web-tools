@@ -33,7 +33,10 @@ export function formatHoursToHHMM(hours, baseMs = Date.now()) {
   const h12 = h % 12 || 12
   return `${h12}:${String(m).padStart(2, '0')} ${ampm}`
 }
-export function peakBAC(drinks, weightKg, biologicalSex) { throw new Error('not implemented') }
+export function peakBAC(drinks, weightKg, biologicalSex) {
+  if (drinks.length === 0) return 0
+  return calculateBAC(drinks, weightKg, biologicalSex, Date.parse(drinks[0].loggedAt))
+}
 export function drinkDefaults(type, isDouble) { throw new Error('not implemented') }
 export function getBACDescription(bac) { throw new Error('not implemented') }
 export function getBrandSuggestions(type, partialBrand, sessions) { throw new Error('not implemented') }

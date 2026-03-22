@@ -144,6 +144,7 @@ save(record)
 // On update: replaces the existing record entirely
 
 findNearby({lat, lng}, radiusM)
+// Precondition: lat and lng arguments must be non-null numbers
 // Returns the closest location record whose lat/lng is within radiusM metres
 // Records with lat: null or lng: null are skipped during distance calculation
 // If two records are equidistant, returns either one (order not guaranteed)
@@ -262,7 +263,11 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
 - Returns POI name when `response.name` is non-empty
 - Returns `"road, city"` when `name` is empty but `address.road` and
   `address.city` are present
+- Returns `"road, city"` (from `address.road` and `address.city`) when
+  `response.name` is an empty string
 - Returns truncated `display_name` (≤ 60 chars) when address fields are missing
+- Returns truncated `display_name` when `address.road` is present but
+  `address.city` is absent (partial address falls through to step 3)
 - Returns `null` when fetch throws a network error
 - Returns `null` on non-200 HTTP response
 - Returns `null` when `display_name` is an empty string and other name

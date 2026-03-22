@@ -316,12 +316,22 @@ function renderHistory() {
     })
     const li = document.createElement('li')
     li.className = 'history-row'
-    li.innerHTML = `
-      <span class="history-date">${dateStr}</span>
-      <span class="history-values">BMR <strong>${snap.bmr.toLocaleString()}</strong> · TDEE <strong>${snap.tdee.toLocaleString()}</strong></span>
-      <button class="btn-delete" aria-label="Delete snapshot">✕</button>
-    `
-    li.querySelector('.btn-delete').addEventListener('click', () => onDeleteSnapshot(snap.id))
+
+    const dateSpan = document.createElement('span')
+    dateSpan.className = 'history-date'
+    dateSpan.textContent = dateStr
+
+    const valuesSpan = document.createElement('span')
+    valuesSpan.className = 'history-values'
+    valuesSpan.textContent = `BMR ${snap.bmr.toLocaleString()} · TDEE ${snap.tdee.toLocaleString()}`
+
+    const delBtn = document.createElement('button')
+    delBtn.className = 'btn-delete'
+    delBtn.setAttribute('aria-label', 'Delete snapshot')
+    delBtn.textContent = '✕'
+    delBtn.addEventListener('click', () => onDeleteSnapshot(snap.id))
+
+    li.append(dateSpan, valuesSpan, delBtn)
     listHistory.appendChild(li)
   }
 }

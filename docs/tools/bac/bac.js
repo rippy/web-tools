@@ -60,7 +60,7 @@ export function drinkDefaults(type, isDouble) {
   return { volumeMl, abv: preset.abv }
 }
 export function getBACDescription(bac) {
-  const level = BAC_LEVELS.find(l => bac >= l.min && bac <= l.max)
+  const level = [...BAC_LEVELS].reverse().find(l => bac >= l.min)
   return level ? level.description : null
 }
 export function getBrandSuggestions(type, partialBrand, sessions) { throw new Error('not implemented') }

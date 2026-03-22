@@ -178,4 +178,8 @@ describe('getBACDescription', () => {
     expect(getBACDescription(0.40)).toContain('Coma likely')
     expect(getBACDescription(0.99)).toContain('Coma likely')
   })
+
+  it('returns nearest lower level for values in inter-level gaps', () => {
+    expect(getBACDescription(0.055)).toContain('Mild relaxation')  // gap between level 1 (0.01-0.05) and level 2 (0.06-0.09)
+  })
 })

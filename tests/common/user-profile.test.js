@@ -55,6 +55,14 @@ describe('userProfile', () => {
     expect(userProfile.isIdentityComplete()).toBe(true)
   })
 
+  it('isIdentityComplete returns false when only one identity field is present', () => {
+    // bypass set() since it writes both fields together; test one-field partial state
+    localStorage.setItem('web-tools.user-profile', JSON.stringify({
+      biologicalSex: 'male', weight: 80, height: 178, age: 35, genderIdentity: 'Non-binary',
+    }))
+    expect(userProfile.isIdentityComplete()).toBe(false)
+  })
+
   it('set throws TypeError for wrong biologicalSex string', () => {
     expect(() => userProfile.set({ ...validPhysio, biologicalSex: 'other' }))
       .toThrow(TypeError)

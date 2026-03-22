@@ -59,13 +59,15 @@ Character handling:
 - Populate `#input-shift` with that value
 
 **On shift input (`input` event on `#input-shift`):**
-- Parse the value as an integer
-- Save via `state.set('rot13', { shift: n })`
+- Parse the value as an integer with `parseInt`
+- Only call `state.set('rot13', { shift: n })` if `Number.isFinite(n)` — skip saving if the field is empty or mid-edit invalid
 
-**Shift validation:**
-- Before encoding or decoding, read `#input-shift` as an integer
-- If the value is not a finite integer in 1–25, clamp it: `Math.min(25, Math.max(1, Math.round(value)))`, update the input display, and save the clamped value
-- Then proceed with the (clamped) shift
+**Shift validation (before Encode / Decode):**
+- Read `#input-shift` as an integer with `parseInt`
+- If `Number.isFinite(n)` is false (empty field, non-numeric), fall back to `13`
+- Otherwise clamp: `Math.min(25, Math.max(1, Math.round(n)))`
+- Update `#input-shift` display to the resolved value and save it via `state.set`
+- Then proceed with the resolved shift
 
 **Encode button (`#btn-encode`):**
 - Read textarea content and current (clamped) shift
@@ -132,7 +134,7 @@ No DOM, no localStorage — tests import `caesar.js` directly.
 
 ## Home Page Activation
 
-As part of this task, `docs/index.html` line 30 must be updated to replace the `<span>Caesar Cipher / ROT13</span>` with an `<a href="tools/rot13/index.html">Caesar Cipher / ROT13</a>` link, consistent with how the BMR tool was activated.
+As part of this task, `docs/index.html` must be updated to replace the `<span>Caesar Cipher / Rot13</span>` with an `<a href="tools/rot13/index.html">Caesar Cipher / Rot13</a>` link, consistent with how the BMR tool was activated.
 
 ---
 

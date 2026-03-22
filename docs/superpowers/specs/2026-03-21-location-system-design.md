@@ -103,12 +103,14 @@ reverseGeocode({lat, lng})
 
 ```text
 GET https://nominatim.openstreetmap.org/reverse?format=json&lat={lat}&lon={lng}
-User-Agent: web-tools/1.0 (rippy.github.io/web-tools)
 ```
 
-Per Nominatim's usage policy: one request per second maximum; `User-Agent`
-header required. Our use case (one request per recorded event) is well within
-this limit.
+Per Nominatim's usage policy: one request per second maximum. Our use case
+(one request per recorded event) is well within this limit. Nominatim's policy
+requires a `User-Agent` header, but browsers treat `User-Agent` as a forbidden
+header name and silently drop it from `fetch()` calls. The browser's default
+`User-Agent` is sent automatically and satisfies the policy in practice — no
+explicit header is set in code.
 
 **Name resolution priority:**
 
@@ -145,9 +147,10 @@ findNearby({lat, lng}, radiusM)
 // Uses Haversine formula for distance calculation
 
 recordVisit(id)
-// Appends current ISO timestamp to visits[]
+// Calls new Date().toISOString() once to get a single timestamp
+// Appends that timestamp to visits[]
 // Increments visitCount by 1
-// Updates lastSeen to current ISO timestamp
+// Sets lastSeen to that same timestamp
 // No-op if id does not exist
 ```
 
@@ -175,8 +178,11 @@ captureLocation()
    a. Call `reverseGeocode({lat, lng})` → `displayName` (or `null`)
    b. Call `findNearby({lat, lng}, 100)` → existing record or `null`
    c. If existing: call `recordVisit(existing.id)` → return `{id, name}`
-   d. If new: generate id, `save({id, name: displayName ?? "Unknown", lat, lng,
-      firstSeen, lastSeen, visitCount: 0, visits: []})` →
+      (the stored `name` is **not** updated on revisit — it keeps the name
+      from first visit)
+   d. If new: let `now = new Date().toISOString()`; generate id;
+      `save({id, name: displayName ?? "Unknown", lat, lng,
+      firstSeen: now, lastSeen: now, visitCount: 0, visits: []})` →
       `recordVisit(id)` → return `{id, name}`
 3. If GPS fails: return `null`
 
@@ -246,7 +252,6 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
 - Returns truncated `display_name` (≤ 60 chars) when address fields are missing
 - Returns `null` when fetch throws a network error
 - Returns `null` on non-200 HTTP response
-- Sends correct `User-Agent` header
 
 **`location-store.test.js`**
 
@@ -269,7 +274,8 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
   a nearby known location
 - Returns `null` when GPS fails
 - New location gets name `"Unknown"` when geocoding returns `null`
-- `recordVisit` is called exactly once on successful capture
+- After successful capture of a new location, `visitCount` equals 1 and
+  `visits` has one entry
 
 ---
 

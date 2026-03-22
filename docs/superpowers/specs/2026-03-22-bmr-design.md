@@ -45,25 +45,51 @@ This sub-project updates the shared `user-profile` state key and
    when absent). This is a display preference only — it never affects stored
    values.
 
+### Migration
+
+Existing stored data uses the old field names (`weight`, `height`). Migration
+runs at the top of the `get()` function: read the raw value from
+`state.get('user-profile')`; if it contains a `weight` or `height` field,
+copy those values to `weightKg` / `heightCm` (respectively), delete the old
+keys, and persist the updated record via `state.set`. If both old and new
+field names are present simultaneously (e.g. partial prior migration), the new
+names take priority — old names are deleted without overwriting the new values.
+Migration operates field-by-field: a record missing either `weight` or
+`height` (old) and also missing the corresponding new name simply has no value
+for that field after migration — no defaulting occurs. Migration is a no-op
+when no stored profile exists or when neither old field name is present. After migration completes, `get()` returns the migrated record. The existing
+`isComplete()` implementation calls `stateGet(KEY)` directly — this must be
+changed to call the module-level `get()` instead, so migration always runs
+before the completeness check. A stored record with only old `weight`/`height`
+fields will be migrated to `weightKg`/`heightCm` before `isComplete()` checks
+them — if both values are positive numbers, `isComplete()` returns `true`. No
+migration is needed for users with no stored profile.
+
 ### Updated `user-profile.js` interface
 
 The public API of `user-profile.js` is unchanged (`get`, `set`, `isComplete`,
-`isIdentityComplete`). The `set()` function accepts the new field names:
+`isIdentityComplete`). `isIdentityComplete()` only checks `genderIdentity` and
+`pronouns`, which are not affected by the field rename — it may continue to
+read state directly without triggering migration. The `set()` function accepts
+the new field names and validates them:
 
 ```js
 userProfile.set({
-  biologicalSex: 'male' | 'female',  // unchanged
-  weightKg: number,                   // positive number, stored in kg
-  heightCm: number,                   // positive number, stored in cm
-  age: number,                        // positive integer, unchanged
-  units: 'metric' | 'imperial',       // optional, defaults absent
+  biologicalSex: 'male' | 'female',  // required; throws TypeError if invalid or absent
+  weightKg: number,                   // required positive number; throws TypeError if ≤ 0, non-number, or absent
+  heightCm: number,                   // required positive number; throws TypeError if ≤ 0, non-number, or absent
+  age: number,                        // required positive integer; throws TypeError if invalid or absent
+  units: 'metric' | 'imperial',       // optional; throws TypeError if present but not one of these values;
+                                      // persisted in the stored record when provided
   genderIdentity: string,             // optional, unchanged
   pronouns: string,                   // optional, unchanged
 })
 ```
 
 `isComplete()` checks `weightKg` and `heightCm` (renamed from `weight` and
-`height`).
+`height`). Because `isComplete()` calls `get()` which runs migration, old
+`weight`/`height` fields are always converted to `weightKg`/`heightCm` before
+the completeness check; a previously-saved profile is not lost after the rename.
 
 ---
 
@@ -89,7 +115,7 @@ userProfile.set({
   tdee: number,                 // calculated TDEE (calories/day)
   targetWeightKg: number | null, // null if no target entered
   dailyDeficitCal: number | null, // null if no target entered
-  weeksToGoal: number | null,   // null if no target entered or target >= current
+  weeksToGoal: number | null,   // null if: no target entered, target >= current, or deficit is not a finite positive number
 }
 ```
 
@@ -108,16 +134,25 @@ calculateBMR({ biologicalSex, weightKg, heightCm, age })
 // Returns BMR in calories/day using Mifflin-St Jeor formula
 // Male:   10 × weightKg + 6.25 × heightCm − 5 × age + 5
 // Female: 10 × weightKg + 6.25 × heightCm − 5 × age − 161
+// No input validation — if biologicalSex is neither 'male' nor 'female', NaN
+// propagates. Callers must ensure valid inputs (user-profile.js validates on set).
 
 calculateTDEE(bmr, activityLevel)
 // Returns TDEE in calories/day = bmr × activityMultiplier
 // activityLevel must be one of the keys in ACTIVITY_LEVELS
+// Throws TypeError if activityLevel is not a valid key
+
+CALORIES_PER_KG_FAT = 7700  // exported constant (kcal per kg of body fat)
 
 calculateDeficit(currentWeightKg, targetWeightKg, dailyDeficitCal)
 // Returns { kgToLose: number, weeksToGoal: number }
 // Returns null if targetWeightKg >= currentWeightKg
+// Returns null if either weight argument is not a finite positive number
+// Returns null if dailyDeficitCal is not a finite positive number (≤ 0, NaN, or Infinity)
 // kgToLose   = currentWeightKg − targetWeightKg
-// weeksToGoal = (kgToLose × 7700) / (dailyDeficitCal × 7)
+// weeksToGoal = (kgToLose × CALORIES_PER_KG_FAT) / (dailyDeficitCal × 7)
+// Example: currentWeightKg=90, targetWeightKg=80, dailyDeficitCal=500
+//          → kgToLose=10, weeksToGoal=(10×7700)/(500×7)=22
 
 kgToLbs(kg)        // kg × 2.20462
 lbsToKg(lbs)       // lbs / 2.20462
@@ -126,7 +161,10 @@ inchesToCm(inches) // inches × 2.54
 cmToFeetAndInches(cm)
 // Returns { feet: number, inches: number }
 // e.g. cmToFeetAndInches(180.3) → { feet: 5, inches: 11 }
-// inches is rounded to nearest whole number; feet is floored
+// feet = Math.floor(totalInches / 12)
+// inches = Math.round(totalInches % 12)
+// If rounded inches === 12, carry: feet += 1, inches = 0
+// e.g. cmToFeetAndInches(182.9) → { feet: 6, inches: 0 } (182.9 cm ≈ 71.97 in → 5 ft 11.97 in → carry to 6 ft 0 in)
 ```
 
 **Activity levels** (exported as `ACTIVITY_LEVELS` object):
@@ -148,15 +186,41 @@ DOM controller. No unit tests. Responsibilities:
 
 - On load: read `user-profile` via `userProfile.get()`; if incomplete, render
   the profile form; if complete, render pre-filled profile display
-- Units toggle: reads/writes `units` field on profile; reconverts all displayed
-  values without recalculating BMR
+- Units toggle: writes `units` to profile only when `userProfile.isComplete()`
+  is true AND all required form fields currently pass the same validation
+  criteria as `userProfile.set()` (i.e. biologicalSex is valid, weightKg and
+  heightCm are positive numbers, age is a positive integer). If either
+  condition fails, the toggle updates in-memory display state only and `units`
+  is persisted together with the other fields on next form submit. Reconversion
+  reads from the current live form values (not the stored profile), converting
+  them to the new unit. When the form is pre-filled from a stored profile and
+  unchanged, stored and form values are identical.
 - Calculate button: runs `calculateBMR` + `calculateTDEE`, renders results
   section, enables Save button
 - Target weight inputs: runs `calculateDeficit` reactively on each change;
   shows/hides the projection block
-- Save snapshot: appends a snapshot to `bmr-history` via `state.set`
-- History: renders `bmr-history` entries on load and after each save; supports
-  per-row delete
+- Save snapshot: reads the current form/result state and appends a snapshot to
+  `bmr-history` via `state.set`. Snapshot field rules:
+  - If target weight field is **empty**: `targetWeightKg`, `dailyDeficitCal`,
+    and `weeksToGoal` are all stored as `null`.
+  - If target weight field has a value **< current weight** and deficit is
+    positive: store `targetWeightKg` as the entered value converted to kg
+    (apply `lbsToKg` if display units are imperial), `dailyDeficitCal` as the
+    current deficit input value, and `weeksToGoal` as computed.
+  - If target weight field has a value **< current weight** but the deficit
+    input is empty or zero: the deficit input being empty is treated the same
+    as the target weight field being empty — store `targetWeightKg`,
+    `dailyDeficitCal`, and `weeksToGoal` all as `null`. A deficit of 0
+    (explicitly entered) stores `dailyDeficitCal: 0` and `weeksToGoal: null`.
+    The Save button is not disabled by an invalid deficit. `app.js` parses the
+    deficit input with `parseFloat`; an empty string produces `NaN` which is
+    treated as "not entered" (null).
+  - If target weight field has a value **≥ current weight**: store
+    `targetWeightKg` as the entered value converted to kg, `dailyDeficitCal`
+    as the current deficit input value, and `weeksToGoal` as `null`.
+- History: renders `bmr-history` entries on load and after each save; each row
+  shows date (formatted as "Mon D, YYYY" in the user's local timezone using
+  `toLocaleDateString`), BMR value, and TDEE value. Supports per-row delete.
 
 ### `index.html`
 
@@ -178,8 +242,11 @@ Sections in order:
 3. **Goal Weight** (optional) — target weight input and daily deficit input
    (defaults to 500 cal). Projection block (`Lose X lbs in Y weeks`) appears
    when target weight < current weight.
-4. **History** — list of saved snapshots showing date, BMR, TDEE. Delete
-   button per row. Shows "No snapshots yet" when empty.
+4. **History** — list of saved snapshots showing date, BMR (cal/day), and TDEE
+   (cal/day). Weight and height are stored in the snapshot but are NOT
+   displayed in history rows. All snapshots display identically regardless of
+   whether a goal weight was saved. Delete button per row. Shows "No snapshots
+   yet" when empty.
 
 ---
 
@@ -190,10 +257,11 @@ Display units are controlled by `profile.units`:
 - **Metric:** weight in kg, height in cm
 - **Imperial:** weight in lbs, height as ft + in (integer feet, rounded inches)
 
-The units toggle updates `profile.units` via `userProfile.set()` and
-immediately reconverts all displayed numbers. Stored values (`weightKg`,
-`heightCm`) are always metric. When reading user input, `app.js` converts to
-metric before calling `userProfile.set()` or `calculateBMR()`.
+Stored values (`weightKg`, `heightCm`) are always metric. When reading user
+input, `app.js` converts to metric before calling `userProfile.set()` or
+`calculateBMR()`. The units toggle immediately reconverts all displayed
+numbers; see `app.js` responsibilities above for when the `units` value is
+persisted.
 
 Height in imperial is split into two fields: feet and inches (both integers).
 Internally stored as total centimetres.
@@ -218,25 +286,47 @@ Internally stored as total centimetres.
 
 - `calculateBMR` returns correct value for male inputs (known reference value)
 - `calculateBMR` returns correct value for female inputs (known reference value)
+- `calculateBMR` has no input validation — callers are responsible for passing
+  valid values (validation lives in `app.js` and `user-profile.js`)
 - `calculateTDEE` returns `bmr × 1.55` for `'moderate'` activity level
 - `calculateTDEE` returns correct multiplier for each of the five activity levels
-- `calculateDeficit` returns correct `kgToLose` and `weeksToGoal`
+- `calculateTDEE` throws `TypeError` when `activityLevel` is not a valid key
+- `calculateDeficit` returns correct `kgToLose` and `weeksToGoal` (e.g. 90 kg → 80 kg at 500 cal/day deficit → kgToLose=10, weeksToGoal=22)
 - `calculateDeficit` returns `null` when `targetWeightKg >= currentWeightKg`
 - `calculateDeficit` returns `null` when `targetWeightKg === currentWeightKg`
+- `calculateDeficit` returns `null` when `dailyDeficitCal` is 0
+- `calculateDeficit` returns `null` when `dailyDeficitCal` is negative
+- `calculateDeficit` returns `null` when `dailyDeficitCal` is `Infinity`
+- `calculateDeficit` returns `null` when a weight argument is non-finite (e.g. `NaN`)
 - `kgToLbs` / `lbsToKg` round-trip within floating-point tolerance
 - `cmToInches` / `inchesToCm` round-trip within floating-point tolerance
 - `cmToFeetAndInches` returns correct `{feet, inches}` for a known value
 - `cmToFeetAndInches` rounds inches correctly (e.g. 179.7 cm → 5 ft 11 in)
+- `cmToFeetAndInches` carries when rounded inches reach 12 (e.g. 182.9 cm → 6 ft 0 in)
 
 **`docs/common/user-profile.js` — updated tests**
-(`tests/common/user-profile.test.js` is updated to reflect the renamed fields):
+(`tests/common/user-profile.test.js` is updated to reflect the renamed fields)
 
-- `set` / `get` round-trip with `weightKg` and `heightCm`
-- `isComplete` checks `weightKg` and `heightCm` (not old `weight`/`height`)
+**Existing tests to update (field names change, logic unchanged):**
+
+- `validPhysio` fixture: rename `weight: 80` → `weightKg: 80`, `height: 178` → `heightCm: 178`
+- "set and get round-trip with physiological fields only" — updated fixture covers this
+- "isComplete is presence-only" bypass test: update inline JSON to use `weightKg`/`heightCm`
+- "set throws TypeError for non-positive weight" → rename to `weightKg`, test `weightKg: 0` and `weightKg: -1`
+- "set throws TypeError for non-positive height" → rename to `heightCm`
+- "set throws TypeError when weight missing" → rename destructured key to `weightKg`
+- "set throws TypeError when height missing" → rename destructured key to `heightCm`
+
+**New tests to add:**
+
+- `set` / `get` round-trip with `weightKg` and `heightCm` (renamed fields)
+- `isComplete` returns `true` after `get()` migrates old `weight`/`height` fields to `weightKg`/`heightCm`
 - `set` accepts `units: 'metric'`
 - `set` accepts `units: 'imperial'`
 - `set` throws `TypeError` for invalid `units` value
 - `set` persists without `units` field (units is optional)
+- migration: `get()` migrates stored record with old `weight`/`height` fields to `weightKg`/`heightCm`
+- migration: when both old and new field names are present, new names take priority and old names are removed
 
 ---
 

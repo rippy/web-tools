@@ -1,6 +1,14 @@
-export const DRINK_PRESETS = {}
+export const DRINK_TYPES = ['shot', 'cocktail', 'beer', 'cider', 'wine']
+
+export const DRINK_PRESETS = {
+  shot:     { volumeMl: 44,  abv: 0.40 },
+  cocktail: { volumeMl: 120, abv: 0.20 },
+  beer:     { volumeMl: 355, abv: 0.05 },
+  cider:    { volumeMl: 355, abv: 0.05 },
+  wine:     { volumeMl: 150, abv: 0.12 },
+}
+
 export const BAC_LEVELS = []
-export const DRINK_TYPES = []
 export const DRINK_EMOJI = {}
 
 export function alcoholGrams(volumeMl, abv) {
@@ -37,6 +45,10 @@ export function peakBAC(drinks, weightKg, biologicalSex) {
   if (drinks.length === 0) return 0
   return calculateBAC(drinks, weightKg, biologicalSex, Date.parse(drinks[0].loggedAt))
 }
-export function drinkDefaults(type, isDouble) { throw new Error('not implemented') }
+export function drinkDefaults(type, isDouble) {
+  const preset = DRINK_PRESETS[type]
+  const volumeMl = (isDouble && type === 'shot') ? preset.volumeMl * 2 : preset.volumeMl
+  return { volumeMl, abv: preset.abv }
+}
 export function getBACDescription(bac) { throw new Error('not implemented') }
 export function getBrandSuggestions(type, partialBrand, sessions) { throw new Error('not implemented') }

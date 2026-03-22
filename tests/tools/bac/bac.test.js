@@ -122,3 +122,34 @@ describe('peakBAC', () => {
     expect(peakBAC(drinks, 80, 'male')).toBeCloseTo(calculateBAC(drinks, 80, 'male', T0), 6)
   })
 })
+
+describe('DRINK_TYPES', () => {
+  it('lists the 5 types in display order', () => {
+    expect(DRINK_TYPES).toEqual(['shot', 'cocktail', 'beer', 'cider', 'wine'])
+  })
+})
+
+describe('drinkDefaults', () => {
+  it('returns correct defaults for each of the 5 types', () => {
+    expect(drinkDefaults('shot',     false)).toEqual({ volumeMl: 44,  abv: 0.40 })
+    expect(drinkDefaults('cocktail', false)).toEqual({ volumeMl: 120, abv: 0.20 })
+    expect(drinkDefaults('beer',     false)).toEqual({ volumeMl: 355, abv: 0.05 })
+    expect(drinkDefaults('cider',    false)).toEqual({ volumeMl: 355, abv: 0.05 })
+    expect(drinkDefaults('wine',     false)).toEqual({ volumeMl: 150, abv: 0.12 })
+  })
+
+  it('returns 44 ml for shot when isDouble is false', () => {
+    expect(drinkDefaults('shot', false).volumeMl).toBe(44)
+  })
+
+  it('doubles volumeMl to 88 ml for shot when isDouble is true', () => {
+    expect(drinkDefaults('shot', true)).toEqual({ volumeMl: 88, abv: 0.40 })
+  })
+
+  it('does not double volume for non-shot types when isDouble is true', () => {
+    expect(drinkDefaults('beer',     true)).toEqual({ volumeMl: 355, abv: 0.05 })
+    expect(drinkDefaults('cocktail', true)).toEqual({ volumeMl: 120, abv: 0.20 })
+    expect(drinkDefaults('wine',     true)).toEqual({ volumeMl: 150, abv: 0.12 })
+    expect(drinkDefaults('cider',    true)).toEqual({ volumeMl: 355, abv: 0.05 })
+  })
+})

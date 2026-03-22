@@ -153,3 +153,29 @@ describe('drinkDefaults', () => {
     expect(drinkDefaults('cider',    true)).toEqual({ volumeMl: 355, abv: 0.05 })
   })
 })
+
+describe('getBACDescription', () => {
+  it('returns null when BAC is 0', () => {
+    expect(getBACDescription(0)).toBeNull()
+  })
+
+  it('returns null when BAC is below 0.01', () => {
+    expect(getBACDescription(0.005)).toBeNull()
+  })
+
+  it('returns the correct description for each level', () => {
+    expect(getBACDescription(0.03)).toContain('Mild relaxation')
+    expect(getBACDescription(0.07)).toContain('Euphoria')
+    expect(getBACDescription(0.11)).toContain('Significant impairment')
+    expect(getBACDescription(0.14)).toContain('Gross motor impairment')
+    expect(getBACDescription(0.18)).toContain('Nausea')
+    expect(getBACDescription(0.25)).toContain('Severe motor impairment')
+    expect(getBACDescription(0.32)).toContain('Complete loss of consciousness')
+    expect(getBACDescription(0.40)).toContain('Coma likely')
+  })
+
+  it('returns the last level description when BAC is 0.40 (≥ 0.36)', () => {
+    expect(getBACDescription(0.40)).toContain('Coma likely')
+    expect(getBACDescription(0.99)).toContain('Coma likely')
+  })
+})

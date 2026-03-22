@@ -8,7 +8,16 @@ export const DRINK_PRESETS = {
   wine:     { volumeMl: 150, abv: 0.12 },
 }
 
-export const BAC_LEVELS = []
+export const BAC_LEVELS = [
+  { min: 0.01, max: 0.05, description: 'Mild relaxation, slight euphoria, reduced inhibition. Judgment may be impaired even at low levels.' },
+  { min: 0.06, max: 0.09, description: 'Euphoria, emotional swings, impaired coordination, speech, and vision. Judgment and self-control decline.' },
+  { min: 0.10, max: 0.12, description: 'Significant impairment in motor skills, balance, and reaction time. Speech may be slurred.' },
+  { min: 0.13, max: 0.15, description: 'Gross motor impairment, blurred vision, major loss of balance. Euphoria fades; anxiety or unease may appear.' },
+  { min: 0.16, max: 0.20, description: 'Nausea, dizziness, disorientation. Blackouts are likely. Vomiting may occur, increasing choking risk.' },
+  { min: 0.21, max: 0.29, description: 'Severe motor impairment, loss of consciousness, memory blackouts. High risk of life-threatening alcohol poisoning.' },
+  { min: 0.30, max: 0.35, description: 'Complete loss of consciousness. Equivalent to surgical anesthesia. Medical emergency, risk of sudden death.' },
+  { min: 0.36, max: Infinity, description: 'Coma likely. Respiratory arrest and death are probable. This is a lethal BAC level.' },
+]
 export const DRINK_EMOJI = {}
 
 export function alcoholGrams(volumeMl, abv) {
@@ -50,5 +59,8 @@ export function drinkDefaults(type, isDouble) {
   const volumeMl = (isDouble && type === 'shot') ? preset.volumeMl * 2 : preset.volumeMl
   return { volumeMl, abv: preset.abv }
 }
-export function getBACDescription(bac) { throw new Error('not implemented') }
+export function getBACDescription(bac) {
+  const level = BAC_LEVELS.find(l => bac >= l.min && bac <= l.max)
+  return level ? level.description : null
+}
 export function getBrandSuggestions(type, partialBrand, sessions) { throw new Error('not implemented') }

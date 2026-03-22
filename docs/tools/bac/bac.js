@@ -63,4 +63,24 @@ export function getBACDescription(bac) {
   const level = [...BAC_LEVELS].reverse().find(l => bac >= l.min)
   return level ? level.description : null
 }
-export function getBrandSuggestions(type, partialBrand, sessions) { throw new Error('not implemented') }
+export function getBrandSuggestions(type, partialBrand, sessions) {
+  const counts = {}
+  const lower = partialBrand.toLowerCase()
+
+  for (const session of sessions) {
+    for (const drink of session.drinks) {
+      if (drink.type !== type) continue
+      if (drink.brand === 'house') continue
+      if (!drink.brand.toLowerCase().startsWith(lower)) continue
+      counts[drink.brand] = (counts[drink.brand] ?? 0) + 1
+    }
+  }
+
+  return Object.entries(counts)
+    .sort(([aName, aCount], [bName, bCount]) => {
+      if (bCount !== aCount) return bCount - aCount
+      return aName.localeCompare(bName)
+    })
+    .slice(0, 10)
+    .map(([brand]) => brand)
+}

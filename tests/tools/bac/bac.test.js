@@ -183,3 +183,88 @@ describe('getBACDescription', () => {
     expect(getBACDescription(0.055)).toContain('Mild relaxation')  // gap between level 1 (0.01-0.05) and level 2 (0.06-0.09)
   })
 })
+
+describe('getBrandSuggestions', () => {
+  // Helper: build a minimal completed session with given drinks
+  function makeSession(drinks) {
+    return {
+      startedAt: '2026-03-20T20:00:00.000Z',
+      endedAt:   '2026-03-20T23:00:00.000Z',
+      weightKg: 80,
+      biologicalSex: 'male',
+      drinks,
+    }
+  }
+  function makeDrink(type, brand) {
+    return { loggedAt: new Date().toISOString(), type, brand, volumeMl: 44, abv: 0.40, isDouble: false }
+  }
+
+  it('returns [] when sessions is empty', () => {
+    expect(getBrandSuggestions('shot', '', [])).toEqual([])
+  })
+
+  it('returns [] when no drinks match the type', () => {
+    const sessions = [makeSession([makeDrink('beer', 'Guinness')])]
+    expect(getBrandSuggestions('shot', '', sessions)).toEqual([])
+  })
+
+  it('returns [] when only matching brand is "house"', () => {
+    const sessions = [makeSession([makeDrink('shot', 'house')])]
+    expect(getBrandSuggestions('shot', '', sessions)).toEqual([])
+  })
+
+  it('returns brands sorted by frequency descending', () => {
+    const sessions = [
+      makeSession([
+        makeDrink('shot', 'Jameson'),
+        makeDrink('shot', 'Jameson'),
+        makeDrink('shot', 'Jameson'),
+        makeDrink('shot', 'Bushmills'),
+        makeDrink('shot', 'Bushmills'),
+        makeDrink('shot', 'Tullamore'),
+      ]),
+    ]
+    expect(getBrandSuggestions('shot', '', sessions)).toEqual(['Jameson', 'Bushmills', 'Tullamore'])
+  })
+
+  it('breaks ties alphabetically (A before Z)', () => {
+    const sessions = [
+      makeSession([
+        makeDrink('shot', 'Zephyr'),
+        makeDrink('shot', 'Zephyr'),
+        makeDrink('shot', 'Ardbeg'),
+        makeDrink('shot', 'Ardbeg'),
+      ]),
+    ]
+    expect(getBrandSuggestions('shot', '', sessions)).toEqual(['Ardbeg', 'Zephyr'])
+  })
+
+  it('filters by partialBrand (case-insensitive)', () => {
+    const sessions = [
+      makeSession([
+        makeDrink('shot', 'Jameson'),
+        makeDrink('shot', 'Jack Daniel\'s'),
+        makeDrink('shot', 'Bushmills'),
+      ]),
+    ]
+    const result = getBrandSuggestions('shot', 'ja', sessions)
+    expect(result).toContain('Jameson')
+    expect(result).toContain('Jack Daniel\'s')
+    expect(result).not.toContain('Bushmills')
+  })
+
+  it('returns at most 10 results', () => {
+    const drinks = Array.from({ length: 15 }, (_, i) => makeDrink('shot', `Brand${i}`))
+    const sessions = [makeSession(drinks)]
+    expect(getBrandSuggestions('shot', '', sessions).length).toBeLessThanOrEqual(10)
+  })
+
+  it('deduplicates brands across multiple sessions', () => {
+    const sessions = [
+      makeSession([makeDrink('shot', 'Jameson')]),
+      makeSession([makeDrink('shot', 'Jameson')]),
+    ]
+    const result = getBrandSuggestions('shot', '', sessions)
+    expect(result.filter(b => b === 'Jameson').length).toBe(1)
+  })
+})

@@ -70,6 +70,7 @@ export function getBrandSuggestions(type, partialBrand, sessions) {
   for (const session of sessions) {
     for (const drink of session.drinks) {
       if (drink.type !== type) continue
+      if (typeof drink.brand !== 'string') continue
       if (drink.brand === 'house') continue
       if (!drink.brand.toLowerCase().startsWith(lower)) continue
       counts[drink.brand] = (counts[drink.brand] ?? 0) + 1

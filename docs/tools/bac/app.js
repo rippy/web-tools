@@ -367,11 +367,22 @@ function renderAnalytics() {
       const row = document.createElement('div')
       row.className = 'brand-bar-row'
       const pct = Math.round((count / maxCount) * 100)
-      row.innerHTML = `
-        <span style="flex:1">${brand}</span>
-        <div class="brand-bar-track"><div class="brand-bar-fill" style="width:${pct}%"></div></div>
-        <span style="color:#868e96;font-size:0.75rem;margin-left:0.4rem">×${count}</span>
-      `
+      const brandSpan = document.createElement('span')
+      brandSpan.style.flex = '1'
+      brandSpan.textContent = brand
+
+      const barTrack = document.createElement('div')
+      barTrack.className = 'brand-bar-track'
+      const barFill = document.createElement('div')
+      barFill.className = 'brand-bar-fill'
+      barFill.style.width = `${pct}%`
+      barTrack.appendChild(barFill)
+
+      const countSpan = document.createElement('span')
+      countSpan.style.cssText = 'color:#868e96;font-size:0.75rem;margin-left:0.4rem'
+      countSpan.textContent = `×${count}`
+
+      row.append(brandSpan, barTrack, countSpan)
       divTopBrands.appendChild(row)
     }
   }

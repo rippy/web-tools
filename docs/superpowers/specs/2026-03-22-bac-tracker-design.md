@@ -111,6 +111,23 @@ Pure calculation and data functions. No DOM or state dependencies.
 
 Drink types in display order: `shot`, `cocktail`, `beer`, `cider`, `wine`.
 
+**BAC level descriptions** (exported as `BAC_LEVELS` — array of objects in
+ascending `min` order):
+
+| min | max | description |
+| --- | --- | --- |
+| 0.01 | 0.05 | Mild relaxation, slight euphoria, reduced inhibition. Judgment may be impaired even at low levels. |
+| 0.06 | 0.09 | Euphoria, emotional swings, impaired coordination, speech, and vision. Judgment and self-control decline. |
+| 0.10 | 0.12 | Significant impairment in motor skills, balance, and reaction time. Speech may be slurred. |
+| 0.13 | 0.15 | Gross motor impairment, blurred vision, major loss of balance. Euphoria fades; anxiety or unease may appear. |
+| 0.16 | 0.20 | Nausea, dizziness, disorientation. Blackouts are likely. Vomiting may occur, increasing choking risk. |
+| 0.21 | 0.29 | Severe motor impairment, loss of consciousness, memory blackouts. High risk of life-threatening alcohol poisoning. |
+| 0.30 | 0.35 | Complete loss of consciousness. Equivalent to surgical anesthesia. Medical emergency, risk of sudden death. |
+| 0.36 | `Infinity` | Coma likely. Respiratory arrest and death are probable. This is a lethal BAC level. |
+
+`max` for the last entry is `Infinity` so that any BAC ≥ 0.36 is matched.
+Below 0.01 there is no description entry — `getBACDescription` returns `null`.
+
 **Interface:**
 
 ```js
@@ -178,6 +195,12 @@ drinkDefaults(type, isDouble)
 // Returns only { volumeMl, abv } — caller records isDouble separately on the
 // drink object
 
+getBACDescription(bac)
+// Returns the description string for the given BAC value by finding the
+// first entry in BAC_LEVELS where bac >= entry.min and bac <= entry.max.
+// Returns null when bac < 0.01 (no matching entry).
+// No input validation — caller ensures bac is a non-negative number.
+
 getBrandSuggestions(type, partialBrand, sessions)
 // sessions: array of completed session objects (from bac-sessions state key);
 //   does NOT include the active session. The active session's already-logged
@@ -216,6 +239,9 @@ DOM controller. No unit tests. Responsibilities:
   - Large BAC value (3 decimal places, e.g. `0.042`)
   - Status dot: green `● Sober` when BAC < 0.08; red `● Over limit` when
     BAC ≥ 0.08. Only these two states.
+  - BAC description: shown below the status dot when `getBACDescription(bac)`
+    returns a non-null value. Hidden when BAC < 0.01. Rendered as a small
+    muted text line beneath the status dot.
   - "clears ~HH:MM": shown only when BAC > 0. Computed as
     `formatHoursToHHMM(timeToClear(bac))`. Hidden when BAC is 0.
   - "safe to drive after HH:MM": shown only when BAC > 0. Same time as
@@ -410,6 +436,10 @@ No new entry is added — only this existing element is changed.
 - `drinkDefaults` returns 44 ml when `isDouble: false` and type is `shot`
 - `drinkDefaults` doubles `volumeMl` to 88 ml when `isDouble: true` and type is `shot`
 - `drinkDefaults` does not double volume when `isDouble: true` and type is not `shot`
+- `getBACDescription` returns the correct description for a BAC in each level (one case per level)
+- `getBACDescription` returns `null` when BAC is 0
+- `getBACDescription` returns `null` when BAC is 0.005 (below 0.01 threshold)
+- `getBACDescription` returns the last level's description when BAC is 0.40 (≥ 0.36)
 - `getBrandSuggestions` returns brands matching type and partial string,
   sorted by frequency descending, ties broken alphabetically, excluding `"house"`
 - `getBrandSuggestions` returns at most 10 results

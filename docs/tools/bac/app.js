@@ -209,7 +209,201 @@ function renderBACHeader() {
   }
 }
 
-function renderDrinkLog() {}
+function renderDrinkLog() {
+  const session = stateGet(ACTIVE_KEY)
+
+  if (!session) {
+    pNoSession.hidden = false
+    listDrinks.hidden = true
+    return
+  }
+
+  pNoSession.hidden = true
+  listDrinks.hidden = false
+  listDrinks.innerHTML = ''
+
+  for (const drink of [...session.drinks].reverse()) {
+    const li = document.createElement('li')
+    li.className = 'drink-row'
+
+    const label = `${DRINK_EMOJI[drink.type]} ${drink.brand}${drink.isDouble ? ' (double)' : ''}`
+    const time = formatHoursToHHMM(0, Date.parse(drink.loggedAt))
+
+    const nameSpan = document.createElement('span')
+    nameSpan.className = 'drink-name'
+    nameSpan.textContent = label
+
+    const timeSpan = document.createElement('span')
+    timeSpan.className = 'drink-time'
+    timeSpan.textContent = time
+
+    const btnAgain = document.createElement('button')
+    btnAgain.className = 'btn-again'
+    btnAgain.textContent = '↺ Again'
+    btnAgain.addEventListener('click', () => onAgain(drink))
+
+    const btnDel = document.createElement('button')
+    btnDel.className = 'btn-delete'
+    btnDel.setAttribute('aria-label', 'Delete drink')
+    btnDel.textContent = '✕'
+    btnDel.addEventListener('click', () => onDeleteDrink(drink.loggedAt))
+
+    li.append(nameSpan, timeSpan, btnAgain, btnDel)
+    listDrinks.appendChild(li)
+  }
+}
+
+function onAgain(drink) {
+  const newDrink = { ...drink, loggedAt: new Date().toISOString() }
+  let session = stateGet(ACTIVE_KEY)
+  if (!session) session = { startedAt: new Date().toISOString(), drinks: [] }
+  session.drinks.push(newDrink)
+  stateSet(ACTIVE_KEY, session)
+  renderAll()
+}
+
+function onDeleteDrink(loggedAt) {
+  const session = stateGet(ACTIVE_KEY)
+  if (!session) return
+  session.drinks = session.drinks.filter(d => d.loggedAt !== loggedAt)
+  stateSet(ACTIVE_KEY, session)
+  renderAll()
+}
+
 function renderHistory() {}
 function renderAnalytics() {}
-function wireEvents() {}
+
+// ─── Wire events ─────────────────────────────────────────────────────────────
+function wireEvents() {
+  btnAddDrink.addEventListener('click', onToggleAddPanel)
+  btnEndSession.addEventListener('click', onEndSession)
+  btnLogDrink.addEventListener('click', onLogDrink)
+
+  // Type buttons
+  for (const btn of typeGroup.querySelectorAll('.type-btn')) {
+    btn.addEventListener('click', () => selectType(btn.dataset.type))
+  }
+
+  // Double toggle
+  btnDoubleYes.addEventListener('click', () => selectDouble(true))
+  btnDoubleNo.addEventListener('click',  () => selectDouble(false))
+
+  // Brand autocomplete
+  inputBrand.addEventListener('input', onBrandInput)
+  inputBrand.addEventListener('blur',  () => { setTimeout(() => divBrandDropdown.hidden = true, 150) })
+
+  // History / Analytics collapse
+  headerHistory.addEventListener('click', () => {
+    bodyHistory.hidden = !bodyHistory.hidden
+    renderHistory()
+  })
+  headerAnalytics.addEventListener('click', () => {
+    bodyAnalytics.hidden = !bodyAnalytics.hidden
+    spanAnalyticsToggle.textContent = bodyAnalytics.hidden ? '▸' : '▾'
+  })
+}
+
+// ─── Add-drink panel ─────────────────────────────────────────────────────────
+let panelOpen = false
+
+function onToggleAddPanel() {
+  panelOpen = !panelOpen
+  divAddPanel.hidden = !panelOpen
+  if (panelOpen) {
+    // Default to 'shot' when opening fresh
+    const currentType = typeGroup.querySelector('.type-btn.selected')?.dataset.type ?? 'shot'
+    selectType(currentType)
+  }
+}
+
+function selectType(type) {
+  for (const btn of typeGroup.querySelectorAll('.type-btn')) {
+    btn.classList.toggle('selected', btn.dataset.type === type)
+  }
+  // Default double: Yes for shots, No for everything else
+  const isDouble = type === 'shot'
+  selectDouble(isDouble)
+  updatePanelDefaults(type, isDouble)
+}
+
+function selectDouble(isDouble) {
+  btnDoubleYes.classList.toggle('selected', isDouble)
+  btnDoubleNo.classList.toggle('selected', !isDouble)
+  const type = typeGroup.querySelector('.type-btn.selected')?.dataset.type ?? 'shot'
+  updatePanelDefaults(type, isDouble)
+}
+
+function updatePanelDefaults(type, isDouble) {
+  const { volumeMl, abv } = drinkDefaults(type, isDouble)
+  inputVolume.value = volumeMl
+  inputAbv.value = (abv * 100).toFixed(1)
+}
+
+function onBrandInput() {
+  const partial = inputBrand.value.trim()
+  const type = typeGroup.querySelector('.type-btn.selected')?.dataset.type ?? 'shot'
+  const sessions = stateGet(SESSIONS_KEY) ?? []
+  const suggestions = getBrandSuggestions(type, partial, sessions)
+
+  divBrandDropdown.innerHTML = ''
+  if (suggestions.length === 0) {
+    divBrandDropdown.hidden = true
+    return
+  }
+
+  for (const brand of suggestions) {
+    const div = document.createElement('div')
+    div.className = 'brand-option'
+    div.textContent = brand
+    div.addEventListener('mousedown', () => {
+      inputBrand.value = brand
+      divBrandDropdown.hidden = true
+    })
+    divBrandDropdown.appendChild(div)
+  }
+  divBrandDropdown.hidden = false
+}
+
+function onLogDrink() {
+  const type = typeGroup.querySelector('.type-btn.selected')?.dataset.type
+  if (!type) return
+
+  const isDouble = btnDoubleYes.classList.contains('selected')
+  const brandRaw = inputBrand.value.trim()
+  const brand = brandRaw || 'house'
+  const volumeMl = parseFloat(inputVolume.value)
+  const abv = parseFloat(inputAbv.value) / 100
+
+  if (!isFinite(volumeMl) || volumeMl <= 0) return
+  if (!isFinite(abv) || abv < 0) return
+
+  const drink = {
+    loggedAt: new Date().toISOString(),
+    type,
+    brand,
+    volumeMl,
+    abv,
+    isDouble,
+  }
+
+  let session = stateGet(ACTIVE_KEY)
+  if (!session) {
+    session = { startedAt: new Date().toISOString(), drinks: [] }
+  }
+  session.drinks.push(drink)
+  stateSet(ACTIVE_KEY, session)
+
+  divAddPanel.hidden = true
+  panelOpen = false
+  inputBrand.value = ''
+  divBrandDropdown.hidden = true
+
+  renderAll()
+}
+
+function onEndSession() {
+  const session = stateGet(ACTIVE_KEY)
+  if (!session) return
+  closeSession(session)
+  renderAll()
+}

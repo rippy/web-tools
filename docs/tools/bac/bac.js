@@ -3,7 +3,9 @@ export const BAC_LEVELS = []
 export const DRINK_TYPES = []
 export const DRINK_EMOJI = {}
 
-export function alcoholGrams(volumeMl, abv) { throw new Error('not implemented') }
+export function alcoholGrams(volumeMl, abv) {
+  return volumeMl * abv * 0.789
+}
 export function calculateBAC(drinks, weightKg, biologicalSex, nowMs) { throw new Error('not implemented') }
 export function timeToClear(bac) { throw new Error('not implemented') }
 export function formatHoursToHHMM(hours, baseMs) { throw new Error('not implemented') }

@@ -2,6 +2,8 @@ import { getCurrentPosition } from './geolocation.js'
 import { reverseGeocode } from './geocoding.js'
 import { findNearby, save, recordVisit } from './location-store.js'
 
+const DEDUP_RADIUS_M = 100
+
 export function generateId() {
   const bytes = new Uint8Array(4)
   crypto.getRandomValues(bytes)
@@ -14,7 +16,7 @@ export async function captureLocation() {
 
   const { lat, lng } = coords
   const displayName = await reverseGeocode({ lat, lng })
-  const existing = findNearby({ lat, lng }, 100)
+  const existing = findNearby({ lat, lng }, DEDUP_RADIUS_M)
 
   if (existing) {
     recordVisit(existing.id)

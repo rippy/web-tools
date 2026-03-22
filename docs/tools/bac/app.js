@@ -330,7 +330,67 @@ function renderHistory() {
     listHistory.appendChild(li)
   }
 }
-function renderAnalytics() {}
+function renderAnalytics() {
+  const sessions = stateGet(SESSIONS_KEY) ?? []
+  const active = stateGet(ACTIVE_KEY)
+  const allSessions = active ? [...sessions, active] : sessions
+
+  // Collect all drinks
+  const allDrinks = allSessions.flatMap(s => s.drinks)
+
+  if (allDrinks.length === 0) {
+    pNoAnalytics.hidden = false
+    divAnalyticsContent.hidden = true
+    return
+  }
+
+  pNoAnalytics.hidden = true
+  divAnalyticsContent.hidden = false
+
+  // ── Top brands ──────────────────────────────────────────────────────────
+  const brandCounts = {}
+  for (const d of allDrinks) {
+    if (d.brand === 'house') continue
+    brandCounts[d.brand] = (brandCounts[d.brand] ?? 0) + 1
+  }
+
+  const topBrands = Object.entries(brandCounts)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 10)
+
+  divTopBrands.innerHTML = ''
+  if (topBrands.length === 0) {
+    divTopBrands.textContent = '—'
+  } else {
+    const maxCount = topBrands[0][1]
+    for (const [brand, count] of topBrands) {
+      const row = document.createElement('div')
+      row.className = 'brand-bar-row'
+      const pct = Math.round((count / maxCount) * 100)
+      row.innerHTML = `
+        <span style="flex:1">${brand}</span>
+        <div class="brand-bar-track"><div class="brand-bar-fill" style="width:${pct}%"></div></div>
+        <span style="color:#868e96;font-size:0.75rem;margin-left:0.4rem">×${count}</span>
+      `
+      divTopBrands.appendChild(row)
+    }
+  }
+
+  // ── By type ─────────────────────────────────────────────────────────────
+  const typeCounts = {}
+  for (const d of allDrinks) {
+    typeCounts[d.type] = (typeCounts[d.type] ?? 0) + 1
+  }
+
+  divByType.innerHTML = ''
+  for (const type of DRINK_TYPES) {
+    if (!typeCounts[type]) continue
+    const badge = document.createElement('span')
+    badge.className = 'type-badge'
+    badge.textContent = `${DRINK_EMOJI[type]} ${type.charAt(0).toUpperCase() + type.slice(1)} ${typeCounts[type]}`
+    divByType.appendChild(badge)
+  }
+}
 
 // ─── Wire events ─────────────────────────────────────────────────────────────
 let eventsWired = false

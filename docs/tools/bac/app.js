@@ -268,7 +268,61 @@ function onDeleteDrink(loggedAt) {
   renderAll()
 }
 
-function renderHistory() {}
+function renderHistory() {
+  const sessions = stateGet(SESSIONS_KEY) ?? []
+  spanHistoryCount.textContent = sessions.length
+    ? `${sessions.length} session${sessions.length > 1 ? 's' : ''} ${bodyHistory.hidden ? '▸' : '▾'}`
+    : (bodyHistory.hidden ? '▸' : '▾')
+
+  if (sessions.length === 0) {
+    pNoHistory.hidden = false
+    listHistory.hidden = true
+    return
+  }
+
+  pNoHistory.hidden = true
+  listHistory.hidden = false
+  listHistory.innerHTML = ''
+
+  for (const session of sessions) {
+    const dateStr = new Date(session.startedAt).toLocaleDateString('en-US', {
+      month: 'short', day: 'numeric', year: 'numeric',
+    })
+    const peak = peakBAC(session.drinks, session.weightKg, session.biologicalSex).toFixed(3)
+    const count = session.drinks.length
+
+    const li = document.createElement('li')
+
+    // Collapsed header row
+    const header = document.createElement('div')
+    header.className = 'history-row-header'
+    header.innerHTML = `<span>${dateStr}</span><span style="color:#555;font-size:0.78rem">${count} drink${count !== 1 ? 's' : ''} · peak ${peak}</span><span style="color:#868e96;font-size:0.75rem">▸</span>`
+
+    // Expanded drink list (hidden)
+    const drinkList = document.createElement('div')
+    drinkList.className = 'history-drinks'
+    drinkList.hidden = true
+
+    for (const drink of session.drinks) {
+      const row = document.createElement('div')
+      row.className = 'history-drink-row'
+      const time = formatHoursToHHMM(0, Date.parse(drink.loggedAt))
+      row.innerHTML = `<span>${DRINK_EMOJI[drink.type]} ${drink.brand}${drink.isDouble ? ' (double)' : ''}</span><span style="color:#868e96">${time}</span>`
+      drinkList.appendChild(row)
+    }
+
+    // Toggle expand/collapse
+    const chevron = header.querySelector('span:last-child')
+    header.addEventListener('click', () => {
+      drinkList.hidden = !drinkList.hidden
+      header.classList.toggle('expanded', !drinkList.hidden)
+      chevron.textContent = drinkList.hidden ? '▸' : '▾'
+    })
+
+    li.append(header, drinkList)
+    listHistory.appendChild(li)
+  }
+}
 function renderAnalytics() {}
 
 // ─── Wire events ─────────────────────────────────────────────────────────────

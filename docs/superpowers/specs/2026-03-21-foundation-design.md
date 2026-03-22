@@ -19,7 +19,7 @@ This sub-project establishes the repository scaffolding, development environment
   index.html                  ← landing page listing all tools
   /common/
     state.js                  ← namespaced localStorage helpers
-    user-profile.js           ← shared user attributes (gender, weight, age, height)
+    user-profile.js           ← shared user attributes (identity, biological sex, pronouns, weight, age, height)
     export-import.js          ← full state export/import as JSON
     /location/                ← sub-project 2 (empty, .gitkeep only)
   /tools/
@@ -91,22 +91,29 @@ Cookies are not used — localStorage is sufficient for same-device persistence.
 
 Stores and retrieves shared user attributes used by health-related tools (BMR, BAC, meals, exercise).
 
-**Fields:**
-- `gender` — must be exactly `"male"` or `"female"` (case-sensitive; `"Male"` is invalid and not normalised)
+**Fields are split into two categories:**
+
+*Identity fields* (optional, free-form — used for personalisation only, never for calculations):
+- `genderIdentity` — free-text string; UI offers common options ("Woman", "Man", "Non-binary", "Prefer not to say") plus an open-ended input. No validation beyond being a non-empty string if provided.
+- `pronouns` — free-text string; UI offers common options ("she/her", "he/him", "they/them", "prefer not to say") plus an open-ended input. No validation beyond being a non-empty string if provided.
+
+*Physiological fields* (required for health calculations):
+- `biologicalSex` — must be exactly `"male"` or `"female"` (case-sensitive); used by BMR and BAC formulas. Prompted with the label "For health calculations, what is your sex assigned at birth?"
 - `weight` — number, must be > 0 (kg)
 - `height` — number, must be > 0 (cm)
 - `age` — number, must be a positive integer (> 0, no decimals)
 
 **Interface:**
 ```js
-userProfile.get()           // returns stored profile object or null if not set
-userProfile.set(profile)    // validates all fields; throws TypeError with descriptive message on any invalid input; saves on success
-userProfile.isComplete()    // true if a profile is stored and all four field keys are present with non-null values (presence check only)
+userProfile.get()                  // returns stored profile object or null if not set
+userProfile.set(profile)           // validates physiological fields; throws TypeError on invalid; saves on success
+userProfile.isComplete()           // true if all four physiological fields are present with non-null values (presence check only)
+userProfile.isIdentityComplete()   // true if both genderIdentity and pronouns are present (optional convenience check)
 ```
 
-`set()` throws rather than silently dropping bad input. All four fields are required — partial profiles are rejected. `isComplete()` checks only that the four field keys exist with non-null values and does not re-run type/range validation. This means a profile written via import that bypasses `set()` could pass `isComplete()` with invalid values — this is an accepted limitation. Tools must not assume that `isComplete() === true` implies the values are valid beyond being present. Internally delegates to `state.js` using short key `"user-profile"`.
+`set()` validates and requires all four physiological fields. Identity fields (`genderIdentity`, `pronouns`) are optional — `set()` accepts them if present but does not require them or validate their content beyond type. `isComplete()` checks physiological fields only. `isIdentityComplete()` checks identity fields only. `isComplete()` does not re-run type/range validation — this is an accepted limitation (see accepted limitations note in export-import section). Internally delegates to `state.js` using short key `"user-profile"`.
 
-Tools that require profile data call `isComplete()` on load and render an inline profile form if it returns false.
+Tools that require physiological data call `isComplete()` on load and render an inline profile form if it returns false.
 
 ### `common/export-import.js`
 
@@ -128,7 +135,7 @@ importState(file)              // accepts a File object; returns Promise<void>; 
   "exported": "2026-03-21T14:00:00.000Z",
   "version": 1,
   "data": {
-    "user-profile": { "gender": "male", "weight": 80, "height": 178, "age": 35 },
+    "user-profile": { "biologicalSex": "male", "weight": 80, "height": 178, "age": 35, "genderIdentity": "Man", "pronouns": "he/him" },
     "bac": { ... }
   }
 }
@@ -172,13 +179,16 @@ Tests cover:
   - `get` returns null when stored value is not valid JSON (simulated by writing directly via `localStorage.setItem("web-tools.foo", "not-json")`, bypassing `state.set`)
 
 - **`user-profile.test.js`**
-  - `get`/`set` round-trip
-  - `isComplete` returns false when no profile stored, true after valid `set`
-  - `isComplete` returns true if all four keys are present even with invalid values (presence-only — accepted limitation)
-  - `set` throws for invalid gender (wrong string, wrong case)
+  - `get`/`set` round-trip with physiological fields only
+  - `get`/`set` round-trip with all fields including identity fields
+  - `isComplete` returns false when no profile stored, true after valid `set` with physiological fields
+  - `isComplete` returns true if all four physiological keys are present even with invalid values (presence-only — accepted limitation)
+  - `isIdentityComplete` returns false when identity fields absent, true when both present
+  - `set` throws for invalid `biologicalSex` (wrong string, wrong case)
   - `set` throws for non-positive weight, height, age
   - `set` throws for non-integer age
-  - `set` throws when any required field is missing
+  - `set` throws when any required physiological field is missing
+  - `set` accepts profile without identity fields (they are optional)
 
 - **`export-import.test.js`**
   - Exported JSON contains `version: 1`, `exported` matching ISO 8601 pattern (`/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/`), and correct `data` keys

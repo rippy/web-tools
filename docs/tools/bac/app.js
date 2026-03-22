@@ -255,18 +255,16 @@ function renderDrinkLog() {
 
 function onAgain(drink) {
   const newDrink = { ...drink, loggedAt: new Date().toISOString() }
-  let session = stateGet(ACTIVE_KEY)
-  if (!session) session = { startedAt: new Date().toISOString(), drinks: [] }
-  session.drinks.push(newDrink)
-  stateSet(ACTIVE_KEY, session)
+  const existing = stateGet(ACTIVE_KEY)
+  const session = existing ?? { startedAt: new Date().toISOString(), drinks: [] }
+  stateSet(ACTIVE_KEY, { ...session, drinks: [...session.drinks, newDrink] })
   renderAll()
 }
 
 function onDeleteDrink(loggedAt) {
   const session = stateGet(ACTIVE_KEY)
   if (!session) return
-  session.drinks = session.drinks.filter(d => d.loggedAt !== loggedAt)
-  stateSet(ACTIVE_KEY, session)
+  stateSet(ACTIVE_KEY, { ...session, drinks: session.drinks.filter(d => d.loggedAt !== loggedAt) })
   renderAll()
 }
 
@@ -274,7 +272,11 @@ function renderHistory() {}
 function renderAnalytics() {}
 
 // ─── Wire events ─────────────────────────────────────────────────────────────
+let eventsWired = false
+
 function wireEvents() {
+  if (eventsWired) return
+  eventsWired = true
   btnAddDrink.addEventListener('click', onToggleAddPanel)
   btnEndSession.addEventListener('click', onEndSession)
   btnLogDrink.addEventListener('click', onLogDrink)
@@ -386,12 +388,9 @@ function onLogDrink() {
     isDouble,
   }
 
-  let session = stateGet(ACTIVE_KEY)
-  if (!session) {
-    session = { startedAt: new Date().toISOString(), drinks: [] }
-  }
-  session.drinks.push(drink)
-  stateSet(ACTIVE_KEY, session)
+  const existing = stateGet(ACTIVE_KEY)
+  const session = existing ?? { startedAt: new Date().toISOString(), drinks: [] }
+  stateSet(ACTIVE_KEY, { ...session, drinks: [...session.drinks, drink] })
 
   divAddPanel.hidden = true
   panelOpen = false

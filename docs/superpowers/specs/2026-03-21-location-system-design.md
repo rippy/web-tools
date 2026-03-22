@@ -116,7 +116,7 @@ explicit header is set in code.
 
 1. `response.name` if present and non-empty — POI name (e.g. `"The Rusty Nail"`)
 2. `address.road + ", " + address.city` if both present
-3. `response.display_name` truncated to 60 characters
+3. `response.display_name` hard-truncated at 60 characters (no ellipsis)
 4. `null`
 
 Returns `null` on any network error or non-200 response.
@@ -143,6 +143,7 @@ save(record)
 
 findNearby({lat, lng}, radiusM)
 // Returns the closest location record whose lat/lng is within radiusM metres
+// If two records are equidistant, returns either one (order not guaranteed)
 // Returns null if no match, or if all candidates have lat: null
 // Uses Haversine formula for distance calculation
 
@@ -184,6 +185,11 @@ captureLocation()
       `save({id, name: displayName ?? "Unknown", lat, lng,
       firstSeen: now, lastSeen: now, visitCount: 0, visits: []})` →
       `recordVisit(id)` → return `{id, name}`
+
+      Note: `recordVisit` immediately overwrites `lastSeen` with its own
+      `new Date().toISOString()` call. `firstSeen` (the `now` from above)
+      is never modified after `save()`. `visits[0]` and `firstSeen` may
+      therefore differ by a few milliseconds — this is expected.
 3. If GPS fails: return `null`
 
 **Manual entry (tool-side pattern):**
@@ -192,8 +198,9 @@ When `captureLocation()` returns `null`, the tool may prompt the user for a
 name. If the user provides one, the tool calls:
 
 ```js
+const id = generateId()
 locationStore.save({
-  id: generateId(),
+  id,
   name: userEnteredName,
   lat: null,
   lng: null,
@@ -263,6 +270,7 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
 - `findNearby` returns `null` when all candidates have `lat: null`
 - `recordVisit` increments `visitCount`, appends timestamp to `visits`,
   updates `lastSeen`
+- `recordVisit` does not modify `firstSeen`
 - `visitCount` equals `visits.length` after multiple `recordVisit` calls
 - `recordVisit` is a no-op for unknown id
 
@@ -270,8 +278,9 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
 
 - Returns `{id, name}` when GPS + geocoding succeed and no nearby location exists
   (new record created with `visitCount: 1` after capture)
-- Returns existing `{id, name}` and increments `visitCount` when GPS matches
-  a nearby known location
+- Returns existing `{id, name}` (where `name` is the originally stored name,
+  not the current geocoding result) and increments `visitCount` when GPS
+  matches a nearby known location
 - Returns `null` when GPS fails
 - New location gets name `"Unknown"` when geocoding returns `null`
 - After successful capture of a new location, `visitCount` equals 1 and

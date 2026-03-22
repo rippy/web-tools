@@ -45,33 +45,13 @@ This sub-project updates the shared `user-profile` state key and
    when absent). This is a display preference only — it never affects stored
    values.
 
-### Migration
-
-Existing stored data uses the old field names (`weight`, `height`). Migration
-runs at the top of the `get()` function: read the raw value from
-`state.get('user-profile')`; if it contains a `weight` or `height` field,
-copy those values to `weightKg` / `heightCm` (respectively), delete the old
-keys, and persist the updated record via `state.set`. If both old and new
-field names are present simultaneously (e.g. partial prior migration), the new
-names take priority — old names are deleted without overwriting the new values.
-Migration operates field-by-field: a record missing either `weight` or
-`height` (old) and also missing the corresponding new name simply has no value
-for that field after migration — no defaulting occurs. Migration is a no-op
-when no stored profile exists or when neither old field name is present. After migration completes, `get()` returns the migrated record. The existing
-`isComplete()` implementation calls `stateGet(KEY)` directly — this must be
-changed to call the module-level `get()` instead, so migration always runs
-before the completeness check. A stored record with only old `weight`/`height`
-fields will be migrated to `weightKg`/`heightCm` before `isComplete()` checks
-them — if both values are positive numbers, `isComplete()` returns `true`. No
-migration is needed for users with no stored profile.
+No data migration is needed — the app has no existing users.
 
 ### Updated `user-profile.js` interface
 
 The public API of `user-profile.js` is unchanged (`get`, `set`, `isComplete`,
-`isIdentityComplete`). `isIdentityComplete()` only checks `genderIdentity` and
-`pronouns`, which are not affected by the field rename — it may continue to
-read state directly without triggering migration. The `set()` function accepts
-the new field names and validates them:
+`isIdentityComplete`). The `set()` function accepts the new field names and
+validates them:
 
 ```js
 userProfile.set({
@@ -86,10 +66,7 @@ userProfile.set({
 })
 ```
 
-`isComplete()` checks `weightKg` and `heightCm` (renamed from `weight` and
-`height`). Because `isComplete()` calls `get()` which runs migration, old
-`weight`/`height` fields are always converted to `weightKg`/`heightCm` before
-the completeness check; a previously-saved profile is not lost after the rename.
+`isComplete()` checks `weightKg` and `heightCm` (renamed from `weight` and `height`).
 
 ---
 
@@ -305,28 +282,21 @@ Internally stored as total centimetres.
 - `cmToFeetAndInches` carries when rounded inches reach 12 (e.g. 182.9 cm → 6 ft 0 in)
 
 **`docs/common/user-profile.js` — updated tests**
-(`tests/common/user-profile.test.js` is updated to reflect the renamed fields)
+(`tests/common/user-profile.test.js` is rewritten to use the new field names)
 
-**Existing tests to update (field names change, logic unchanged):**
+The `validPhysio` fixture changes to `{ biologicalSex: 'male', weightKg: 80, heightCm: 178, age: 35 }`.
+All existing tests that reference `weight` or `height` are renamed to `weightKg` / `heightCm`.
+New tests added:
 
-- `validPhysio` fixture: rename `weight: 80` → `weightKg: 80`, `height: 178` → `heightCm: 178`
-- "set and get round-trip with physiological fields only" — updated fixture covers this
-- "isComplete is presence-only" bypass test: update inline JSON to use `weightKg`/`heightCm`
-- "set throws TypeError for non-positive weight" → rename to `weightKg`, test `weightKg: 0` and `weightKg: -1`
-- "set throws TypeError for non-positive height" → rename to `heightCm`
-- "set throws TypeError when weight missing" → rename destructured key to `weightKg`
-- "set throws TypeError when height missing" → rename destructured key to `heightCm`
-
-**New tests to add:**
-
-- `set` / `get` round-trip with `weightKg` and `heightCm` (renamed fields)
-- `isComplete` returns `true` after `get()` migrates old `weight`/`height` fields to `weightKg`/`heightCm`
+- `set` / `get` round-trip with `weightKg` and `heightCm`
+- `set` throws `TypeError` for non-positive `weightKg`
+- `set` throws `TypeError` for non-positive `heightCm`
+- `set` throws `TypeError` when `weightKg` is missing
+- `set` throws `TypeError` when `heightCm` is missing
 - `set` accepts `units: 'metric'`
 - `set` accepts `units: 'imperial'`
 - `set` throws `TypeError` for invalid `units` value
 - `set` persists without `units` field (units is optional)
-- migration: `get()` migrates stored record with old `weight`/`height` fields to `weightKg`/`heightCm`
-- migration: when both old and new field names are present, new names take priority and old names are removed
 
 ---
 

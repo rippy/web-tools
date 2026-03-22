@@ -11,7 +11,7 @@ function saveRecords(records) {
 }
 
 export function getAll() {
-  return getRecords().sort((a, b) => {
+  return [...getRecords()].sort((a, b) => {
     if (b.lastSeen > a.lastSeen) return 1
     if (b.lastSeen < a.lastSeen) return -1
     return 0

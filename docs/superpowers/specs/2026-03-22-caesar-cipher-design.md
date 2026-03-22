@@ -45,19 +45,34 @@ Character handling:
 
 ## UI Logic (`app.js`)
 
+**Element IDs:**
+
+| Element | ID |
+|---|---|
+| Shift number input | `input-shift` |
+| Main textarea | `input-text` |
+| Encode button | `btn-encode` |
+| Decode button | `btn-decode` |
+
 **On load:**
-- Read `shift` from `state.get('rot13')`; fall back to `13` if absent
-- Populate the shift input with the stored/default value
+- Read stored object via `state.get('rot13')`; extract shift with `stored?.shift ?? 13`
+- Populate `#input-shift` with that value
 
-**On shift input change:**
-- Save new value via `state.set('rot13', { shift: n })`
+**On shift input (`input` event on `#input-shift`):**
+- Parse the value as an integer
+- Save via `state.set('rot13', { shift: n })`
 
-**Encode button:**
-- Read textarea content and current shift
+**Shift validation:**
+- Before encoding or decoding, read `#input-shift` as an integer
+- If the value is not a finite integer in 1–25, clamp it: `Math.min(25, Math.max(1, Math.round(value)))`, update the input display, and save the clamped value
+- Then proceed with the (clamped) shift
+
+**Encode button (`#btn-encode`):**
+- Read textarea content and current (clamped) shift
 - Replace textarea content with `encode(text, shift)`
 
-**Decode button:**
-- Read textarea content and current shift
+**Decode button (`#btn-decode`):**
+- Read textarea content and current (clamped) shift
 - Replace textarea content with `decode(text, shift)`
 
 ---
@@ -69,13 +84,14 @@ Character handling:
 
 Caesar Cipher / ROT13  (h1)
 
-Shift: [  13  ↕ ]      (number input, min=1, max=25)
+Shift: [  13  ↕ ]      (number input, id="input-shift", min=1, max=25)
 
 ┌─────────────────────────────┐
-│ textarea (input + output)   │
+│ textarea id="input-text"    │
 └─────────────────────────────┘
 
 [ Encode ]  [ Decode ]
+  #btn-encode  #btn-decode
 ```
 
 Styling follows the BMR tool conventions: `system-ui` font, `max-width: 520px`, `margin: 2rem auto`, muted back link, consistent input/button styling.
@@ -101,12 +117,22 @@ Stored under the `rot13` key in `state.js`:
 | Round-trip | `decode(encode(text, n), n)` equals original for arbitrary shift |
 | Case preservation | Uppercase stays uppercase, lowercase stays lowercase |
 | Non-alpha passthrough | Digits, spaces, punctuation unchanged |
-| Shift 0 | Returns text unchanged |
-| Shift 26 | Returns text unchanged |
+| Shift 0 | Returns text unchanged — tests normalisation when `shift % 26 === 0` via a zero input |
+| Shift 26 | Returns text unchanged — tests the same normalisation property via a mod-clamp path (26 % 26 = 0) |
 | Negative shift | Handled correctly (same as decode direction) |
 | Empty string | Returns `""` |
 
+Note: Shift 0 and Shift 26 both test the identity property of `((n % 26) + 26) % 26`, but via different input paths and are kept as separate cases for clarity.
+
+The UI constrains the shift input to 1–25, but `caesar.js` itself imposes no such constraint; these edge-case tests verify the pure function behaves correctly regardless of UI guards.
+
 No DOM, no localStorage — tests import `caesar.js` directly.
+
+---
+
+## Home Page Activation
+
+As part of this task, `docs/index.html` line 30 must be updated to replace the `<span>Caesar Cipher / ROT13</span>` with an `<a href="tools/rot13/index.html">Caesar Cipher / ROT13</a>` link, consistent with how the BMR tool was activated.
 
 ---
 

@@ -7,14 +7,19 @@ function defaultTrigger(blob, filename) {
   const a = document.createElement('a')
   a.href = url
   a.download = filename
+  document.body.appendChild(a)
   a.click()
+  document.body.removeChild(a)
   URL.revokeObjectURL(url)
 }
 
 export function exportState(triggerDownload = defaultTrigger) {
   const data = {}
   for (const key of getAllKeys()) {
-    data[key] = get(key)
+    const value = get(key)
+    if (value !== null) {
+      data[key] = value
+    }
   }
   const payload = {
     exported: new Date().toISOString(),

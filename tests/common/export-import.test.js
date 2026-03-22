@@ -76,6 +76,12 @@ describe('export-import', () => {
     await expect(importState(file)).rejects.toThrow(Error)
   })
 
+  it('import rejects data: null', async () => {
+    const content = JSON.stringify({ version: 1, data: null })
+    const file = new File([content], 'bad.json', { type: 'application/json' })
+    await expect(importState(file)).rejects.toThrow(Error)
+  })
+
   it('import silently ignores keys with dots or special chars', async () => {
     const content = JSON.stringify({
       version: 1,

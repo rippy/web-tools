@@ -143,6 +143,7 @@ save(record)
 
 findNearby({lat, lng}, radiusM)
 // Returns the closest location record whose lat/lng is within radiusM metres
+// Records with lat: null or lng: null are skipped during distance calculation
 // If two records are equidistant, returns either one (order not guaranteed)
 // Returns null if no match, or if all candidates have lat: null
 // Uses Haversine formula for distance calculation
@@ -212,6 +213,9 @@ locationStore.save({
 locationStore.recordVisit(id)
 ```
 
+Note: as with GPS capture, `firstSeen` (set in `save()`) and `visits[0]`
+(set by `recordVisit`) will differ by a few milliseconds. This is expected.
+
 If the user skips manual entry, the tool records the event with `locationId: null`.
 
 **`generateId()`** is a helper exported from `capture.js`:
@@ -268,6 +272,8 @@ All tests use Vitest with jsdom environment. `localStorage.clear()` in
 - `findNearby` returns closest record within radius
 - `findNearby` returns `null` when no record is within radius
 - `findNearby` returns `null` when all candidates have `lat: null`
+- `findNearby` returns the closest non-null record when the store contains
+  a mix of null-coordinate and non-null-coordinate records
 - `recordVisit` increments `visitCount`, appends timestamp to `visits`,
   updates `lastSeen`
 - `recordVisit` does not modify `firstSeen`

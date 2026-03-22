@@ -19,8 +19,20 @@ export function calculateBAC(drinks, weightKg, biologicalSex, nowMs = Date.now()
   const bac = (totalAlcoholG / (weightKg * r * 10)) - (BURN_RATE * hoursElapsed)
   return Math.max(0, bac)
 }
-export function timeToClear(bac) { throw new Error('not implemented') }
-export function formatHoursToHHMM(hours, baseMs) { throw new Error('not implemented') }
+export function timeToClear(bac) {
+  if (bac === 0) return 0
+  return bac / BURN_RATE
+}
+
+export function formatHoursToHHMM(hours, baseMs = Date.now()) {
+  const timeMs = baseMs + Math.round(hours * 3_600_000)
+  const date = new Date(timeMs)
+  const h = date.getHours()
+  const m = date.getMinutes()
+  const ampm = h >= 12 ? 'PM' : 'AM'
+  const h12 = h % 12 || 12
+  return `${h12}:${String(m).padStart(2, '0')} ${ampm}`
+}
 export function peakBAC(drinks, weightKg, biologicalSex) { throw new Error('not implemented') }
 export function drinkDefaults(type, isDouble) { throw new Error('not implemented') }
 export function getBACDescription(bac) { throw new Error('not implemented') }

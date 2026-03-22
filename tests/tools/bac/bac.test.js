@@ -68,3 +68,34 @@ describe('calculateBAC', () => {
     expect(calculateBAC(twoBeers, 80, 'other', nowMs)).toBeNaN()
   })
 })
+
+describe('timeToClear', () => {
+  it('returns correct hours for a given BAC', () => {
+    // 0.09 / 0.015 = 6
+    expect(timeToClear(0.09)).toBeCloseTo(6)
+  })
+
+  it('returns 0 when BAC is 0', () => {
+    expect(timeToClear(0)).toBe(0)
+  })
+})
+
+describe('formatHoursToHHMM', () => {
+  it('returns correct H:MM AM/PM string for known hours and baseMs', () => {
+    // 9:00 PM local + 1.5h = 10:30 PM
+    const base = new Date(2026, 2, 22, 21, 0, 0).getTime()  // March 22 2026, 9:00 PM local
+    expect(formatHoursToHHMM(1.5, base)).toBe('10:30 PM')
+  })
+
+  it('handles midnight crossing (PM → AM)', () => {
+    // 11:00 PM local + 2h = 1:00 AM
+    const base = new Date(2026, 2, 22, 23, 0, 0).getTime()
+    expect(formatHoursToHHMM(2, base)).toBe('1:00 AM')
+  })
+
+  it('formats noon as 12:00 PM', () => {
+    // 11:00 AM + 1h = 12:00 PM
+    const base = new Date(2026, 2, 22, 11, 0, 0).getTime()
+    expect(formatHoursToHHMM(1, base)).toBe('12:00 PM')
+  })
+})

@@ -3,8 +3,8 @@ import * as userProfile from '../../docs/common/user-profile.js'
 
 const validPhysio = {
   biologicalSex: 'male',
-  weight: 80,
-  height: 178,
+  weightKg: 80,
+  heightCm: 178,
   age: 35,
 }
 
@@ -28,6 +28,16 @@ describe('userProfile', () => {
     expect(userProfile.get()).toEqual(full)
   })
 
+  it('set and get round-trip persists units field', () => {
+    userProfile.set({ ...validPhysio, units: 'imperial' })
+    expect(userProfile.get().units).toBe('imperial')
+  })
+
+  it('set persists without units field (units is optional)', () => {
+    userProfile.set(validPhysio)
+    expect(userProfile.get().units).toBeUndefined()
+  })
+
   it('isComplete returns false when no profile stored', () => {
     expect(userProfile.isComplete()).toBe(false)
   })
@@ -38,9 +48,8 @@ describe('userProfile', () => {
   })
 
   it('isComplete is presence-only — true even with invalid stored values', () => {
-    // bypass set() to write invalid data directly
     localStorage.setItem('web-tools.user-profile', JSON.stringify({
-      biologicalSex: 'alien', weight: -5, height: 0, age: 'old',
+      biologicalSex: 'alien', weightKg: -5, heightCm: 0, age: 'old',
     }))
     expect(userProfile.isComplete()).toBe(true)
   })
@@ -56,30 +65,27 @@ describe('userProfile', () => {
   })
 
   it('isIdentityComplete returns false when only one identity field is present', () => {
-    // bypass set() since it writes both fields together; test one-field partial state
     localStorage.setItem('web-tools.user-profile', JSON.stringify({
-      biologicalSex: 'male', weight: 80, height: 178, age: 35, genderIdentity: 'Non-binary',
+      biologicalSex: 'male', weightKg: 80, heightCm: 178, age: 35, genderIdentity: 'Non-binary',
     }))
     expect(userProfile.isIdentityComplete()).toBe(false)
   })
 
   it('set throws TypeError for wrong biologicalSex string', () => {
-    expect(() => userProfile.set({ ...validPhysio, biologicalSex: 'other' }))
-      .toThrow(TypeError)
+    expect(() => userProfile.set({ ...validPhysio, biologicalSex: 'other' })).toThrow(TypeError)
   })
 
   it('set throws TypeError for wrong-case biologicalSex', () => {
-    expect(() => userProfile.set({ ...validPhysio, biologicalSex: 'Male' }))
-      .toThrow(TypeError)
+    expect(() => userProfile.set({ ...validPhysio, biologicalSex: 'Male' })).toThrow(TypeError)
   })
 
-  it('set throws TypeError for non-positive weight', () => {
-    expect(() => userProfile.set({ ...validPhysio, weight: 0 })).toThrow(TypeError)
-    expect(() => userProfile.set({ ...validPhysio, weight: -1 })).toThrow(TypeError)
+  it('set throws TypeError for non-positive weightKg', () => {
+    expect(() => userProfile.set({ ...validPhysio, weightKg: 0 })).toThrow(TypeError)
+    expect(() => userProfile.set({ ...validPhysio, weightKg: -1 })).toThrow(TypeError)
   })
 
-  it('set throws TypeError for non-positive height', () => {
-    expect(() => userProfile.set({ ...validPhysio, height: 0 })).toThrow(TypeError)
+  it('set throws TypeError for non-positive heightCm', () => {
+    expect(() => userProfile.set({ ...validPhysio, heightCm: 0 })).toThrow(TypeError)
   })
 
   it('set throws TypeError for non-positive age', () => {
@@ -95,19 +101,31 @@ describe('userProfile', () => {
     expect(() => userProfile.set(rest)).toThrow(TypeError)
   })
 
-  it('set throws TypeError when weight missing', () => {
-    const { weight, ...rest } = validPhysio
+  it('set throws TypeError when weightKg missing', () => {
+    const { weightKg, ...rest } = validPhysio
     expect(() => userProfile.set(rest)).toThrow(TypeError)
   })
 
-  it('set throws TypeError when height missing', () => {
-    const { height, ...rest } = validPhysio
+  it('set throws TypeError when heightCm missing', () => {
+    const { heightCm, ...rest } = validPhysio
     expect(() => userProfile.set(rest)).toThrow(TypeError)
   })
 
   it('set throws TypeError when age missing', () => {
     const { age, ...rest } = validPhysio
     expect(() => userProfile.set(rest)).toThrow(TypeError)
+  })
+
+  it('set throws TypeError for invalid units value', () => {
+    expect(() => userProfile.set({ ...validPhysio, units: 'furlongs' })).toThrow(TypeError)
+  })
+
+  it('set accepts units: metric', () => {
+    expect(() => userProfile.set({ ...validPhysio, units: 'metric' })).not.toThrow()
+  })
+
+  it('set accepts units: imperial', () => {
+    expect(() => userProfile.set({ ...validPhysio, units: 'imperial' })).not.toThrow()
   })
 
   it('set does not throw when identity fields are omitted', () => {

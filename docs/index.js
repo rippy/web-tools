@@ -109,7 +109,7 @@ panel.addEventListener('toggle', async () => {
   if (!panel.open) return
 
   // sync location permission on every open
-  syncLocationPermission()
+  syncLocationPermission().catch(() => {})
 
   // version info: load once
   if (versionLoaded) return

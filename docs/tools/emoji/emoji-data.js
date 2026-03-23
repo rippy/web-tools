@@ -1009,7 +1009,7 @@ export default [
   },
   {
     "emoji": "💤",
-    "name": "ZZZ",
+    "name": "zzz",
     "shortcode": ":zzz:",
     "category": "Smileys & Emotion"
   },
@@ -1092,7 +1092,7 @@ export default [
   },
   {
     "emoji": "👌",
-    "name": "OK hand",
+    "name": "ok hand",
     "shortcode": ":ok_hand:",
     "category": "People & Body",
     "skinTones": true
@@ -1668,42 +1668,42 @@ export default [
   },
   {
     "emoji": "🙅",
-    "name": "person gesturing NO",
+    "name": "person gesturing no",
     "shortcode": ":person_gesturing_no:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🙅‍♂️",
-    "name": "man gesturing NO",
+    "name": "man gesturing no",
     "shortcode": ":man_gesturing_no:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🙅‍♀️",
-    "name": "woman gesturing NO",
+    "name": "woman gesturing no",
     "shortcode": ":woman_gesturing_no:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🙆",
-    "name": "person gesturing OK",
+    "name": "person gesturing ok",
     "shortcode": ":person_gesturing_ok:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🙆‍♂️",
-    "name": "man gesturing OK",
+    "name": "man gesturing ok",
     "shortcode": ":man_gesturing_ok:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🙆‍♀️",
-    "name": "woman gesturing OK",
+    "name": "woman gesturing ok",
     "shortcode": ":woman_gesturing_ok:",
     "category": "People & Body",
     "skinTones": true
@@ -2417,21 +2417,21 @@ export default [
   },
   {
     "emoji": "🎅",
-    "name": "Santa Claus",
+    "name": "santa claus",
     "shortcode": ":santa_claus:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🤶",
-    "name": "Mrs. Claus",
+    "name": "mrs. claus",
     "shortcode": ":mrs_claus:",
     "category": "People & Body",
     "skinTones": true
   },
   {
     "emoji": "🧑‍🎄",
-    "name": "Mx Claus",
+    "name": "mx claus",
     "shortcode": ":mx_claus:",
     "category": "People & Body",
     "skinTones": true
@@ -4230,7 +4230,7 @@ export default [
   },
   {
     "emoji": "🦖",
-    "name": "T-Rex",
+    "name": "t-rex",
     "shortcode": ":t_rex:",
     "category": "Animals & Nature"
   },
@@ -5394,19 +5394,19 @@ export default [
   },
   {
     "emoji": "🌍",
-    "name": "globe showing Europe-Africa",
+    "name": "globe showing europe-africa",
     "shortcode": ":globe_showing_europe_africa:",
     "category": "Travel & Places"
   },
   {
     "emoji": "🌎",
-    "name": "globe showing Americas",
+    "name": "globe showing americas",
     "shortcode": ":globe_showing_americas:",
     "category": "Travel & Places"
   },
   {
     "emoji": "🌏",
-    "name": "globe showing Asia-Australia",
+    "name": "globe showing asia-australia",
     "shortcode": ":globe_showing_asia_australia:",
     "category": "Travel & Places"
   },
@@ -5424,7 +5424,7 @@ export default [
   },
   {
     "emoji": "🗾",
-    "name": "map of Japan",
+    "name": "map of japan",
     "shortcode": ":map_of_japan:",
     "category": "Travel & Places"
   },
@@ -5562,7 +5562,7 @@ export default [
   },
   {
     "emoji": "🏣",
-    "name": "Japanese post office",
+    "name": "japanese post office",
     "shortcode": ":japanese_post_office:",
     "category": "Travel & Places"
   },
@@ -5622,7 +5622,7 @@ export default [
   },
   {
     "emoji": "🏯",
-    "name": "Japanese castle",
+    "name": "japanese castle",
     "shortcode": ":japanese_castle:",
     "category": "Travel & Places"
   },
@@ -5640,13 +5640,13 @@ export default [
   },
   {
     "emoji": "🗼",
-    "name": "Tokyo tower",
+    "name": "tokyo tower",
     "shortcode": ":tokyo_tower:",
     "category": "Travel & Places"
   },
   {
     "emoji": "🗽",
-    "name": "Statue of Liberty",
+    "name": "statue of liberty",
     "shortcode": ":statue_of_liberty:",
     "category": "Travel & Places"
   },
@@ -6708,7 +6708,7 @@ export default [
   },
   {
     "emoji": "🎄",
-    "name": "Christmas tree",
+    "name": "christmas tree",
     "shortcode": ":christmas_tree:",
     "category": "Activities"
   },
@@ -6768,7 +6768,7 @@ export default [
   },
   {
     "emoji": "🎎",
-    "name": "Japanese dolls",
+    "name": "japanese dolls",
     "shortcode": ":japanese_dolls:",
     "category": "Activities"
   },
@@ -8796,7 +8796,7 @@ export default [
   },
   {
     "emoji": "🏧",
-    "name": "ATM sign",
+    "name": "atm sign",
     "shortcode": ":atm_sign:",
     "category": "Symbols"
   },
@@ -9048,31 +9048,31 @@ export default [
   },
   {
     "emoji": "🔙",
-    "name": "BACK arrow",
+    "name": "back arrow",
     "shortcode": ":back_arrow:",
     "category": "Symbols"
   },
   {
     "emoji": "🔚",
-    "name": "END arrow",
+    "name": "end arrow",
     "shortcode": ":end_arrow:",
     "category": "Symbols"
   },
   {
     "emoji": "🔛",
-    "name": "ON! arrow",
+    "name": "on! arrow",
     "shortcode": ":on_arrow:",
     "category": "Symbols"
   },
   {
     "emoji": "🔜",
-    "name": "SOON arrow",
+    "name": "soon arrow",
     "shortcode": ":soon_arrow:",
     "category": "Symbols"
   },
   {
     "emoji": "🔝",
-    "name": "TOP arrow",
+    "name": "top arrow",
     "shortcode": ":top_arrow:",
     "category": "Symbols"
   },
@@ -9096,7 +9096,7 @@ export default [
   },
   {
     "emoji": "✡️",
-    "name": "star of David",
+    "name": "star of david",
     "shortcode": ":star_of_david:",
     "category": "Symbols"
   },
@@ -9156,79 +9156,79 @@ export default [
   },
   {
     "emoji": "♈",
-    "name": "Aries",
+    "name": "aries",
     "shortcode": ":aries:",
     "category": "Symbols"
   },
   {
     "emoji": "♉",
-    "name": "Taurus",
+    "name": "taurus",
     "shortcode": ":taurus:",
     "category": "Symbols"
   },
   {
     "emoji": "♊",
-    "name": "Gemini",
+    "name": "gemini",
     "shortcode": ":gemini:",
     "category": "Symbols"
   },
   {
     "emoji": "♋",
-    "name": "Cancer",
+    "name": "cancer",
     "shortcode": ":cancer:",
     "category": "Symbols"
   },
   {
     "emoji": "♌",
-    "name": "Leo",
+    "name": "leo",
     "shortcode": ":leo:",
     "category": "Symbols"
   },
   {
     "emoji": "♍",
-    "name": "Virgo",
+    "name": "virgo",
     "shortcode": ":virgo:",
     "category": "Symbols"
   },
   {
     "emoji": "♎",
-    "name": "Libra",
+    "name": "libra",
     "shortcode": ":libra:",
     "category": "Symbols"
   },
   {
     "emoji": "♏",
-    "name": "Scorpio",
+    "name": "scorpio",
     "shortcode": ":scorpio:",
     "category": "Symbols"
   },
   {
     "emoji": "♐",
-    "name": "Sagittarius",
+    "name": "sagittarius",
     "shortcode": ":sagittarius:",
     "category": "Symbols"
   },
   {
     "emoji": "♑",
-    "name": "Capricorn",
+    "name": "capricorn",
     "shortcode": ":capricorn:",
     "category": "Symbols"
   },
   {
     "emoji": "♒",
-    "name": "Aquarius",
+    "name": "aquarius",
     "shortcode": ":aquarius:",
     "category": "Symbols"
   },
   {
     "emoji": "♓",
-    "name": "Pisces",
+    "name": "pisces",
     "shortcode": ":pisces:",
     "category": "Symbols"
   },
   {
     "emoji": "⛎",
-    "name": "Ophiuchus",
+    "name": "ophiuchus",
     "shortcode": ":ophiuchus:",
     "category": "Symbols"
   },
@@ -9522,7 +9522,7 @@ export default [
   },
   {
     "emoji": "🔰",
-    "name": "Japanese symbol for beginner",
+    "name": "japanese symbol for beginner",
     "shortcode": ":japanese_symbol_for_beginner:",
     "category": "Symbols"
   },
@@ -9732,37 +9732,37 @@ export default [
   },
   {
     "emoji": "🅰️",
-    "name": "A button (blood type)",
+    "name": "a button (blood type)",
     "shortcode": ":a_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆎",
-    "name": "AB button (blood type)",
+    "name": "ab button (blood type)",
     "shortcode": ":ab_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🅱️",
-    "name": "B button (blood type)",
+    "name": "b button (blood type)",
     "shortcode": ":b_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆑",
-    "name": "CL button",
+    "name": "cl button",
     "shortcode": ":cl_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆒",
-    "name": "COOL button",
+    "name": "cool button",
     "shortcode": ":cool_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆓",
-    "name": "FREE button",
+    "name": "free button",
     "shortcode": ":free_button:",
     "category": "Symbols"
   },
@@ -9774,163 +9774,163 @@ export default [
   },
   {
     "emoji": "🆔",
-    "name": "ID button",
+    "name": "id button",
     "shortcode": ":id_button:",
     "category": "Symbols"
   },
   {
     "emoji": "Ⓜ️",
-    "name": "circled M",
+    "name": "circled m",
     "shortcode": ":circled_m:",
     "category": "Symbols"
   },
   {
     "emoji": "🆕",
-    "name": "NEW button",
+    "name": "new button",
     "shortcode": ":new_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆖",
-    "name": "NG button",
+    "name": "ng button",
     "shortcode": ":ng_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🅾️",
-    "name": "O button (blood type)",
+    "name": "o button (blood type)",
     "shortcode": ":o_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆗",
-    "name": "OK button",
+    "name": "ok button",
     "shortcode": ":ok_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🅿️",
-    "name": "P button",
+    "name": "p button",
     "shortcode": ":p_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆘",
-    "name": "SOS button",
+    "name": "sos button",
     "shortcode": ":sos_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆙",
-    "name": "UP! button",
+    "name": "up! button",
     "shortcode": ":up_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🆚",
-    "name": "VS button",
+    "name": "vs button",
     "shortcode": ":vs_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈁",
-    "name": "Japanese “here” button",
+    "name": "japanese “here” button",
     "shortcode": ":japanese_here_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈂️",
-    "name": "Japanese “service charge” button",
+    "name": "japanese “service charge” button",
     "shortcode": ":japanese_service_charge_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈷️",
-    "name": "Japanese “monthly amount” button",
+    "name": "japanese “monthly amount” button",
     "shortcode": ":japanese_monthly_amount_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈶",
-    "name": "Japanese “not free of charge” button",
+    "name": "japanese “not free of charge” button",
     "shortcode": ":japanese_not_free_of_charge_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈯",
-    "name": "Japanese “reserved” button",
+    "name": "japanese “reserved” button",
     "shortcode": ":japanese_reserved_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🉐",
-    "name": "Japanese “bargain” button",
+    "name": "japanese “bargain” button",
     "shortcode": ":japanese_bargain_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈹",
-    "name": "Japanese “discount” button",
+    "name": "japanese “discount” button",
     "shortcode": ":japanese_discount_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈚",
-    "name": "Japanese “free of charge” button",
+    "name": "japanese “free of charge” button",
     "shortcode": ":japanese_free_of_charge_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈲",
-    "name": "Japanese “prohibited” button",
+    "name": "japanese “prohibited” button",
     "shortcode": ":japanese_prohibited_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🉑",
-    "name": "Japanese “acceptable” button",
+    "name": "japanese “acceptable” button",
     "shortcode": ":japanese_acceptable_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈸",
-    "name": "Japanese “application” button",
+    "name": "japanese “application” button",
     "shortcode": ":japanese_application_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈴",
-    "name": "Japanese “passing grade” button",
+    "name": "japanese “passing grade” button",
     "shortcode": ":japanese_passing_grade_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈳",
-    "name": "Japanese “vacancy” button",
+    "name": "japanese “vacancy” button",
     "shortcode": ":japanese_vacancy_button:",
     "category": "Symbols"
   },
   {
     "emoji": "㊗️",
-    "name": "Japanese “congratulations” button",
+    "name": "japanese “congratulations” button",
     "shortcode": ":japanese_congratulations_button:",
     "category": "Symbols"
   },
   {
     "emoji": "㊙️",
-    "name": "Japanese “secret” button",
+    "name": "japanese “secret” button",
     "shortcode": ":japanese_secret_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈺",
-    "name": "Japanese “open for business” button",
+    "name": "japanese “open for business” button",
     "shortcode": ":japanese_open_for_business_button:",
     "category": "Symbols"
   },
   {
     "emoji": "🈵",
-    "name": "Japanese “no vacancy” button",
+    "name": "japanese “no vacancy” button",
     "shortcode": ":japanese_no_vacancy_button:",
     "category": "Symbols"
   },
@@ -10188,1573 +10188,1573 @@ export default [
   },
   {
     "emoji": "🇦🇨",
-    "name": "flag Ascension Island",
+    "name": "flag ascension island",
     "shortcode": ":flag_ascension_island:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇩",
-    "name": "flag Andorra",
+    "name": "flag andorra",
     "shortcode": ":flag_andorra:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇪",
-    "name": "flag United Arab Emirates",
+    "name": "flag united arab emirates",
     "shortcode": ":flag_united_arab_emirates:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇫",
-    "name": "flag Afghanistan",
+    "name": "flag afghanistan",
     "shortcode": ":flag_afghanistan:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇬",
-    "name": "flag Antigua & Barbuda",
+    "name": "flag antigua & barbuda",
     "shortcode": ":flag_antigua_barbuda:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇮",
-    "name": "flag Anguilla",
+    "name": "flag anguilla",
     "shortcode": ":flag_anguilla:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇱",
-    "name": "flag Albania",
+    "name": "flag albania",
     "shortcode": ":flag_albania:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇲",
-    "name": "flag Armenia",
+    "name": "flag armenia",
     "shortcode": ":flag_armenia:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇴",
-    "name": "flag Angola",
+    "name": "flag angola",
     "shortcode": ":flag_angola:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇶",
-    "name": "flag Antarctica",
+    "name": "flag antarctica",
     "shortcode": ":flag_antarctica:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇷",
-    "name": "flag Argentina",
+    "name": "flag argentina",
     "shortcode": ":flag_argentina:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇸",
-    "name": "flag American Samoa",
+    "name": "flag american samoa",
     "shortcode": ":flag_american_samoa:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇹",
-    "name": "flag Austria",
+    "name": "flag austria",
     "shortcode": ":flag_austria:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇺",
-    "name": "flag Australia",
+    "name": "flag australia",
     "shortcode": ":flag_australia:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇼",
-    "name": "flag Aruba",
+    "name": "flag aruba",
     "shortcode": ":flag_aruba:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇽",
-    "name": "flag Åland Islands",
+    "name": "flag åland islands",
     "shortcode": ":flag_aland_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇦🇿",
-    "name": "flag Azerbaijan",
+    "name": "flag azerbaijan",
     "shortcode": ":flag_azerbaijan:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇦",
-    "name": "flag Bosnia & Herzegovina",
+    "name": "flag bosnia & herzegovina",
     "shortcode": ":flag_bosnia_herzegovina:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇧",
-    "name": "flag Barbados",
+    "name": "flag barbados",
     "shortcode": ":flag_barbados:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇩",
-    "name": "flag Bangladesh",
+    "name": "flag bangladesh",
     "shortcode": ":flag_bangladesh:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇪",
-    "name": "flag Belgium",
+    "name": "flag belgium",
     "shortcode": ":flag_belgium:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇫",
-    "name": "flag Burkina Faso",
+    "name": "flag burkina faso",
     "shortcode": ":flag_burkina_faso:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇬",
-    "name": "flag Bulgaria",
+    "name": "flag bulgaria",
     "shortcode": ":flag_bulgaria:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇭",
-    "name": "flag Bahrain",
+    "name": "flag bahrain",
     "shortcode": ":flag_bahrain:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇮",
-    "name": "flag Burundi",
+    "name": "flag burundi",
     "shortcode": ":flag_burundi:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇯",
-    "name": "flag Benin",
+    "name": "flag benin",
     "shortcode": ":flag_benin:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇱",
-    "name": "flag St. Barthélemy",
+    "name": "flag st. barthélemy",
     "shortcode": ":flag_st_barthelemy:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇲",
-    "name": "flag Bermuda",
+    "name": "flag bermuda",
     "shortcode": ":flag_bermuda:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇳",
-    "name": "flag Brunei",
+    "name": "flag brunei",
     "shortcode": ":flag_brunei:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇴",
-    "name": "flag Bolivia",
+    "name": "flag bolivia",
     "shortcode": ":flag_bolivia:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇶",
-    "name": "flag Caribbean Netherlands",
+    "name": "flag caribbean netherlands",
     "shortcode": ":flag_caribbean_netherlands:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇷",
-    "name": "flag Brazil",
+    "name": "flag brazil",
     "shortcode": ":flag_brazil:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇸",
-    "name": "flag Bahamas",
+    "name": "flag bahamas",
     "shortcode": ":flag_bahamas:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇹",
-    "name": "flag Bhutan",
+    "name": "flag bhutan",
     "shortcode": ":flag_bhutan:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇻",
-    "name": "flag Bouvet Island",
+    "name": "flag bouvet island",
     "shortcode": ":flag_bouvet_island:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇼",
-    "name": "flag Botswana",
+    "name": "flag botswana",
     "shortcode": ":flag_botswana:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇾",
-    "name": "flag Belarus",
+    "name": "flag belarus",
     "shortcode": ":flag_belarus:",
     "category": "Flags"
   },
   {
     "emoji": "🇧🇿",
-    "name": "flag Belize",
+    "name": "flag belize",
     "shortcode": ":flag_belize:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇦",
-    "name": "flag Canada",
+    "name": "flag canada",
     "shortcode": ":flag_canada:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇨",
-    "name": "flag Cocos (Keeling) Islands",
+    "name": "flag cocos (keeling) islands",
     "shortcode": ":flag_cocos_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇩",
-    "name": "flag Congo - Kinshasa",
+    "name": "flag congo - kinshasa",
     "shortcode": ":flag_congo_kinshasa:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇫",
-    "name": "flag Central African Republic",
+    "name": "flag central african republic",
     "shortcode": ":flag_central_african_republic:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇬",
-    "name": "flag Congo - Brazzaville",
+    "name": "flag congo - brazzaville",
     "shortcode": ":flag_congo_brazzaville:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇭",
-    "name": "flag Switzerland",
+    "name": "flag switzerland",
     "shortcode": ":flag_switzerland:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇮",
-    "name": "flag Côte d’Ivoire",
+    "name": "flag côte d’ivoire",
     "shortcode": ":flag_cote_d_ivoire:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇰",
-    "name": "flag Cook Islands",
+    "name": "flag cook islands",
     "shortcode": ":flag_cook_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇱",
-    "name": "flag Chile",
+    "name": "flag chile",
     "shortcode": ":flag_chile:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇲",
-    "name": "flag Cameroon",
+    "name": "flag cameroon",
     "shortcode": ":flag_cameroon:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇳",
-    "name": "flag China",
+    "name": "flag china",
     "shortcode": ":flag_china:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇴",
-    "name": "flag Colombia",
+    "name": "flag colombia",
     "shortcode": ":flag_colombia:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇵",
-    "name": "flag Clipperton Island",
+    "name": "flag clipperton island",
     "shortcode": ":flag_clipperton_island:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇶",
-    "name": "flag Sark",
+    "name": "flag sark",
     "shortcode": ":flag_sark:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇷",
-    "name": "flag Costa Rica",
+    "name": "flag costa rica",
     "shortcode": ":flag_costa_rica:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇺",
-    "name": "flag Cuba",
+    "name": "flag cuba",
     "shortcode": ":flag_cuba:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇻",
-    "name": "flag Cape Verde",
+    "name": "flag cape verde",
     "shortcode": ":flag_cape_verde:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇼",
-    "name": "flag Curaçao",
+    "name": "flag curaçao",
     "shortcode": ":flag_curacao:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇽",
-    "name": "flag Christmas Island",
+    "name": "flag christmas island",
     "shortcode": ":flag_christmas_island:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇾",
-    "name": "flag Cyprus",
+    "name": "flag cyprus",
     "shortcode": ":flag_cyprus:",
     "category": "Flags"
   },
   {
     "emoji": "🇨🇿",
-    "name": "flag Czechia",
+    "name": "flag czechia",
     "shortcode": ":flag_czechia:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇪",
-    "name": "flag Germany",
+    "name": "flag germany",
     "shortcode": ":flag_germany:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇬",
-    "name": "flag Diego Garcia",
+    "name": "flag diego garcia",
     "shortcode": ":flag_diego_garcia:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇯",
-    "name": "flag Djibouti",
+    "name": "flag djibouti",
     "shortcode": ":flag_djibouti:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇰",
-    "name": "flag Denmark",
+    "name": "flag denmark",
     "shortcode": ":flag_denmark:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇲",
-    "name": "flag Dominica",
+    "name": "flag dominica",
     "shortcode": ":flag_dominica:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇴",
-    "name": "flag Dominican Republic",
+    "name": "flag dominican republic",
     "shortcode": ":flag_dominican_republic:",
     "category": "Flags"
   },
   {
     "emoji": "🇩🇿",
-    "name": "flag Algeria",
+    "name": "flag algeria",
     "shortcode": ":flag_algeria:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇦",
-    "name": "flag Ceuta & Melilla",
+    "name": "flag ceuta & melilla",
     "shortcode": ":flag_ceuta_melilla:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇨",
-    "name": "flag Ecuador",
+    "name": "flag ecuador",
     "shortcode": ":flag_ecuador:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇪",
-    "name": "flag Estonia",
+    "name": "flag estonia",
     "shortcode": ":flag_estonia:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇬",
-    "name": "flag Egypt",
+    "name": "flag egypt",
     "shortcode": ":flag_egypt:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇭",
-    "name": "flag Western Sahara",
+    "name": "flag western sahara",
     "shortcode": ":flag_western_sahara:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇷",
-    "name": "flag Eritrea",
+    "name": "flag eritrea",
     "shortcode": ":flag_eritrea:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇸",
-    "name": "flag Spain",
+    "name": "flag spain",
     "shortcode": ":flag_spain:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇹",
-    "name": "flag Ethiopia",
+    "name": "flag ethiopia",
     "shortcode": ":flag_ethiopia:",
     "category": "Flags"
   },
   {
     "emoji": "🇪🇺",
-    "name": "flag European Union",
+    "name": "flag european union",
     "shortcode": ":flag_european_union:",
     "category": "Flags"
   },
   {
     "emoji": "🇫🇮",
-    "name": "flag Finland",
+    "name": "flag finland",
     "shortcode": ":flag_finland:",
     "category": "Flags"
   },
   {
     "emoji": "🇫🇯",
-    "name": "flag Fiji",
+    "name": "flag fiji",
     "shortcode": ":flag_fiji:",
     "category": "Flags"
   },
   {
     "emoji": "🇫🇰",
-    "name": "flag Falkland Islands",
+    "name": "flag falkland islands",
     "shortcode": ":flag_falkland_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇫🇲",
-    "name": "flag Micronesia",
+    "name": "flag micronesia",
     "shortcode": ":flag_micronesia:",
     "category": "Flags"
   },
   {
     "emoji": "🇫🇴",
-    "name": "flag Faroe Islands",
+    "name": "flag faroe islands",
     "shortcode": ":flag_faroe_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇫🇷",
-    "name": "flag France",
+    "name": "flag france",
     "shortcode": ":flag_france:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇦",
-    "name": "flag Gabon",
+    "name": "flag gabon",
     "shortcode": ":flag_gabon:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇧",
-    "name": "flag United Kingdom",
+    "name": "flag united kingdom",
     "shortcode": ":flag_united_kingdom:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇩",
-    "name": "flag Grenada",
+    "name": "flag grenada",
     "shortcode": ":flag_grenada:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇪",
-    "name": "flag Georgia",
+    "name": "flag georgia",
     "shortcode": ":flag_georgia:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇫",
-    "name": "flag French Guiana",
+    "name": "flag french guiana",
     "shortcode": ":flag_french_guiana:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇬",
-    "name": "flag Guernsey",
+    "name": "flag guernsey",
     "shortcode": ":flag_guernsey:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇭",
-    "name": "flag Ghana",
+    "name": "flag ghana",
     "shortcode": ":flag_ghana:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇮",
-    "name": "flag Gibraltar",
+    "name": "flag gibraltar",
     "shortcode": ":flag_gibraltar:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇱",
-    "name": "flag Greenland",
+    "name": "flag greenland",
     "shortcode": ":flag_greenland:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇲",
-    "name": "flag Gambia",
+    "name": "flag gambia",
     "shortcode": ":flag_gambia:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇳",
-    "name": "flag Guinea",
+    "name": "flag guinea",
     "shortcode": ":flag_guinea:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇵",
-    "name": "flag Guadeloupe",
+    "name": "flag guadeloupe",
     "shortcode": ":flag_guadeloupe:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇶",
-    "name": "flag Equatorial Guinea",
+    "name": "flag equatorial guinea",
     "shortcode": ":flag_equatorial_guinea:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇷",
-    "name": "flag Greece",
+    "name": "flag greece",
     "shortcode": ":flag_greece:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇸",
-    "name": "flag South Georgia & South Sandwich Islands",
+    "name": "flag south georgia & south sandwich islands",
     "shortcode": ":flag_south_georgia_south_sandwich_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇹",
-    "name": "flag Guatemala",
+    "name": "flag guatemala",
     "shortcode": ":flag_guatemala:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇺",
-    "name": "flag Guam",
+    "name": "flag guam",
     "shortcode": ":flag_guam:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇼",
-    "name": "flag Guinea-Bissau",
+    "name": "flag guinea-bissau",
     "shortcode": ":flag_guinea_bissau:",
     "category": "Flags"
   },
   {
     "emoji": "🇬🇾",
-    "name": "flag Guyana",
+    "name": "flag guyana",
     "shortcode": ":flag_guyana:",
     "category": "Flags"
   },
   {
     "emoji": "🇭🇰",
-    "name": "flag Hong Kong SAR China",
+    "name": "flag hong kong sar china",
     "shortcode": ":flag_hong_kong_sar_china:",
     "category": "Flags"
   },
   {
     "emoji": "🇭🇲",
-    "name": "flag Heard & McDonald Islands",
+    "name": "flag heard & mcdonald islands",
     "shortcode": ":flag_heard_mcdonald_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇭🇳",
-    "name": "flag Honduras",
+    "name": "flag honduras",
     "shortcode": ":flag_honduras:",
     "category": "Flags"
   },
   {
     "emoji": "🇭🇷",
-    "name": "flag Croatia",
+    "name": "flag croatia",
     "shortcode": ":flag_croatia:",
     "category": "Flags"
   },
   {
     "emoji": "🇭🇹",
-    "name": "flag Haiti",
+    "name": "flag haiti",
     "shortcode": ":flag_haiti:",
     "category": "Flags"
   },
   {
     "emoji": "🇭🇺",
-    "name": "flag Hungary",
+    "name": "flag hungary",
     "shortcode": ":flag_hungary:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇨",
-    "name": "flag Canary Islands",
+    "name": "flag canary islands",
     "shortcode": ":flag_canary_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇩",
-    "name": "flag Indonesia",
+    "name": "flag indonesia",
     "shortcode": ":flag_indonesia:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇪",
-    "name": "flag Ireland",
+    "name": "flag ireland",
     "shortcode": ":flag_ireland:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇱",
-    "name": "flag Israel",
+    "name": "flag israel",
     "shortcode": ":flag_israel:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇲",
-    "name": "flag Isle of Man",
+    "name": "flag isle of man",
     "shortcode": ":flag_isle_of_man:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇳",
-    "name": "flag India",
+    "name": "flag india",
     "shortcode": ":flag_india:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇴",
-    "name": "flag British Indian Ocean Territory",
+    "name": "flag british indian ocean territory",
     "shortcode": ":flag_british_indian_ocean_territory:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇶",
-    "name": "flag Iraq",
+    "name": "flag iraq",
     "shortcode": ":flag_iraq:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇷",
-    "name": "flag Iran",
+    "name": "flag iran",
     "shortcode": ":flag_iran:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇸",
-    "name": "flag Iceland",
+    "name": "flag iceland",
     "shortcode": ":flag_iceland:",
     "category": "Flags"
   },
   {
     "emoji": "🇮🇹",
-    "name": "flag Italy",
+    "name": "flag italy",
     "shortcode": ":flag_italy:",
     "category": "Flags"
   },
   {
     "emoji": "🇯🇪",
-    "name": "flag Jersey",
+    "name": "flag jersey",
     "shortcode": ":flag_jersey:",
     "category": "Flags"
   },
   {
     "emoji": "🇯🇲",
-    "name": "flag Jamaica",
+    "name": "flag jamaica",
     "shortcode": ":flag_jamaica:",
     "category": "Flags"
   },
   {
     "emoji": "🇯🇴",
-    "name": "flag Jordan",
+    "name": "flag jordan",
     "shortcode": ":flag_jordan:",
     "category": "Flags"
   },
   {
     "emoji": "🇯🇵",
-    "name": "flag Japan",
+    "name": "flag japan",
     "shortcode": ":flag_japan:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇪",
-    "name": "flag Kenya",
+    "name": "flag kenya",
     "shortcode": ":flag_kenya:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇬",
-    "name": "flag Kyrgyzstan",
+    "name": "flag kyrgyzstan",
     "shortcode": ":flag_kyrgyzstan:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇭",
-    "name": "flag Cambodia",
+    "name": "flag cambodia",
     "shortcode": ":flag_cambodia:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇮",
-    "name": "flag Kiribati",
+    "name": "flag kiribati",
     "shortcode": ":flag_kiribati:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇲",
-    "name": "flag Comoros",
+    "name": "flag comoros",
     "shortcode": ":flag_comoros:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇳",
-    "name": "flag St. Kitts & Nevis",
+    "name": "flag st. kitts & nevis",
     "shortcode": ":flag_st_kitts_nevis:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇵",
-    "name": "flag North Korea",
+    "name": "flag north korea",
     "shortcode": ":flag_north_korea:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇷",
-    "name": "flag South Korea",
+    "name": "flag south korea",
     "shortcode": ":flag_south_korea:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇼",
-    "name": "flag Kuwait",
+    "name": "flag kuwait",
     "shortcode": ":flag_kuwait:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇾",
-    "name": "flag Cayman Islands",
+    "name": "flag cayman islands",
     "shortcode": ":flag_cayman_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇰🇿",
-    "name": "flag Kazakhstan",
+    "name": "flag kazakhstan",
     "shortcode": ":flag_kazakhstan:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇦",
-    "name": "flag Laos",
+    "name": "flag laos",
     "shortcode": ":flag_laos:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇧",
-    "name": "flag Lebanon",
+    "name": "flag lebanon",
     "shortcode": ":flag_lebanon:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇨",
-    "name": "flag St. Lucia",
+    "name": "flag st. lucia",
     "shortcode": ":flag_st_lucia:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇮",
-    "name": "flag Liechtenstein",
+    "name": "flag liechtenstein",
     "shortcode": ":flag_liechtenstein:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇰",
-    "name": "flag Sri Lanka",
+    "name": "flag sri lanka",
     "shortcode": ":flag_sri_lanka:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇷",
-    "name": "flag Liberia",
+    "name": "flag liberia",
     "shortcode": ":flag_liberia:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇸",
-    "name": "flag Lesotho",
+    "name": "flag lesotho",
     "shortcode": ":flag_lesotho:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇹",
-    "name": "flag Lithuania",
+    "name": "flag lithuania",
     "shortcode": ":flag_lithuania:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇺",
-    "name": "flag Luxembourg",
+    "name": "flag luxembourg",
     "shortcode": ":flag_luxembourg:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇻",
-    "name": "flag Latvia",
+    "name": "flag latvia",
     "shortcode": ":flag_latvia:",
     "category": "Flags"
   },
   {
     "emoji": "🇱🇾",
-    "name": "flag Libya",
+    "name": "flag libya",
     "shortcode": ":flag_libya:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇦",
-    "name": "flag Morocco",
+    "name": "flag morocco",
     "shortcode": ":flag_morocco:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇨",
-    "name": "flag Monaco",
+    "name": "flag monaco",
     "shortcode": ":flag_monaco:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇩",
-    "name": "flag Moldova",
+    "name": "flag moldova",
     "shortcode": ":flag_moldova:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇪",
-    "name": "flag Montenegro",
+    "name": "flag montenegro",
     "shortcode": ":flag_montenegro:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇫",
-    "name": "flag St. Martin",
+    "name": "flag st. martin",
     "shortcode": ":flag_st_martin:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇬",
-    "name": "flag Madagascar",
+    "name": "flag madagascar",
     "shortcode": ":flag_madagascar:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇭",
-    "name": "flag Marshall Islands",
+    "name": "flag marshall islands",
     "shortcode": ":flag_marshall_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇰",
-    "name": "flag North Macedonia",
+    "name": "flag north macedonia",
     "shortcode": ":flag_north_macedonia:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇱",
-    "name": "flag Mali",
+    "name": "flag mali",
     "shortcode": ":flag_mali:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇲",
-    "name": "flag Myanmar (Burma)",
+    "name": "flag myanmar (burma)",
     "shortcode": ":flag_myanmar:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇳",
-    "name": "flag Mongolia",
+    "name": "flag mongolia",
     "shortcode": ":flag_mongolia:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇴",
-    "name": "flag Macao SAR China",
+    "name": "flag macao sar china",
     "shortcode": ":flag_macao_sar_china:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇵",
-    "name": "flag Northern Mariana Islands",
+    "name": "flag northern mariana islands",
     "shortcode": ":flag_northern_mariana_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇶",
-    "name": "flag Martinique",
+    "name": "flag martinique",
     "shortcode": ":flag_martinique:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇷",
-    "name": "flag Mauritania",
+    "name": "flag mauritania",
     "shortcode": ":flag_mauritania:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇸",
-    "name": "flag Montserrat",
+    "name": "flag montserrat",
     "shortcode": ":flag_montserrat:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇹",
-    "name": "flag Malta",
+    "name": "flag malta",
     "shortcode": ":flag_malta:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇺",
-    "name": "flag Mauritius",
+    "name": "flag mauritius",
     "shortcode": ":flag_mauritius:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇻",
-    "name": "flag Maldives",
+    "name": "flag maldives",
     "shortcode": ":flag_maldives:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇼",
-    "name": "flag Malawi",
+    "name": "flag malawi",
     "shortcode": ":flag_malawi:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇽",
-    "name": "flag Mexico",
+    "name": "flag mexico",
     "shortcode": ":flag_mexico:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇾",
-    "name": "flag Malaysia",
+    "name": "flag malaysia",
     "shortcode": ":flag_malaysia:",
     "category": "Flags"
   },
   {
     "emoji": "🇲🇿",
-    "name": "flag Mozambique",
+    "name": "flag mozambique",
     "shortcode": ":flag_mozambique:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇦",
-    "name": "flag Namibia",
+    "name": "flag namibia",
     "shortcode": ":flag_namibia:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇨",
-    "name": "flag New Caledonia",
+    "name": "flag new caledonia",
     "shortcode": ":flag_new_caledonia:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇪",
-    "name": "flag Niger",
+    "name": "flag niger",
     "shortcode": ":flag_niger:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇫",
-    "name": "flag Norfolk Island",
+    "name": "flag norfolk island",
     "shortcode": ":flag_norfolk_island:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇬",
-    "name": "flag Nigeria",
+    "name": "flag nigeria",
     "shortcode": ":flag_nigeria:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇮",
-    "name": "flag Nicaragua",
+    "name": "flag nicaragua",
     "shortcode": ":flag_nicaragua:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇱",
-    "name": "flag Netherlands",
+    "name": "flag netherlands",
     "shortcode": ":flag_netherlands:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇴",
-    "name": "flag Norway",
+    "name": "flag norway",
     "shortcode": ":flag_norway:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇵",
-    "name": "flag Nepal",
+    "name": "flag nepal",
     "shortcode": ":flag_nepal:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇷",
-    "name": "flag Nauru",
+    "name": "flag nauru",
     "shortcode": ":flag_nauru:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇺",
-    "name": "flag Niue",
+    "name": "flag niue",
     "shortcode": ":flag_niue:",
     "category": "Flags"
   },
   {
     "emoji": "🇳🇿",
-    "name": "flag New Zealand",
+    "name": "flag new zealand",
     "shortcode": ":flag_new_zealand:",
     "category": "Flags"
   },
   {
     "emoji": "🇴🇲",
-    "name": "flag Oman",
+    "name": "flag oman",
     "shortcode": ":flag_oman:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇦",
-    "name": "flag Panama",
+    "name": "flag panama",
     "shortcode": ":flag_panama:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇪",
-    "name": "flag Peru",
+    "name": "flag peru",
     "shortcode": ":flag_peru:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇫",
-    "name": "flag French Polynesia",
+    "name": "flag french polynesia",
     "shortcode": ":flag_french_polynesia:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇬",
-    "name": "flag Papua New Guinea",
+    "name": "flag papua new guinea",
     "shortcode": ":flag_papua_new_guinea:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇭",
-    "name": "flag Philippines",
+    "name": "flag philippines",
     "shortcode": ":flag_philippines:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇰",
-    "name": "flag Pakistan",
+    "name": "flag pakistan",
     "shortcode": ":flag_pakistan:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇱",
-    "name": "flag Poland",
+    "name": "flag poland",
     "shortcode": ":flag_poland:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇲",
-    "name": "flag St. Pierre & Miquelon",
+    "name": "flag st. pierre & miquelon",
     "shortcode": ":flag_st_pierre_miquelon:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇳",
-    "name": "flag Pitcairn Islands",
+    "name": "flag pitcairn islands",
     "shortcode": ":flag_pitcairn_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇷",
-    "name": "flag Puerto Rico",
+    "name": "flag puerto rico",
     "shortcode": ":flag_puerto_rico:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇸",
-    "name": "flag Palestinian Territories",
+    "name": "flag palestinian territories",
     "shortcode": ":flag_palestinian_territories:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇹",
-    "name": "flag Portugal",
+    "name": "flag portugal",
     "shortcode": ":flag_portugal:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇼",
-    "name": "flag Palau",
+    "name": "flag palau",
     "shortcode": ":flag_palau:",
     "category": "Flags"
   },
   {
     "emoji": "🇵🇾",
-    "name": "flag Paraguay",
+    "name": "flag paraguay",
     "shortcode": ":flag_paraguay:",
     "category": "Flags"
   },
   {
     "emoji": "🇶🇦",
-    "name": "flag Qatar",
+    "name": "flag qatar",
     "shortcode": ":flag_qatar:",
     "category": "Flags"
   },
   {
     "emoji": "🇷🇪",
-    "name": "flag Réunion",
+    "name": "flag réunion",
     "shortcode": ":flag_reunion:",
     "category": "Flags"
   },
   {
     "emoji": "🇷🇴",
-    "name": "flag Romania",
+    "name": "flag romania",
     "shortcode": ":flag_romania:",
     "category": "Flags"
   },
   {
     "emoji": "🇷🇸",
-    "name": "flag Serbia",
+    "name": "flag serbia",
     "shortcode": ":flag_serbia:",
     "category": "Flags"
   },
   {
     "emoji": "🇷🇺",
-    "name": "flag Russia",
+    "name": "flag russia",
     "shortcode": ":flag_russia:",
     "category": "Flags"
   },
   {
     "emoji": "🇷🇼",
-    "name": "flag Rwanda",
+    "name": "flag rwanda",
     "shortcode": ":flag_rwanda:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇦",
-    "name": "flag Saudi Arabia",
+    "name": "flag saudi arabia",
     "shortcode": ":flag_saudi_arabia:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇧",
-    "name": "flag Solomon Islands",
+    "name": "flag solomon islands",
     "shortcode": ":flag_solomon_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇨",
-    "name": "flag Seychelles",
+    "name": "flag seychelles",
     "shortcode": ":flag_seychelles:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇩",
-    "name": "flag Sudan",
+    "name": "flag sudan",
     "shortcode": ":flag_sudan:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇪",
-    "name": "flag Sweden",
+    "name": "flag sweden",
     "shortcode": ":flag_sweden:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇬",
-    "name": "flag Singapore",
+    "name": "flag singapore",
     "shortcode": ":flag_singapore:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇭",
-    "name": "flag St. Helena",
+    "name": "flag st. helena",
     "shortcode": ":flag_st_helena:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇮",
-    "name": "flag Slovenia",
+    "name": "flag slovenia",
     "shortcode": ":flag_slovenia:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇯",
-    "name": "flag Svalbard & Jan Mayen",
+    "name": "flag svalbard & jan mayen",
     "shortcode": ":flag_svalbard_jan_mayen:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇰",
-    "name": "flag Slovakia",
+    "name": "flag slovakia",
     "shortcode": ":flag_slovakia:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇱",
-    "name": "flag Sierra Leone",
+    "name": "flag sierra leone",
     "shortcode": ":flag_sierra_leone:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇲",
-    "name": "flag San Marino",
+    "name": "flag san marino",
     "shortcode": ":flag_san_marino:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇳",
-    "name": "flag Senegal",
+    "name": "flag senegal",
     "shortcode": ":flag_senegal:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇴",
-    "name": "flag Somalia",
+    "name": "flag somalia",
     "shortcode": ":flag_somalia:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇷",
-    "name": "flag Suriname",
+    "name": "flag suriname",
     "shortcode": ":flag_suriname:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇸",
-    "name": "flag South Sudan",
+    "name": "flag south sudan",
     "shortcode": ":flag_south_sudan:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇹",
-    "name": "flag São Tomé & Príncipe",
+    "name": "flag são tomé & príncipe",
     "shortcode": ":flag_sao_tome_principe:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇻",
-    "name": "flag El Salvador",
+    "name": "flag el salvador",
     "shortcode": ":flag_el_salvador:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇽",
-    "name": "flag Sint Maarten",
+    "name": "flag sint maarten",
     "shortcode": ":flag_sint_maarten:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇾",
-    "name": "flag Syria",
+    "name": "flag syria",
     "shortcode": ":flag_syria:",
     "category": "Flags"
   },
   {
     "emoji": "🇸🇿",
-    "name": "flag Eswatini",
+    "name": "flag eswatini",
     "shortcode": ":flag_eswatini:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇦",
-    "name": "flag Tristan da Cunha",
+    "name": "flag tristan da cunha",
     "shortcode": ":flag_tristan_da_cunha:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇨",
-    "name": "flag Turks & Caicos Islands",
+    "name": "flag turks & caicos islands",
     "shortcode": ":flag_turks_caicos_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇩",
-    "name": "flag Chad",
+    "name": "flag chad",
     "shortcode": ":flag_chad:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇫",
-    "name": "flag French Southern Territories",
+    "name": "flag french southern territories",
     "shortcode": ":flag_french_southern_territories:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇬",
-    "name": "flag Togo",
+    "name": "flag togo",
     "shortcode": ":flag_togo:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇭",
-    "name": "flag Thailand",
+    "name": "flag thailand",
     "shortcode": ":flag_thailand:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇯",
-    "name": "flag Tajikistan",
+    "name": "flag tajikistan",
     "shortcode": ":flag_tajikistan:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇰",
-    "name": "flag Tokelau",
+    "name": "flag tokelau",
     "shortcode": ":flag_tokelau:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇱",
-    "name": "flag Timor-Leste",
+    "name": "flag timor-leste",
     "shortcode": ":flag_timor_leste:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇲",
-    "name": "flag Turkmenistan",
+    "name": "flag turkmenistan",
     "shortcode": ":flag_turkmenistan:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇳",
-    "name": "flag Tunisia",
+    "name": "flag tunisia",
     "shortcode": ":flag_tunisia:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇴",
-    "name": "flag Tonga",
+    "name": "flag tonga",
     "shortcode": ":flag_tonga:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇷",
-    "name": "flag Türkiye",
+    "name": "flag türkiye",
     "shortcode": ":flag_turkiye:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇹",
-    "name": "flag Trinidad & Tobago",
+    "name": "flag trinidad & tobago",
     "shortcode": ":flag_trinidad_tobago:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇻",
-    "name": "flag Tuvalu",
+    "name": "flag tuvalu",
     "shortcode": ":flag_tuvalu:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇼",
-    "name": "flag Taiwan",
+    "name": "flag taiwan",
     "shortcode": ":flag_taiwan:",
     "category": "Flags"
   },
   {
     "emoji": "🇹🇿",
-    "name": "flag Tanzania",
+    "name": "flag tanzania",
     "shortcode": ":flag_tanzania:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇦",
-    "name": "flag Ukraine",
+    "name": "flag ukraine",
     "shortcode": ":flag_ukraine:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇬",
-    "name": "flag Uganda",
+    "name": "flag uganda",
     "shortcode": ":flag_uganda:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇲",
-    "name": "flag U.S. Outlying Islands",
+    "name": "flag u.s. outlying islands",
     "shortcode": ":flag_u_s_outlying_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇳",
-    "name": "flag United Nations",
+    "name": "flag united nations",
     "shortcode": ":flag_united_nations:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇸",
-    "name": "flag United States",
+    "name": "flag united states",
     "shortcode": ":flag_united_states:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇾",
-    "name": "flag Uruguay",
+    "name": "flag uruguay",
     "shortcode": ":flag_uruguay:",
     "category": "Flags"
   },
   {
     "emoji": "🇺🇿",
-    "name": "flag Uzbekistan",
+    "name": "flag uzbekistan",
     "shortcode": ":flag_uzbekistan:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇦",
-    "name": "flag Vatican City",
+    "name": "flag vatican city",
     "shortcode": ":flag_vatican_city:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇨",
-    "name": "flag St. Vincent & Grenadines",
+    "name": "flag st. vincent & grenadines",
     "shortcode": ":flag_st_vincent_grenadines:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇪",
-    "name": "flag Venezuela",
+    "name": "flag venezuela",
     "shortcode": ":flag_venezuela:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇬",
-    "name": "flag British Virgin Islands",
+    "name": "flag british virgin islands",
     "shortcode": ":flag_british_virgin_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇮",
-    "name": "flag U.S. Virgin Islands",
+    "name": "flag u.s. virgin islands",
     "shortcode": ":flag_u_s_virgin_islands:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇳",
-    "name": "flag Vietnam",
+    "name": "flag vietnam",
     "shortcode": ":flag_vietnam:",
     "category": "Flags"
   },
   {
     "emoji": "🇻🇺",
-    "name": "flag Vanuatu",
+    "name": "flag vanuatu",
     "shortcode": ":flag_vanuatu:",
     "category": "Flags"
   },
   {
     "emoji": "🇼🇫",
-    "name": "flag Wallis & Futuna",
+    "name": "flag wallis & futuna",
     "shortcode": ":flag_wallis_futuna:",
     "category": "Flags"
   },
   {
     "emoji": "🇼🇸",
-    "name": "flag Samoa",
+    "name": "flag samoa",
     "shortcode": ":flag_samoa:",
     "category": "Flags"
   },
   {
     "emoji": "🇽🇰",
-    "name": "flag Kosovo",
+    "name": "flag kosovo",
     "shortcode": ":flag_kosovo:",
     "category": "Flags"
   },
   {
     "emoji": "🇾🇪",
-    "name": "flag Yemen",
+    "name": "flag yemen",
     "shortcode": ":flag_yemen:",
     "category": "Flags"
   },
   {
     "emoji": "🇾🇹",
-    "name": "flag Mayotte",
+    "name": "flag mayotte",
     "shortcode": ":flag_mayotte:",
     "category": "Flags"
   },
   {
     "emoji": "🇿🇦",
-    "name": "flag South Africa",
+    "name": "flag south africa",
     "shortcode": ":flag_south_africa:",
     "category": "Flags"
   },
   {
     "emoji": "🇿🇲",
-    "name": "flag Zambia",
+    "name": "flag zambia",
     "shortcode": ":flag_zambia:",
     "category": "Flags"
   },
   {
     "emoji": "🇿🇼",
-    "name": "flag Zimbabwe",
+    "name": "flag zimbabwe",
     "shortcode": ":flag_zimbabwe:",
     "category": "Flags"
   },
   {
     "emoji": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-    "name": "flag England",
+    "name": "flag england",
     "shortcode": ":flag_england:",
     "category": "Flags"
   },
   {
     "emoji": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-    "name": "flag Scotland",
+    "name": "flag scotland",
     "shortcode": ":flag_scotland:",
     "category": "Flags"
   },
   {
     "emoji": "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
-    "name": "flag Wales",
+    "name": "flag wales",
     "shortcode": ":flag_wales:",
     "category": "Flags"
   }

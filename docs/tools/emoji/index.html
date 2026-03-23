@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji Lookup</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 640px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: #212529;
+    }
+    a.back { color: #0070f3; text-decoration: none; font-size: 0.9rem; }
+    a.back:hover { text-decoration: underline; }
+    h1 { margin: 0.5rem 0 1rem; }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .copy-toggle { display: flex; }
+    .copy-toggle button {
+      padding: 0.3rem 0.75rem;
+      border: 1px solid #ced4da;
+      background: #fff;
+      font-size: 0.85rem;
+      font-family: inherit;
+      cursor: pointer;
+      color: #495057;
+    }
+    .copy-toggle button:first-child { border-radius: 4px 0 0 4px; }
+    .copy-toggle button:last-child  { border-radius: 0 4px 4px 0; border-left: none; }
+    .copy-toggle button.active { background: #0070f3; color: #fff; border-color: #0070f3; }
+    .copy-toggle button.active + button { border-left-color: #0070f3; }
+
+    .tone-picker { display: flex; gap: 0.25rem; align-items: center; }
+    .tone-btn {
+      width: 2rem; height: 2rem;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      background: none;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+      line-height: 1;
+    }
+    .tone-btn.active { border-color: #0070f3; }
+
+    #recents-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    #category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-bottom: 0.75rem;
+    }
+    .cat-pill {
+      padding: 0.2rem 0.6rem;
+      border: 1px solid #ced4da;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 0.8rem;
+      font-family: inherit;
+      cursor: pointer;
+      color: #495057;
+    }
+    .cat-pill.active { background: #0070f3; color: #fff; border-color: #0070f3; }
+
+    #input-search {
+      width: 100%;
+      padding: 0.4rem 0.6rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      margin-bottom: 0.75rem;
+    }
+
+    #emoji-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+    .emoji-btn {
+      width: 2.5rem; height: 2.5rem;
+      border: none;
+      background: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      padding: 0;
+    }
+    .emoji-btn:hover { background: #f1f3f5; }
+    .emoji-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 112, 243, 0.25);
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .emoji-btn.copied::after { animation: flash 0.4s ease-out forwards; }
+    @keyframes flash {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    #empty-state { color: #868e96; padding: 1rem 0; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <a class="back" href="../../index.html">← Back to Tools</a>
+  <h1>Emoji Lookup</h1>
+
+  <div class="controls">
+    <div class="copy-toggle">
+      <button id="btn-copy-emoji" class="active">emoji</button>
+      <button id="btn-copy-shortcode">:shortcode:</button>
+    </div>
+    <div class="tone-picker" id="tone-picker">
+      <button class="tone-btn active" data-tone="default" title="Default (yellow)">🖐</button>
+      <button class="tone-btn" data-tone="🏻" title="Light skin tone">🖐🏻</button>
+      <button class="tone-btn" data-tone="🏼" title="Medium-light skin tone">🖐🏼</button>
+      <button class="tone-btn" data-tone="🏽" title="Medium skin tone">🖐🏽</button>
+      <button class="tone-btn" data-tone="🏾" title="Medium-dark skin tone">🖐🏾</button>
+      <button class="tone-btn" data-tone="🏿" title="Dark skin tone">🖐🏿</button>
+    </div>
+  </div>
+
+  <div id="recents-row" hidden></div>
+
+  <div id="category-pills"></div>
+
+  <input type="search" id="input-search" placeholder="🔍 Search emojis…">
+
+  <div id="emoji-grid"></div>
+  <div id="empty-state" hidden>No emojis found.</div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

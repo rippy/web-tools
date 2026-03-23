@@ -167,8 +167,47 @@ function renderGrid() {
   }
 }
 
-// ─── Recents row (placeholder — filled in Task 11) ───────────────────────────
-function renderRecentsRow() {}
+// ─── Emoji click ──────────────────────────────────────────────────────────────
+function onEmojiClick(entry, btnEl) {
+  const char = entry.skinTones ? applyTone(entry.emoji, appState.skinTone) : entry.emoji
+  const textToCopy = appState.copyMode === 'shortcode' ? entry.shortcode : char
+  navigator.clipboard.writeText(textToCopy)
+
+  const wasEmpty = appState.recentShortcodes.length === 0
+  appState.recentShortcodes = addToRecents(appState.recentShortcodes, entry.shortcode)
+  saveState()
+  renderRecentsRow()
+  if (wasEmpty) renderCategoryPills()
+
+  btnEl.classList.remove('copied')
+  void btnEl.offsetWidth  // force reflow so animation restarts on repeated clicks
+  btnEl.classList.add('copied')
+  btnEl.addEventListener('animationend', () => btnEl.classList.remove('copied'), { once: true })
+}
+
+// ─── Recents row ──────────────────────────────────────────────────────────────
+function renderRecentsRow() {
+  const topEntries = getRecentEmojis(emojiData, appState.recentShortcodes)
+    .slice(0, RECENTS_ROW_LIMIT)
+
+  if (topEntries.length === 0) {
+    recentsRow.hidden = true
+    recentsRow.innerHTML = ''
+    return
+  }
+
+  recentsRow.hidden = false
+  recentsRow.innerHTML = ''
+
+  for (const entry of topEntries) {
+    const btn = document.createElement('button')
+    btn.className = 'emoji-btn'
+    btn.textContent = resolveDisplayEmoji(entry)
+    btn.title = entry.name
+    btn.addEventListener('click', () => onEmojiClick(entry, btn))
+    recentsRow.appendChild(btn)
+  }
+}
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 function init() {

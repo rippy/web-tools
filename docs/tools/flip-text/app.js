@@ -8,11 +8,12 @@ function saveState(limit, history) {
   stateSet(STATE_KEY, { limit, history })
 }
 
-function renderHistory(history, container, onLoad) {
+function renderHistory(history, container, onLoad, onDelete) {
   container.innerHTML = ''
-  history.forEach(entry => {
+  history.forEach((entry, index) => {
     const row = document.createElement('div')
     row.className = 'history-entry'
+    row.title = entry.output
 
     const text = document.createElement('span')
     text.className = 'history-text'
@@ -25,22 +26,29 @@ function renderHistory(history, container, onLoad) {
       onLoad(entry.input)
     })
 
+    const copyLabel = entry.mode === 'flip' ? '↕ Copy' : '↔ Copy'
     const copyBtn = document.createElement('button')
     copyBtn.className = 'btn-secondary'
-    copyBtn.textContent = '⎘ Copy'
+    copyBtn.textContent = copyLabel
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(entry.output).then(() => {
         copyBtn.textContent = 'Copied!'
-        setTimeout(() => { copyBtn.textContent = '⎘ Copy' }, 1500)
+        setTimeout(() => { copyBtn.textContent = copyLabel }, 1500)
       }).catch(() => {
         copyBtn.textContent = 'Failed!'
-        setTimeout(() => { copyBtn.textContent = '⎘ Copy' }, 1500)
+        setTimeout(() => { copyBtn.textContent = copyLabel }, 1500)
       })
     })
+
+    const deleteBtn = document.createElement('button')
+    deleteBtn.className = 'btn-secondary'
+    deleteBtn.textContent = '×'
+    deleteBtn.addEventListener('click', () => onDelete(index))
 
     row.appendChild(text)
     row.appendChild(loadBtn)
     row.appendChild(copyBtn)
+    row.appendChild(deleteBtn)
     container.appendChild(row)
   })
 }
@@ -56,17 +64,29 @@ function init() {
   const inputLimit  = document.getElementById('input-limit')
   const historyList = document.getElementById('history-list')
 
+  function render() {
+    renderHistory(history, historyList,
+      t => { inputText.value = t },
+      index => {
+        history = history.filter((_, i) => i !== index)
+        saveState(limit, history)
+        render()
+      }
+    )
+  }
+
   inputLimit.value = limit
-  renderHistory(history, historyList, text => { inputText.value = text })
+  render()
 
   function applyTransform(mode) {
     const text = inputText.value
     if (!text.trim()) return
     const output = mode === 'flip' ? flip(text) : reverse(text)
     inputText.value = output
+    if (history.length > 0 && history[0].input === text && history[0].output === output) return
     history = [{ input: text, output, mode }, ...history].slice(0, limit)
     saveState(limit, history)
-    renderHistory(history, historyList, text => { inputText.value = text })
+    render()
   }
 
   btnFlip.addEventListener('click', () => applyTransform('flip'))
@@ -78,7 +98,7 @@ function init() {
       limit = n
       history = history.slice(0, limit)
       saveState(limit, history)
-      renderHistory(history, historyList, text => { inputText.value = text })
+      render()
     }
   })
 }

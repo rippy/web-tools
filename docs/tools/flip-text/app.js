@@ -22,6 +22,7 @@ function renderHistory(history, container, onLoad, onDelete) {
     const loadBtn = document.createElement('button')
     loadBtn.className = 'btn-secondary'
     loadBtn.textContent = '↩ Load'
+    loadBtn.title = entry.input
     loadBtn.addEventListener('click', () => {
       onLoad(entry.input)
     })

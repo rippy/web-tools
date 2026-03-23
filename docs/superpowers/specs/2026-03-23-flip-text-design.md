@@ -33,7 +33,7 @@ flip(text)     // maps each char to its upside-down Unicode equivalent, then rev
 reverse(text)  // reverses character order only
 ```
 
-The upside-down map is a plain object literal covering a–z, A–Z, digits 0–9, and common punctuation (~100 pairs). Characters with no mapping pass through unchanged. Both functions accept any string and return a string; empty string returns `""`.
+The upside-down map is a plain object literal hardcoded directly in `flip-text.js` — no external file or download required. The mapping is a well-established internet convention: characters are drawn from the Unicode IPA phonetics block and related ranges where glyphs happen to resemble upside-down Latin letters (e.g. `'h' → 'ɥ'` U+0265, `'e' → 'ǝ'` U+01DD). This set is stable and consistent across all "flip text" tools. It covers a–z, A–Z, digits 0–9, and common punctuation (~100 pairs). Characters with no mapping pass through unchanged. Both functions accept any string and return a string; empty string returns `""`.
 
 ---
 

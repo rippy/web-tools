@@ -84,7 +84,7 @@ function init() {
     if (!text) return
     const output = mode === 'flip' ? flip(text) : reverse(text)
     inputText.value = output
-    if (history.length > 0 && history[0].input === text && history[0].output === output) return
+    if (history.some(e => e.input === text && e.output === output)) return
     history = [{ input: text, output, mode }, ...history].slice(0, limit)
     saveState(limit, history)
     render()

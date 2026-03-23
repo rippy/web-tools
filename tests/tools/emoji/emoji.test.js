@@ -81,3 +81,35 @@ describe('filterAndSearch', () => {
     expect(filterAndSearch(FIXTURE, [], '')).toEqual(FIXTURE)
   })
 })
+
+describe('addToRecents', () => {
+  it('prepends shortcode to an empty array', () => {
+    expect(addToRecents([], ':pizza:')).toEqual([':pizza:'])
+  })
+
+  it('prepends shortcode to the front', () => {
+    expect(addToRecents([':dog:', ':joy:'], ':pizza:')).toEqual([':pizza:', ':dog:', ':joy:'])
+  })
+
+  it('moves an existing shortcode to the front (deduplicates)', () => {
+    expect(addToRecents([':pizza:', ':dog:', ':joy:'], ':dog:')).toEqual([':dog:', ':pizza:', ':joy:'])
+  })
+
+  it('trims to maxCount', () => {
+    expect(addToRecents([':a:', ':b:', ':c:'], ':new:', 3)).toEqual([':new:', ':a:', ':b:'])
+  })
+
+  it('defaults maxCount to 30', () => {
+    const existing = Array.from({ length: 30 }, (_, i) => `:e${i}:`)
+    const result = addToRecents(existing, ':new:')
+    expect(result).toHaveLength(30)
+    expect(result[0]).toBe(':new:')
+    expect(result[29]).toBe(':e28:')
+  })
+
+  it('does not mutate the input array', () => {
+    const original = [':dog:', ':joy:']
+    addToRecents(original, ':pizza:')
+    expect(original).toEqual([':dog:', ':joy:'])
+  })
+})

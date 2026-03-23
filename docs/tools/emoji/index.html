@@ -132,16 +132,16 @@
 
   <div class="controls">
     <div class="copy-toggle">
-      <button id="btn-copy-emoji" class="active">emoji</button>
-      <button id="btn-copy-shortcode">:shortcode:</button>
+      <button id="btn-copy-emoji" class="active" aria-pressed="true">emoji</button>
+      <button id="btn-copy-shortcode" aria-pressed="false">:shortcode:</button>
     </div>
     <div class="tone-picker" id="tone-picker">
-      <button class="tone-btn active" data-tone="default" title="Default (yellow)">🖐</button>
-      <button class="tone-btn" data-tone="🏻" title="Light skin tone">🖐🏻</button>
-      <button class="tone-btn" data-tone="🏼" title="Medium-light skin tone">🖐🏼</button>
-      <button class="tone-btn" data-tone="🏽" title="Medium skin tone">🖐🏽</button>
-      <button class="tone-btn" data-tone="🏾" title="Medium-dark skin tone">🖐🏾</button>
-      <button class="tone-btn" data-tone="🏿" title="Dark skin tone">🖐🏿</button>
+      <button class="tone-btn active" data-tone="default" title="Default (yellow)" aria-label="Default (yellow)" aria-pressed="true">🖐</button>
+      <button class="tone-btn" data-tone="🏻" title="Light skin tone" aria-label="Light skin tone" aria-pressed="false">🖐🏻</button>
+      <button class="tone-btn" data-tone="🏼" title="Medium-light skin tone" aria-label="Medium-light skin tone" aria-pressed="false">🖐🏼</button>
+      <button class="tone-btn" data-tone="🏽" title="Medium skin tone" aria-label="Medium skin tone" aria-pressed="false">🖐🏽</button>
+      <button class="tone-btn" data-tone="🏾" title="Medium-dark skin tone" aria-label="Medium-dark skin tone" aria-pressed="false">🖐🏾</button>
+      <button class="tone-btn" data-tone="🏿" title="Dark skin tone" aria-label="Dark skin tone" aria-pressed="false">🖐🏿</button>
     </div>
   </div>
 
@@ -149,7 +149,7 @@
 
   <div id="category-pills"></div>
 
-  <input type="search" id="input-search" placeholder="🔍 Search emojis…">
+  <input type="search" id="input-search" placeholder="🔍 Search emojis…" aria-label="Search emojis">
 
   <div id="emoji-grid"></div>
   <div id="empty-state" hidden>No emojis found.</div>

@@ -26,7 +26,7 @@ function renderHistory(history, container, onLoad, onDelete) {
       onLoad(entry.input)
     })
 
-    const copyLabel = entry.mode === 'flip' ? '↕ Copy' : '↔ Copy'
+    const copyLabel = entry.mode === 'flip' ? '↕️ Copy' : '↔️ Copy'
     const copyBtn = document.createElement('button')
     copyBtn.className = 'btn-secondary'
     copyBtn.textContent = copyLabel
@@ -41,14 +41,14 @@ function renderHistory(history, container, onLoad, onDelete) {
     })
 
     const deleteBtn = document.createElement('button')
-    deleteBtn.className = 'btn-secondary'
-    deleteBtn.textContent = '×'
+    deleteBtn.className = 'btn-delete'
+    deleteBtn.textContent = '❌'
     deleteBtn.addEventListener('click', () => onDelete(index))
 
+    row.appendChild(deleteBtn)
     row.appendChild(text)
     row.appendChild(loadBtn)
     row.appendChild(copyBtn)
-    row.appendChild(deleteBtn)
     container.appendChild(row)
   })
 }
@@ -79,8 +79,8 @@ function init() {
   render()
 
   function applyTransform(mode) {
-    const text = inputText.value
-    if (!text.trim()) return
+    const text = inputText.value.trim()
+    if (!text) return
     const output = mode === 'flip' ? flip(text) : reverse(text)
     inputText.value = output
     if (history.length > 0 && history[0].input === text && history[0].output === output) return

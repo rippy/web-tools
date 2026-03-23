@@ -113,3 +113,30 @@ describe('addToRecents', () => {
     expect(original).toEqual([':dog:', ':joy:'])
   })
 })
+
+describe('getRecentEmojis', () => {
+  it('returns emoji objects in most-recent-first order', () => {
+    const result = getRecentEmojis(FIXTURE, [':pizza:', ':dog:'])
+    expect(result.map(e => e.shortcode)).toEqual([':pizza:', ':dog:'])
+  })
+
+  it('drops unknown shortcodes silently', () => {
+    const result = getRecentEmojis(FIXTURE, [':unknown:', ':pizza:'])
+    expect(result.map(e => e.shortcode)).toEqual([':pizza:'])
+  })
+
+  it('returns [] for empty recentShortcodes', () => {
+    expect(getRecentEmojis(FIXTURE, [])).toEqual([])
+  })
+
+  it('returns full emoji objects preserving all fields', () => {
+    const result = getRecentEmojis(FIXTURE, [':wave:'])
+    expect(result[0]).toEqual({
+      emoji: '👋',
+      name: 'waving hand',
+      shortcode: ':wave:',
+      category: 'People & Body',
+      skinTones: true,
+    })
+  })
+})

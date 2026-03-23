@@ -30,5 +30,12 @@ export function filterAndSearch(data, selectedCategories, query) {
 export function addToRecents(recentShortcodes, shortcode, maxCount = 30) {
   return [shortcode, ...recentShortcodes.filter(s => s !== shortcode)].slice(0, maxCount)
 }
-export function getRecentEmojis(data, recentShortcodes) { return [] }
+export function getRecentEmojis(data, recentShortcodes) {
+  const map = new Map(data.map(e => [e.shortcode, e]))
+  return recentShortcodes.reduce((acc, sc) => {
+    const e = map.get(sc)
+    if (e) acc.push(e)
+    return acc
+  }, [])
+}
 export function applyTone(emojiChar, tone) { return emojiChar }

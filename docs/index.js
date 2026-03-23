@@ -1,4 +1,5 @@
 import * as settings from './common/settings.js'
+import { getCurrentPosition } from './common/location/geolocation.js'
 
 settings.apply()
 
@@ -44,12 +45,74 @@ document.getElementById('btn-font-larger').addEventListener('click', () => {
   }
 })
 
+// --- Location tracking toggle ---
+const btnLocationOn  = document.getElementById('btn-location-on')
+const btnLocationOff = document.getElementById('btn-location-off')
+const locationNote   = document.getElementById('location-permission-note')
+
+function renderLocationToggle() {
+  const on = settings.get().locationTracking
+  btnLocationOn.classList.toggle('selected', on)
+  btnLocationOff.classList.toggle('selected', !on)
+}
+
+btnLocationOn.addEventListener('click', () => {
+  if (btnLocationOn.disabled) return
+  settings.set({ locationTracking: true })
+  renderLocationToggle()
+})
+btnLocationOff.addEventListener('click', () => {
+  if (btnLocationOff.disabled) return
+  settings.set({ locationTracking: false })
+  renderLocationToggle()
+})
+
+let syncRunning = false
+async function syncLocationPermission() {
+  if (syncRunning) return
+  syncRunning = true
+  try {
+    if (!navigator.permissions) return
+    const status = await navigator.permissions.query({ name: 'geolocation' })
+
+    if (status.state === 'denied') {
+      settings.set({ locationTracking: false })
+      btnLocationOn.disabled  = true
+      btnLocationOff.disabled = true
+      locationNote.hidden = false
+      renderLocationToggle()
+      return
+    }
+
+    btnLocationOn.disabled  = false
+    btnLocationOff.disabled = false
+    locationNote.hidden = true
+
+    if (status.state === 'prompt') {
+      const result = await getCurrentPosition()
+      settings.set({ locationTracking: result !== null })
+    }
+
+    renderLocationToggle()
+  } finally {
+    syncRunning = false
+  }
+}
+
+renderLocationToggle()
+
 // --- Version info (fetched lazily on first panel open) ---
 const panel = document.getElementById('settings-panel')
 const divVersion = document.getElementById('div-version')
 let versionLoaded = false
 panel.addEventListener('toggle', async () => {
-  if (!panel.open || versionLoaded) return
+  if (!panel.open) return
+
+  // sync location permission on every open
+  syncLocationPermission()
+
+  // version info: load once
+  if (versionLoaded) return
   versionLoaded = true
   try {
     const res = await fetch('./version.json')

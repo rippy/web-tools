@@ -41,7 +41,13 @@ if ('locationTracking' in patch && typeof patch.locationTracking !== 'boolean') 
 }
 ```
 
-`apply()` is unchanged — `locationTracking` is not a visual setting.
+`apply()` body is unchanged — `locationTracking` is not a visual setting.
+Note: `set()` always calls `apply()` as a side effect (existing behaviour). Calling
+`set({ locationTracking })` will therefore re-apply theme/font/fontSize. This is
+harmless — `apply()` is idempotent — and no change to `set()` is needed.
+
+`schemaVersion` is not bumped. It is reserved for future migration logic and
+adding a new field with a default value does not require a migration.
 
 ---
 
@@ -63,41 +69,60 @@ A new row is added inside `.settings-body` in `docs/index.html`:
 
 ```html
 <div class="settings-row">
-  <span>Location tracking</span>
+  <span class="settings-label">Location</span>
   <div class="toggle-group" id="location-toggle-group">
     <button class="toggle-btn" id="btn-location-on">On</button>
     <button class="toggle-btn" id="btn-location-off">Off</button>
   </div>
-  <span id="location-permission-note" hidden style="font-size:0.8rem;color:var(--color-text-secondary)">
-    Location access denied in browser settings
-  </span>
+</div>
+<div id="location-permission-note" hidden
+     style="font-size:0.8rem;color:var(--color-text-secondary);padding:0.25rem 0 0.25rem 0.5rem">
+  Location access denied in browser settings
 </div>
 ```
+
+The permission note is a separate `<div>` below the row (not inside the flex row)
+so it does not affect the row's alignment and wraps cleanly on narrow screens.
 
 ### Permission sync (`docs/index.js`)
 
 `syncLocationPermission()` runs every time the `<details>` settings panel fires
 a `toggle` event (i.e. on every open — not on close).
 
+`getCurrentPosition` is imported from `../common/location/geolocation.js`
+(the same thin wrapper used by `capture.js`). This avoids reimplementing the
+GPS promise and reuses the established 10-second timeout and null-on-failure
+contract.
+
+A module-level `let syncRunning = false` guard prevents concurrent invocations
+(e.g. if the user opens the panel while a `'prompt'` GPS request is still pending):
+
 ```
+let syncRunning = false
+
 async function syncLocationPermission():
-  if navigator.permissions is undefined → return (no Permissions API)
-  status = await navigator.permissions.query({ name: 'geolocation' })
+  if syncRunning return
+  syncRunning = true
+  try:
+    if navigator.permissions is undefined → return (no Permissions API)
+    status = await navigator.permissions.query({ name: 'geolocation' })
 
-  if status.state === 'denied':
-    settings.set({ locationTracking: false })
-    disable both toggle buttons
-    show #location-permission-note
-    return
+    if status.state === 'denied':
+      settings.set({ locationTracking: false })
+      disable both toggle buttons
+      show #location-permission-note
+      return
 
-  enable both toggle buttons
-  hide #location-permission-note
+    enable both toggle buttons
+    hide #location-permission-note
 
-  if status.state === 'prompt':
-    result = await getCurrentPosition()   // triggers native permission dialog
-    settings.set({ locationTracking: result !== null })
+    if status.state === 'prompt':
+      result = await getCurrentPosition()   // triggers native permission dialog
+      settings.set({ locationTracking: result !== null })
 
-  renderLocationToggle()   // reflects stored value
+    renderLocationToggle()   // reflects stored value
+  finally:
+    syncRunning = false
 ```
 
 `renderLocationToggle()` reads `settings.get().locationTracking` and applies
@@ -155,9 +180,12 @@ captureAndPatchDrink(drink.loggedAt)   // fire-and-forget
 
 ### `onAgain` change
 
-Same pattern — after saving the cloned drink with a new `loggedAt`:
+The cloned drink must explicitly reset `locationId: null` to avoid inheriting
+the source drink's location during the async gap:
 
 ```js
+const newDrink = { ...drink, loggedAt: new Date().toISOString(), locationId: null }
+// ... save to state ...
 renderAll()
 captureAndPatchDrink(newDrink.loggedAt)   // fire-and-forget
 ```
@@ -178,7 +206,10 @@ Algorithm:
    a. Resolve name: locationGet(locationId)?.name ?? 'No location'
    b. Render a <li class="location-group-header"> with the name
    c. For each drink in the group (reversed — newest first):
-      render the existing drink row markup (label, time, ↺ Again, ✕)
+      Build a drink row using the same DOM construction logic as the current
+      renderDrinkLog loop: create <li class="drink-row">, append nameSpan,
+      timeSpan, btnAgain, btnDel — each with the same event listeners wired
+      to the individual drink object (onAgain(drink) and onDeleteDrink(drink.loggedAt))
 ```
 
 The location header is a simple non-interactive label row styled with

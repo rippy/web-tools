@@ -238,34 +238,61 @@ function renderDrinkLog() {
   listDrinks.hidden = false
   listDrinks.innerHTML = ''
 
-  for (const drink of [...session.drinks].reverse()) {
-    const li = document.createElement('li')
-    li.className = 'drink-row'
+  // Group drinks into consecutive location runs (chronological order)
+  // A new group starts whenever locationId changes from the previous drink.
+  const groups = []
+  for (const drink of session.drinks) {
+    const last = groups[groups.length - 1]
+    if (!last || drink.locationId !== last.locationId) {
+      groups.push({ locationId: drink.locationId, drinks: [drink] })
+    } else {
+      last.drinks.push(drink)
+    }
+  }
 
-    const label = `${DRINK_EMOJI[drink.type]} ${drink.brand}${drink.isDouble ? ' (double)' : ''}`
-    const time = formatHoursToHHMM(0, Date.parse(drink.loggedAt))
+  // Render newest group first; within each group render newest drink first
+  for (const group of [...groups].reverse()) {
+    // Location header
+    const name = group.locationId
+      ? (locationGet(group.locationId)?.name ?? 'No location')
+      : 'No location'
 
-    const nameSpan = document.createElement('span')
-    nameSpan.className = 'drink-name'
-    nameSpan.textContent = label
+    const header = document.createElement('li')
+    header.className = 'location-group-header'
+    header.style.cssText = 'font-size:0.75rem;color:var(--color-text-secondary);padding:0.3rem 0 0.1rem;list-style:none;'
+    header.textContent = `📍 ${name}`
+    listDrinks.appendChild(header)
 
-    const timeSpan = document.createElement('span')
-    timeSpan.className = 'drink-time'
-    timeSpan.textContent = time
+    // Drink rows within this group, newest first
+    for (const drink of [...group.drinks].reverse()) {
+      const li = document.createElement('li')
+      li.className = 'drink-row'
 
-    const btnAgain = document.createElement('button')
-    btnAgain.className = 'btn-again'
-    btnAgain.textContent = '↺ Again'
-    btnAgain.addEventListener('click', () => onAgain(drink))
+      const label = `${DRINK_EMOJI[drink.type]} ${drink.brand}${drink.isDouble ? ' (double)' : ''}`
+      const time = formatHoursToHHMM(0, Date.parse(drink.loggedAt))
 
-    const btnDel = document.createElement('button')
-    btnDel.className = 'btn-delete'
-    btnDel.setAttribute('aria-label', 'Delete drink')
-    btnDel.textContent = '✕'
-    btnDel.addEventListener('click', () => onDeleteDrink(drink.loggedAt))
+      const nameSpan = document.createElement('span')
+      nameSpan.className = 'drink-name'
+      nameSpan.textContent = label
 
-    li.append(nameSpan, timeSpan, btnAgain, btnDel)
-    listDrinks.appendChild(li)
+      const timeSpan = document.createElement('span')
+      timeSpan.className = 'drink-time'
+      timeSpan.textContent = time
+
+      const btnAgain = document.createElement('button')
+      btnAgain.className = 'btn-again'
+      btnAgain.textContent = '↺ Again'
+      btnAgain.addEventListener('click', () => onAgain(drink))
+
+      const btnDel = document.createElement('button')
+      btnDel.className = 'btn-delete'
+      btnDel.setAttribute('aria-label', 'Delete drink')
+      btnDel.textContent = '✕'
+      btnDel.addEventListener('click', () => onDeleteDrink(drink.loggedAt))
+
+      li.append(nameSpan, timeSpan, btnAgain, btnDel)
+      listDrinks.appendChild(li)
+    }
   }
 }
 

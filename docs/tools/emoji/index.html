@@ -17,13 +17,14 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body {
-      font-family: system-ui, sans-serif;
+      font-family: var(--font-family);
       max-width: 640px;
       margin: 2rem auto;
       padding: 0 1rem;
-      color: #212529;
+      color: var(--color-text);
+      background: var(--color-bg);
     }
-    a.back { color: #0070f3; text-decoration: none; font-size: 0.9rem; }
+    a.back { color: var(--color-link); text-decoration: none; font-size: 0.9rem; }
     a.back:hover { text-decoration: underline; }
     h1 { margin: 0.5rem 0 1rem; }
 
@@ -38,17 +39,17 @@
     .copy-toggle { display: flex; }
     .copy-toggle button {
       padding: 0.3rem 0.75rem;
-      border: 1px solid #ced4da;
-      background: #fff;
+      border: 1px solid var(--color-border-input);
+      background: var(--color-input-bg);
       font-size: 0.85rem;
       font-family: inherit;
       cursor: pointer;
-      color: #495057;
+      color: var(--color-text-secondary);
     }
     .copy-toggle button:first-child { border-radius: 4px 0 0 4px; }
     .copy-toggle button:last-child  { border-radius: 0 4px 4px 0; border-left: none; }
-    .copy-toggle button.active { background: #0070f3; color: #fff; border-color: #0070f3; }
-    .copy-toggle button.active + button { border-left-color: #0070f3; }
+    .copy-toggle button.active { background: var(--color-btn-primary); color: #fff; border-color: var(--color-btn-primary); }
+    .copy-toggle button.active + button { border-left-color: var(--color-btn-primary); }
 
     .tone-picker { display: flex; gap: 0.25rem; align-items: center; }
     .tone-btn {
@@ -62,7 +63,7 @@
       padding: 0;
       line-height: 1;
     }
-    .tone-btn.active { border-color: #0070f3; }
+    .tone-btn.active { border-color: var(--color-btn-primary); }
 
     #recents-row {
       display: flex;
@@ -70,7 +71,7 @@
       gap: 2px;
       margin-bottom: 0.5rem;
       padding-bottom: 0.5rem;
-      border-bottom: 1px solid #e9ecef;
+      border-bottom: 1px solid var(--color-border);
     }
 
     #category-pills {
@@ -81,24 +82,26 @@
     }
     .cat-pill {
       padding: 0.2rem 0.6rem;
-      border: 1px solid #ced4da;
+      border: 1px solid var(--color-border-input);
       border-radius: 999px;
-      background: #fff;
+      background: var(--color-input-bg);
       font-size: 0.8rem;
       font-family: inherit;
       cursor: pointer;
-      color: #495057;
+      color: var(--color-text-secondary);
     }
-    .cat-pill.active { background: #0070f3; color: #fff; border-color: #0070f3; }
+    .cat-pill.active { background: var(--color-btn-primary); color: #fff; border-color: var(--color-btn-primary); }
 
     #input-search {
       width: 100%;
       padding: 0.4rem 0.6rem;
-      border: 1px solid #ced4da;
+      border: 1px solid var(--color-border-input);
       border-radius: 4px;
       font-size: 0.95rem;
       font-family: inherit;
       margin-bottom: 0.75rem;
+      background: var(--color-input-bg);
+      color: var(--color-text);
     }
 
     #emoji-grid {
@@ -117,7 +120,7 @@
       position: relative;
       padding: 0;
     }
-    .emoji-btn:hover { background: #f1f3f5; }
+    .emoji-btn:hover { background: var(--color-surface); }
     .emoji-btn::after {
       content: '';
       position: absolute;
@@ -133,7 +136,7 @@
       100% { opacity: 0; }
     }
 
-    #empty-state { color: #868e96; padding: 1rem 0; font-size: 0.95rem; }
+    #empty-state { color: var(--color-text-muted); padding: 1rem 0; font-size: 0.95rem; }
   </style>
 </head>
 <body>

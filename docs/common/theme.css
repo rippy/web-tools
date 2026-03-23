@@ -1,0 +1,64 @@
+/* ===== FONT + SIZE VARS (set by inline bootstrap or settings.apply()) ===== */
+:root {
+  --font-family: system-ui, sans-serif;
+  --font-size: 16px;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+}
+
+/* ===== LIGHT THEME ===== */
+:root[data-theme="light"] {
+  --color-bg: #ffffff;
+  --color-surface: #f1f3f5;
+  --color-surface-alt: #f8f9fa;
+  --color-border: #dee2e6;
+  --color-border-input: #ced4da;
+  --color-text: #212529;
+  --color-text-muted: #555555;
+  --color-text-secondary: #868e96;
+  --color-link: #0070f3;
+  --color-link-hover: #005fd1;
+  --color-btn-primary: #1976d2;
+  --color-btn-primary-hover: #1565c0;
+  --color-input-bg: #ffffff;
+  --color-accent-blue-bg: #e3f2fd;
+  --color-accent-blue-text: #1565c0;
+  --color-accent-blue-border: #bbdefb;
+  --color-accent-blue-panel-bg: #f8fcff;
+  --color-accent-green-bg: #e8f5e9;
+  --color-accent-green-text: #2e7d32;
+  --color-accent-purple-bg: #f3e5f5;
+  --color-accent-purple-text: #6a1b9a;
+  --color-error: #c62828;
+  --color-delete: #e53935;
+}
+
+/* ===== DARK THEME ===== */
+:root[data-theme="dark"] {
+  --color-bg: #1a1a2e;
+  --color-surface: #252540;
+  --color-surface-alt: #1e1e38;
+  --color-border: #383860;
+  --color-border-input: #444468;
+  --color-text: #e8e8f0;
+  --color-text-muted: #aaaacc;
+  --color-text-secondary: #9090a8;
+  --color-link: #5c9eff;
+  --color-link-hover: #409cff;
+  --color-btn-primary: #2a6dbf;
+  --color-btn-primary-hover: #3a7dcf;
+  --color-input-bg: #1e1e38;
+  --color-accent-blue-bg: #1a3050;
+  --color-accent-blue-text: #7ab8ff;
+  --color-accent-blue-border: #2a4870;
+  --color-accent-blue-panel-bg: #161e30;
+  --color-accent-green-bg: #1a3020;
+  --color-accent-green-text: #7acf7a;
+  --color-accent-purple-bg: #2a1a40;
+  --color-accent-purple-text: #c07aff;
+  --color-error: #ff6b6b;
+  --color-delete: #ff5252;
+}

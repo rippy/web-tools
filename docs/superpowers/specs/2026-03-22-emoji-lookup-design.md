@@ -10,8 +10,10 @@
 
 A browser-based emoji lookup tool that lets users browse emojis by category,
 search by name or shortcode, and copy either the emoji character or its
-`:shortcode:` name to the clipboard. Recent emojis are tracked in localStorage
-and surfaced in a persistent top row and a dedicated Recents category.
+`:shortcode:` name to the clipboard. A global skin tone preference applies
+Fitzpatrick modifiers to tone-eligible emojis. Recent emojis are tracked in
+localStorage and surfaced in a persistent top row and a dedicated Recents
+category.
 
 ---
 
@@ -27,7 +29,8 @@ docs/tools/emoji/
 tests/tools/emoji/
   emoji.test.js   ← unit tests for emoji.js (app.js untested per project convention)
 
-docs/index.html   ← modify: activate Emoji Lookup link
+docs/index.html          ← modify: activate Emoji Lookup link
+docs/common/state.js     ← shared module (already exists); imported by app.js
 ```
 
 ---
@@ -39,12 +42,20 @@ docs/index.html   ← modify: activate Emoji Lookup link
 ```js
 export default [
   { emoji: '🍕', name: 'pizza', shortcode: ':pizza:', category: 'Food & Drink' },
+  { emoji: '👋', name: 'waving hand', shortcode: ':wave:', category: 'People & Body', skinTones: true },
   // …
 ]
 ```
 
+Emojis that support Fitzpatrick skin tone modifiers carry `skinTones: true`.
+All other entries omit the field (treat as `false`). Variants are never stored
+as separate entries — they are generated at runtime by appending the appropriate
+Unicode modifier to the base emoji character.
+
 The file is generated once from the `emoji.json` npm package (MIT-licensed,
-~3600 emojis) and committed as a static asset. It is never modified at runtime.
+~3600 emojis) using a one-off Node script (`scripts/build-emoji-data.js`) and
+committed as a static asset. It is never modified at runtime. The generation
+script is not committed — the output file is the artefact.
 
 Categories used are the standard Unicode groupings:
 
@@ -98,6 +109,15 @@ Maps stored shortcodes back to emoji objects from `data`, preserving
 most-recent-first order. Unknown shortcodes are silently dropped. Returns `[]`
 for empty input.
 
+```js
+applyTone(emojiChar, tone)
+```
+
+Appends the Unicode Fitzpatrick modifier to `emojiChar` and returns the result.
+`tone` is one of `'🏻' | '🏼' | '🏽' | '🏾' | '🏿' | 'default'`. When `tone`
+is `'default'`, returns `emojiChar` unchanged. Called by `app.js` before
+copying and before rendering tone-eligible emojis in the grid and recent row.
+
 ---
 
 ## State
@@ -107,15 +127,17 @@ Single localStorage key `emoji` (via `state.js`):
 ```js
 {
   recentShortcodes: string[],        // ordered most-recent-first, max 30
-  copyMode: 'emoji' | 'shortcode'   // persisted toggle state
+  copyMode: 'emoji' | 'shortcode',  // persisted toggle state
+  skinTone: 'default' | '🏻' | '🏼' | '🏽' | '🏾' | '🏿'  // persisted skin tone preference
 }
 ```
 
-Defaults when the key is absent: `recentShortcodes: []`, `copyMode: 'emoji'`.
+Defaults when the key is absent: `recentShortcodes: []`, `copyMode: 'emoji'`,
+`skinTone: 'default'`.
 
-`app.js` reads state on load and writes it back on every copy action and toggle
-change. Selected categories and the search query are transient UI state and are
-reset on page load.
+`app.js` reads state on load and writes it back on every copy action, toggle
+change, and skin tone selection. Selected categories and the search query are
+transient UI state and are reset on page load.
 
 ---
 
@@ -125,31 +147,38 @@ reset on page load.
 ← Back to Tools
 Emoji Lookup
 
-[Copy: emoji ●] [shortcode]         ← toggle, persisted to localStorage
+[Copy: emoji ●] [shortcode]   🖐 [🏻][🏼][🏽][🏾][🏿][●]   ← copy toggle + skin tone swatches
+                                                              ● = default (yellow), persisted
 
 😀 🎉 🍕 🔥 ✨ 🐶 💙 🎵            ← recent row (top 8 of recents), hidden if empty
+                                      tone-eligible emojis shown with active skin tone
 
-[All] [Smileys] [People] [Food] …  ← category pills, multi-select
-                                      • All selected by default
-                                      • Clicking All deselects all other categories
-                                      • Clicking any category deselects All;
-                                        multiple specific categories may be selected
-                                      • Deselecting all specific categories reverts to All
+[Recents] [All] [Smileys] [People] [Food] …  ← category pills, multi-select
+                                              • All selected by default
+                                              • Recents pill is first; hidden if recentShortcodes is empty
+                                              • Clicking All deselects all other categories
+                                              • Clicking any category deselects All;
+                                                multiple specific categories may be selected
+                                              • Deselecting all specific categories reverts to All
 
 🔍 [search…]                        ← text input, filters across active categories
 
 😀 😃 😄 😁 😆 😅 😂 🤣            ← emoji grid, dense
 😊 😇 🙂 🙃 😉 😌 😍 🥰 …         ← each emoji has title= attribute for hover name
+                                      tone-eligible emojis rendered with active skin tone
 ```
 
 ### Copy interaction
 
 When a user clicks an emoji:
 
-1. Copies the emoji character or `:shortcode:` depending on the current toggle.
-2. Adds the shortcode to recents (writes to localStorage, re-renders recent row
-   and keeps Recents category in sync).
-3. Briefly shows a "Copied!" confirmation near the clicked emoji via a CSS class
+1. Resolves the emoji character: if the emoji has `skinTones: true`, applies the
+   active skin tone via `applyTone`; otherwise uses the base character.
+2. Copies the resolved emoji character or `:shortcode:` depending on the current
+   toggle. (Shortcode always refers to the base emoji — no tone-variant shortcodes.)
+3. Adds the base shortcode to recents (writes to localStorage, re-renders recent
+   row and keeps Recents category in sync).
+4. Briefly shows a "Copied!" confirmation near the clicked emoji via a CSS class
    toggled on the element (no JS timer management beyond adding/removing the
    class using a CSS `animation` with `animationend` to clean up).
 
@@ -166,12 +195,12 @@ imported in tests.
 | `filterAndSearch` | Empty categories → returns all; specific category filters correctly; query matches name (case-insensitive); query matches shortcode; combined category + query; no match → `[]` |
 | `addToRecents` | Prepends to front; deduplicates (moves existing to front); trims to `maxCount`; default `maxCount` is 30 |
 | `getRecentEmojis` | Returns emoji objects in order; drops unknown shortcodes; returns `[]` for empty input |
+| `applyTone` | Returns base emoji unchanged for `'default'`; appends correct modifier for each of the 5 Fitzpatrick tones; tone-ineligible emoji passed with a tone still has modifier appended (caller responsibility to check `skinTones`) |
 
 ---
 
 ## Out of Scope
 
-- Emoji skin tone variants
 - Favourite/starred emojis
 - Copy-as-HTML-entity format
 - Server-side search or indexing
@@ -184,4 +213,5 @@ imported in tests.
 - Emoji grid renders correctly on GitHub Pages
 - Copy to clipboard works in Chrome/Firefox on desktop and mobile
 - Recent row updates immediately on copy and persists across page reloads
+- Skin tone preference persists across page reloads and applies to grid and recent row
 - Category multi-select and search filter correctly in combination

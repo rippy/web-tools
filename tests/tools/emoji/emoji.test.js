@@ -38,3 +38,46 @@ describe('getCategories', () => {
     expect(getCategories(data)).toEqual(['Cat1', 'Cat2'])
   })
 })
+
+describe('filterAndSearch', () => {
+  it('returns all data when selectedCategories is empty', () => {
+    expect(filterAndSearch(FIXTURE, [], null)).toEqual(FIXTURE)
+  })
+
+  it("returns all data when selectedCategories is ['all']", () => {
+    expect(filterAndSearch(FIXTURE, ['all'], null)).toEqual(FIXTURE)
+  })
+
+  it('filters to a single category', () => {
+    const result = filterAndSearch(FIXTURE, ['Food & Drink'], null)
+    expect(result).toEqual([
+      { emoji: '🍕', name: 'pizza', shortcode: ':pizza:', category: 'Food & Drink' },
+    ])
+  })
+
+  it('filters to multiple categories', () => {
+    const result = filterAndSearch(FIXTURE, ['Food & Drink', 'Animals & Nature'], null)
+    expect(result.map(e => e.shortcode)).toEqual([':pizza:', ':dog:'])
+  })
+
+  it('searches by name case-insensitively', () => {
+    expect(filterAndSearch(FIXTURE, [], 'PIZZA').map(e => e.shortcode)).toEqual([':pizza:'])
+  })
+
+  it('searches by shortcode', () => {
+    expect(filterAndSearch(FIXTURE, [], 'wave').map(e => e.shortcode)).toEqual([':wave:'])
+  })
+
+  it('applies category filter and search query together', () => {
+    const result = filterAndSearch(FIXTURE, ['Smileys & Emotion'], 'joy')
+    expect(result.map(e => e.shortcode)).toEqual([':joy:'])
+  })
+
+  it('returns [] when no match', () => {
+    expect(filterAndSearch(FIXTURE, [], 'zzznomatch')).toEqual([])
+  })
+
+  it('returns all data when query is empty string', () => {
+    expect(filterAndSearch(FIXTURE, [], '')).toEqual(FIXTURE)
+  })
+})

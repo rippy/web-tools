@@ -1,0 +1,52 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate version.json
+        run: |
+          SHORT_SHA="${GITHUB_SHA:0:7}"
+          TIMESTAMP="$(git log -1 --format=%cI)"
+          printf '{\n  "commit": "%s",\n  "date": "%s",\n  "url": "https://github.com/%s/commit/%s"\n}\n' \
+            "$SHORT_SHA" "$TIMESTAMP" "${{ github.repository }}" "$GITHUB_SHA" \
+            > docs/version.json
+
+      - name: Cache-bust JS references in HTML
+        run: |
+          SHORT_SHA="${GITHUB_SHA:0:7}"
+          # Strip any existing ?v=... from .js src attributes, then add fresh one
+          find docs -name "*.html" | xargs sed -i \
+            -e 's/\.js?v=[a-zA-Z0-9_-]*/\.js/g' \
+            -e 's/\.js"/\.js?v='"$SHORT_SHA"'"/g'
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

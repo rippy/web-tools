@@ -17,13 +17,14 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     body {
-      font-family: system-ui, sans-serif;
+      font-family: var(--font-family);
       max-width: 520px;
       margin: 2rem auto;
       padding: 0 1rem;
-      color: #212529;
+      color: var(--color-text);
+      background: var(--color-bg);
     }
-    a.back { color: #0070f3; text-decoration: none; font-size: 0.9rem; }
+    a.back { color: var(--color-link); text-decoration: none; font-size: 0.9rem; }
     a.back:hover { text-decoration: underline; }
     h1 { margin: 0.5rem 0 1.5rem; }
 
@@ -31,12 +32,14 @@
       width: 100%;
       min-height: 160px;
       padding: 0.5rem;
-      border: 1px solid #ced4da;
+      border: 1px solid var(--color-border-input);
       border-radius: 4px;
       font-size: 0.95rem;
       font-family: inherit;
       resize: vertical;
       margin-bottom: 0.75rem;
+      background: var(--color-input-bg);
+      color: var(--color-text);
     }
     .btn-row { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
     button {
@@ -44,32 +47,34 @@
       padding: 0.5rem 1rem;
       border: none;
       border-radius: 4px;
-      background: #0070f3;
+      background: var(--color-link);
       color: #fff;
       font-size: 0.95rem;
       font-family: inherit;
       cursor: pointer;
     }
-    button:hover { background: #005fd1; }
+    button:hover { background: var(--color-link-hover); }
 
     .history-header {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      border-top: 1px solid #dee2e6;
+      border-top: 1px solid var(--color-border);
       padding-top: 1rem;
       margin-bottom: 0.75rem;
       font-size: 0.85rem;
-      color: #495057;
+      color: var(--color-text-muted);
     }
     .history-header label { display: flex; align-items: center; gap: 0.4rem; margin-left: auto; }
     .history-header input[type=number] {
       width: 4rem;
       padding: 0.2rem 0.4rem;
-      border: 1px solid #ced4da;
+      border: 1px solid var(--color-border-input);
       border-radius: 4px;
       font-size: 0.85rem;
       font-family: inherit;
+      background: var(--color-input-bg);
+      color: var(--color-text);
     }
 
     .history-entry {
@@ -77,7 +82,7 @@
       align-items: baseline;
       gap: 0.5rem;
       padding: 0.4rem 0;
-      border-bottom: 1px solid #f1f3f5;
+      border-bottom: 1px solid var(--color-border);
       font-size: 0.9rem;
     }
     .history-text {
@@ -85,15 +90,15 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      color: #343a40;
+      color: var(--color-text);
     }
     .btn-secondary {
       flex: none;
       padding: 0.2rem 0.5rem;
-      border: 1px solid #ced4da;
+      border: 1px solid var(--color-border-input);
       border-radius: 4px;
-      background: #fff;
-      color: #495057;
+      background: var(--color-surface-alt);
+      color: var(--color-text-muted);
       font-size: 0.8rem;
       font-family: inherit;
       cursor: pointer;
@@ -101,7 +106,7 @@
       min-width: 5rem;
       text-align: center;
     }
-    .btn-secondary:hover { background: #f8f9fa; }
+    .btn-secondary:hover { background: var(--color-surface); }
     .btn-delete {
       flex: none;
       padding: 0.2rem 0.3rem;

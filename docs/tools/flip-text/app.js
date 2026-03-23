@@ -8,7 +8,7 @@ function saveState(limit, history) {
   stateSet(STATE_KEY, { limit, history })
 }
 
-function renderHistory(history, container) {
+function renderHistory(history, container, onLoad) {
   container.innerHTML = ''
   history.forEach(entry => {
     const row = document.createElement('div')
@@ -22,7 +22,7 @@ function renderHistory(history, container) {
     loadBtn.className = 'btn-secondary'
     loadBtn.textContent = '↩ Load'
     loadBtn.addEventListener('click', () => {
-      document.getElementById('input-text').value = entry.input
+      onLoad(entry.input)
     })
 
     const copyBtn = document.createElement('button')
@@ -31,6 +31,9 @@ function renderHistory(history, container) {
     copyBtn.addEventListener('click', () => {
       navigator.clipboard.writeText(entry.output).then(() => {
         copyBtn.textContent = 'Copied!'
+        setTimeout(() => { copyBtn.textContent = '⎘ Copy' }, 1500)
+      }).catch(() => {
+        copyBtn.textContent = 'Failed!'
         setTimeout(() => { copyBtn.textContent = '⎘ Copy' }, 1500)
       })
     })
@@ -54,7 +57,7 @@ function init() {
   const historyList = document.getElementById('history-list')
 
   inputLimit.value = limit
-  renderHistory(history, historyList)
+  renderHistory(history, historyList, text => { inputText.value = text })
 
   function applyTransform(mode) {
     const text = inputText.value
@@ -63,7 +66,7 @@ function init() {
     inputText.value = output
     history = [{ input: text, output, mode }, ...history].slice(0, limit)
     saveState(limit, history)
-    renderHistory(history, historyList)
+    renderHistory(history, historyList, text => { inputText.value = text })
   }
 
   btnFlip.addEventListener('click', () => applyTransform('flip'))
@@ -72,10 +75,10 @@ function init() {
   inputLimit.addEventListener('input', () => {
     const n = parseInt(inputLimit.value, 10)
     if (Number.isFinite(n) && n >= 1) {
-      limit = Math.round(n)
+      limit = n
       history = history.slice(0, limit)
       saveState(limit, history)
-      renderHistory(history, historyList)
+      renderHistory(history, historyList, text => { inputText.value = text })
     }
   })
 }

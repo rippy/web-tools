@@ -10,12 +10,12 @@ beforeEach(() => {
 
 describe('get()', () => {
   it('returns full defaults when nothing is stored', () => {
-    expect(settings.get()).toEqual({ schemaVersion: 1, theme: 'system', font: 'system-ui', fontSize: 16 })
+    expect(settings.get()).toEqual({ schemaVersion: 1, theme: 'system', font: 'system-ui', fontSize: 16, locationTracking: true })
   })
 
   it('merges stored values over defaults', () => {
     localStorage.setItem('web-tools.settings', JSON.stringify({ theme: 'dark' }))
-    expect(settings.get()).toEqual({ schemaVersion: 1, theme: 'dark', font: 'system-ui', fontSize: 16 })
+    expect(settings.get()).toEqual({ schemaVersion: 1, theme: 'dark', font: 'system-ui', fontSize: 16, locationTracking: true })
   })
 })
 
@@ -96,5 +96,20 @@ describe('apply()', () => {
     settings.set({ fontSize: 20 })
     settings.apply()
     expect(document.documentElement.style.getPropertyValue('--font-size')).toBe('20px')
+  })
+})
+
+describe('locationTracking', () => {
+  it('get() returns locationTracking: true by default', () => {
+    expect(settings.get().locationTracking).toBe(true)
+  })
+
+  it('set({ locationTracking: false }) persists correctly', () => {
+    settings.set({ locationTracking: false })
+    expect(settings.get().locationTracking).toBe(false)
+  })
+
+  it('set({ locationTracking: "yes" }) throws TypeError', () => {
+    expect(() => settings.set({ locationTracking: 'yes' })).toThrow(TypeError)
   })
 })

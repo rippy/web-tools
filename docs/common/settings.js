@@ -7,6 +7,7 @@ const DEFAULTS = {
   theme: 'system',
   font: 'system-ui',
   fontSize: 16,
+  locationTracking: true,
 }
 
 const VALID_THEMES = ['system', 'light', 'dark']
@@ -29,6 +30,9 @@ export function set(patch) {
     if (!Number.isInteger(s) || s < 10 || s > 28) {
       throw new TypeError(`Invalid fontSize: ${s}. Must be an integer between 10 and 28.`)
     }
+  }
+  if ('locationTracking' in patch && typeof patch.locationTracking !== 'boolean') {
+    throw new TypeError('Invalid locationTracking: must be a boolean')
   }
   const current = get()
   const updated = { ...current, ...patch }

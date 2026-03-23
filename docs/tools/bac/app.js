@@ -1,5 +1,8 @@
 import * as userProfile from '../../common/user-profile.js'
 import { get as stateGet, set as stateSet } from '../../common/state.js'
+import { captureLocation } from '../../common/location/capture.js'
+import { get as locationGet } from '../../common/location/location-store.js'
+import * as settings from '../../common/settings.js'
 import {
   calculateBAC, peakBAC, timeToClear, formatHoursToHHMM,
   getBACDescription, getBrandSuggestions, drinkDefaults,
@@ -140,6 +143,19 @@ function closeSession(session) {
   stateSet(ACTIVE_KEY, null)
 }
 
+async function captureAndPatchDrink(loggedAt) {
+  if (!settings.get().locationTracking) return
+  const loc = await captureLocation()
+  const session = stateGet(ACTIVE_KEY)
+  if (!session) return
+  const idx = session.drinks.findIndex(d => d.loggedAt === loggedAt)
+  if (idx === -1) return
+  const drinks = [...session.drinks]
+  drinks[idx] = { ...drinks[idx], locationId: loc?.id ?? null }
+  stateSet(ACTIVE_KEY, { ...session, drinks })
+  renderAll()
+}
+
 // ─── Render ──────────────────────────────────────────────────────────────────
 function renderAll() {
   renderBACHeader()
@@ -254,11 +270,12 @@ function renderDrinkLog() {
 }
 
 function onAgain(drink) {
-  const newDrink = { ...drink, loggedAt: new Date().toISOString() }
+  const newDrink = { ...drink, loggedAt: new Date().toISOString(), locationId: null }
   const existing = stateGet(ACTIVE_KEY)
   const session = existing ?? { startedAt: new Date().toISOString(), drinks: [] }
   stateSet(ACTIVE_KEY, { ...session, drinks: [...session.drinks, newDrink] })
   renderAll()
+  captureAndPatchDrink(newDrink.loggedAt)
 }
 
 function onDeleteDrink(loggedAt) {
@@ -518,6 +535,7 @@ function onLogDrink() {
     volumeMl,
     abv,
     isDouble,
+    locationId: null,
   }
 
   const existing = stateGet(ACTIVE_KEY)
@@ -530,6 +548,7 @@ function onLogDrink() {
   divBrandDropdown.hidden = true
 
   renderAll()
+  captureAndPatchDrink(drink.loggedAt)
 }
 
 function onEndSession() {

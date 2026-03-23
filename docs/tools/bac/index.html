@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAC Tracker</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 520px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      color: #212529;
+    }
+    a.back { color: #0070f3; text-decoration: none; font-size: 0.9rem; }
+    a.back:hover { text-decoration: underline; }
+    h1 { margin: 0.5rem 0 1.5rem; }
+
+    section { border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 1rem; overflow: hidden; }
+    .section-header {
+      background: #f1f3f5;
+      padding: 0.6rem 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .section-header.blue  { background: #e3f2fd; color: #1565c0; cursor: default; }
+    .section-body { padding: 0.9rem; display: flex; flex-direction: column; gap: 0.65rem; }
+
+    .bac-value { font-size: 2.5rem; font-weight: 800; color: #1565c0; line-height: 1; }
+    .bac-status-sober    { color: #2e7d32; font-weight: 600; font-size: 0.85rem; }
+    .bac-status-overlimit { color: #c62828; font-weight: 600; font-size: 0.85rem; }
+    .bac-description { color: #555; font-size: 0.78rem; margin-top: 0.2rem; }
+    .bac-clears { color: #555; font-size: 0.8rem; }
+
+    .stat-tiles { display: flex; gap: 0.4rem; }
+    .stat-tile {
+      flex: 1;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 0.35rem;
+      text-align: center;
+    }
+    .stat-label { font-size: 0.58rem; color: #868e96; text-transform: uppercase; }
+    .stat-value { font-weight: 600; font-size: 0.9rem; }
+
+    .btn-primary {
+      flex: 1;
+      padding: 0.45rem;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    .btn-primary:hover { background: #1565c0; }
+    .btn-secondary {
+      padding: 0.45rem 0.8rem;
+      background: #f8f9fa;
+      color: #868e96;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-family: inherit;
+    }
+    .btn-secondary:hover { background: #e9ecef; }
+
+    .add-panel {
+      border: 1px solid #bbdefb;
+      border-radius: 8px;
+      background: #f8fcff;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .field-label {
+      display: block;
+      font-size: 0.7rem;
+      color: #868e96;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.03em;
+    }
+    .type-group { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .type-btn {
+      padding: 0.3rem 0.5rem;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      background: #fff;
+      color: #555;
+      font-size: 0.78rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .type-btn.selected {
+      border-color: #1976d2;
+      background: #e3f2fd;
+      color: #1565c0;
+      font-weight: 600;
+    }
+    .toggle-group { display: flex; gap: 0.3rem; }
+    .toggle-btn {
+      padding: 0.3rem 0.7rem;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      background: #f8f9fa;
+      color: #868e96;
+      font-size: 0.8rem;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    .toggle-btn.selected {
+      border-color: #1976d2;
+      background: #e3f2fd;
+      color: #1565c0;
+      font-weight: 600;
+    }
+    input[type=number], input[type=text] {
+      width: 100%;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .brand-wrap { position: relative; }
+    .brand-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid #1976d2;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      background: #fff;
+      z-index: 10;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+    .brand-option {
+      padding: 0.3rem 0.5rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+    .brand-option:hover { background: #e3f2fd; }
+
+    .drink-list { list-style: none; padding: 0; margin: 0; }
+    .drink-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.3rem 0.6rem;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.85rem;
+      gap: 0.4rem;
+    }
+    .drink-row:last-child { border-bottom: none; }
+    .drink-name { flex: 1; }
+    .drink-time { color: #868e96; font-size: 0.75rem; white-space: nowrap; }
+    .btn-again {
+      background: #e3f2fd;
+      color: #1565c0;
+      border: 1px solid #bbdefb;
+      border-radius: 3px;
+      padding: 0.15rem 0.4rem;
+      font-size: 0.7rem;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #e53935;
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0;
+      line-height: 1;
+    }
+    .empty-msg { color: #868e96; font-size: 0.9rem; font-style: italic; margin: 0; }
+
+    .history-list { list-style: none; padding: 0; margin: 0; }
+    .history-row-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.35rem 0.6rem;
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      margin-bottom: 0.35rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      background: #fff;
+    }
+    .history-row-header:hover { background: #f8f9fa; }
+    .history-row-header.expanded { border-radius: 5px 5px 0 0; margin-bottom: 0; border-bottom: none; }
+    .history-drinks {
+      border: 1px solid #dee2e6;
+      border-top: none;
+      border-radius: 0 0 5px 5px;
+      margin-bottom: 0.35rem;
+    }
+    .history-drink-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.78rem;
+      border-bottom: 1px solid #f5f5f5;
+      color: #555;
+    }
+    .history-drink-row:last-child { border-bottom: none; }
+
+    .analytics-label { font-size: 0.68rem; color: #868e96; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .brand-bar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      margin-bottom: 0.2rem;
+    }
+    .brand-bar-track { width: 80px; height: 6px; background: #e9ecef; border-radius: 3px; flex-shrink: 0; }
+    .brand-bar-fill  { height: 100%; background: #1976d2; border-radius: 3px; }
+    .type-badges { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+    .type-badge {
+      background: #e3f2fd;
+      color: #1565c0;
+      border-radius: 3px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    /* Profile prompt */
+    .profile-prompt { padding: 1rem; }
+    .profile-prompt p { color: #555; margin: 0 0 0.75rem; font-size: 0.9rem; }
+    .profile-field { margin-bottom: 0.5rem; }
+    .btn-save-profile {
+      width: 100%;
+      padding: 0.45rem;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-family: inherit;
+      margin-top: 0.25rem;
+    }
+    .profile-error { color: #c62828; font-size: 0.8rem; margin-top: 0.25rem; display: none; }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <a class="back" href="../../index.html">← Home</a>
+  <h1>BAC Tracker</h1>
+
+  <!-- Profile prompt (shown when profile incomplete) -->
+  <section id="section-profile-prompt">
+    <div class="section-header">Complete your profile to use the BAC Tracker</div>
+    <div class="profile-prompt">
+      <p>The BAC calculator needs your biological sex and weight to estimate your blood alcohol content.</p>
+      <div class="profile-field">
+        <span class="field-label">Biological sex (for health calculations)</span>
+        <div class="toggle-group">
+          <button id="pp-btn-male"   class="toggle-btn">Male</button>
+          <button id="pp-btn-female" class="toggle-btn">Female</button>
+        </div>
+      </div>
+      <div class="profile-field">
+        <label class="field-label" for="pp-input-weight">Weight (kg)</label>
+        <input id="pp-input-weight" type="number" min="0" step="0.1" placeholder="80">
+      </div>
+      <div class="profile-field">
+        <label class="field-label" for="pp-input-height">Height (cm)</label>
+        <input id="pp-input-height" type="number" min="0" step="0.1" placeholder="178">
+      </div>
+      <div class="profile-field">
+        <label class="field-label" for="pp-input-age">Age</label>
+        <input id="pp-input-age" type="number" min="1" max="120" placeholder="35">
+      </div>
+      <button id="pp-btn-save" class="btn-save-profile">Save profile</button>
+      <div id="pp-error" class="profile-error"></div>
+    </div>
+  </section>
+
+  <!-- Main tool (hidden until profile is complete) -->
+  <div id="div-tool" hidden>
+
+    <!-- BAC header section -->
+    <section id="section-bac">
+      <div class="section-header blue">
+        <div>
+          <div class="field-label">Current BAC</div>
+          <span id="span-bac" class="bac-value">0.000</span>
+        </div>
+        <div style="text-align:right">
+          <span id="span-status" class="bac-status-sober">● Sober</span>
+          <span id="span-description" class="bac-description" hidden></span>
+          <span id="span-clears" class="bac-clears" hidden></span>
+          <span id="span-drive" class="bac-clears" hidden></span>
+        </div>
+      </div>
+      <div class="section-body">
+        <!-- Stat tiles -->
+        <div class="stat-tiles">
+          <div class="stat-tile">
+            <div class="stat-label">Session</div>
+            <div id="tile-duration" class="stat-value">—</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Drinks</div>
+            <div id="tile-count" class="stat-value">—</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-label">Peak BAC</div>
+            <div id="tile-peak" class="stat-value">—</div>
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div style="display:flex;gap:0.4rem">
+          <button id="btn-add-drink" class="btn-primary">+ Add drink</button>
+          <button id="btn-end-session" class="btn-secondary" hidden>End session</button>
+        </div>
+
+        <!-- Add drink panel (hidden until + Add drink clicked) -->
+        <div id="div-add-panel" class="add-panel" hidden>
+          <div>
+            <span class="field-label">Type</span>
+            <div class="type-group" id="type-group">
+              <button class="type-btn" data-type="shot">🥃 Shot</button>
+              <button class="type-btn" data-type="cocktail">🍹 Cocktail</button>
+              <button class="type-btn" data-type="beer">🍺 Beer</button>
+              <button class="type-btn" data-type="cider">🍎 Cider</button>
+              <button class="type-btn" data-type="wine">🍷 Wine</button>
+            </div>
+          </div>
+          <div id="div-double" style="display:flex;align-items:center;gap:0.5rem">
+            <span class="field-label" style="margin:0">Double</span>
+            <div class="toggle-group">
+              <button id="btn-double-yes" class="toggle-btn">Yes</button>
+              <button id="btn-double-no"  class="toggle-btn">No</button>
+            </div>
+          </div>
+          <div class="brand-wrap">
+            <label class="field-label" for="input-brand">Brand <span style="color:#aaa;font-size:0.65rem">(optional)</span></label>
+            <input id="input-brand" type="text" placeholder="house" autocomplete="off">
+            <div id="div-brand-dropdown" class="brand-dropdown" hidden></div>
+          </div>
+          <div class="field-row">
+            <div>
+              <label class="field-label" for="input-volume">Volume (ml)</label>
+              <input id="input-volume" type="number" min="1" step="1">
+            </div>
+            <div>
+              <label class="field-label" for="input-abv">ABV (%)</label>
+              <input id="input-abv" type="number" min="0" max="100" step="0.1">
+            </div>
+          </div>
+          <button id="btn-log-drink" class="btn-primary">Log drink</button>
+        </div>
+
+        <!-- Current session drink log -->
+        <div id="div-drink-log">
+          <p id="p-no-session" class="empty-msg">No active session. Add a drink to start.</p>
+          <ul id="list-drinks" class="drink-list" hidden></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- History section (collapsible) -->
+    <section id="section-history">
+      <div class="section-header" id="header-history">
+        <span>History</span>
+        <span id="span-history-count" style="font-weight:400;font-size:0.8rem;color:#868e96">▸</span>
+      </div>
+      <div id="body-history" class="section-body" hidden>
+        <p id="p-no-history" class="empty-msg">No sessions yet.</p>
+        <ul id="list-history" class="history-list" hidden></ul>
+      </div>
+    </section>
+
+    <!-- Analytics section (collapsible) -->
+    <section id="section-analytics">
+      <div class="section-header" id="header-analytics">
+        <span>Analytics</span>
+        <span id="span-analytics-toggle" style="font-weight:400;font-size:0.8rem;color:#868e96">▸</span>
+      </div>
+      <div id="body-analytics" class="section-body" hidden>
+        <p id="p-no-analytics" class="empty-msg">Log some drinks to see analytics.</p>
+        <div id="div-analytics-content" hidden>
+          <div class="analytics-label">Top brands</div>
+          <div id="div-top-brands"></div>
+          <div class="analytics-label" style="margin-top:0.6rem">By type</div>
+          <div id="div-by-type" class="type-badges"></div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- end div-tool -->
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

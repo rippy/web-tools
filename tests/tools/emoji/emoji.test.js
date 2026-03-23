@@ -140,3 +140,29 @@ describe('getRecentEmojis', () => {
     })
   })
 })
+
+describe('applyTone', () => {
+  it("returns emoji unchanged for 'default' tone", () => {
+    expect(applyTone('👋', 'default')).toBe('👋')
+  })
+
+  it('appends light skin tone modifier', () => {
+    expect(applyTone('👋', '🏻')).toBe('👋🏻')
+  })
+
+  it('appends medium-light skin tone modifier', () => {
+    expect(applyTone('👋', '🏼')).toBe('👋🏼')
+  })
+
+  it('appends medium skin tone modifier', () => {
+    expect(applyTone('👋', '🏽')).toBe('👋🏽')
+  })
+
+  it('appends medium-dark skin tone modifier', () => {
+    expect(applyTone('👋', '🏾')).toBe('👋🏾')
+  })
+
+  it('appends dark skin tone modifier', () => {
+    expect(applyTone('👋', '🏿')).toBe('👋🏿')
+  })
+})

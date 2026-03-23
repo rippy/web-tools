@@ -38,4 +38,7 @@ export function getRecentEmojis(data, recentShortcodes) {
     return acc
   }, [])
 }
-export function applyTone(emojiChar, tone) { return emojiChar }
+export function applyTone(emojiChar, tone) {
+  if (tone === 'default') return emojiChar
+  return emojiChar + tone
+}

@@ -74,10 +74,101 @@ function onToneSelect(tone) {
   renderGrid()
 }
 
-// ─── Placeholders (filled in later tasks) ────────────────────────────────────
+// ─── Category pills ───────────────────────────────────────────────────────────
+function renderCategoryPills() {
+  categoryPills.innerHTML = ''
+
+  const hasRecents = appState.recentShortcodes.length > 0
+  const staticCats = getCategories(emojiData)
+  const allCats = hasRecents
+    ? ['Recents', 'all', ...staticCats]
+    : ['all', ...staticCats]
+
+  for (const cat of allCats) {
+    const btn = document.createElement('button')
+    btn.className = 'cat-pill'
+    btn.textContent = cat === 'all' ? 'All' : cat
+    btn.dataset.cat = cat
+    btn.classList.toggle('active', selectedCategories.includes(cat))
+    btn.addEventListener('click', () => onCategoryToggle(cat))
+    categoryPills.appendChild(btn)
+  }
+}
+
+function onCategoryToggle(cat) {
+  if (cat === 'all') {
+    selectedCategories = ['all']
+  } else {
+    const without = selectedCategories.filter(c => c !== 'all' && c !== cat)
+    if (selectedCategories.includes(cat)) {
+      selectedCategories = without.length > 0 ? without : ['all']
+    } else {
+      selectedCategories = [...without, cat]
+    }
+  }
+
+  for (const btn of categoryPills.querySelectorAll('.cat-pill')) {
+    btn.classList.toggle('active', selectedCategories.includes(btn.dataset.cat))
+  }
+
+  renderGrid()
+}
+
+// ─── Emoji grid ───────────────────────────────────────────────────────────────
+function resolveDisplayEmoji(entry) {
+  return entry.skinTones ? applyTone(entry.emoji, appState.skinTone) : entry.emoji
+}
+
+function getGridEntries() {
+  const hasRecents = selectedCategories.includes('Recents')
+  const otherCats = selectedCategories.filter(c => c !== 'Recents')
+
+  let entries
+
+  if (hasRecents && otherCats.length === 0) {
+    entries = getRecentEmojis(emojiData, appState.recentShortcodes)
+  } else if (hasRecents) {
+    const recentEntries = getRecentEmojis(emojiData, appState.recentShortcodes)
+    const recentSet = new Set(recentEntries.map(e => e.shortcode))
+    const otherEntries = filterAndSearch(emojiData, otherCats, null)
+    entries = [...recentEntries, ...otherEntries.filter(e => !recentSet.has(e.shortcode))]
+  } else {
+    entries = filterAndSearch(emojiData, selectedCategories, null)
+  }
+
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase()
+    entries = entries.filter(e =>
+      e.name.toLowerCase().includes(q) ||
+      e.shortcode.toLowerCase().includes(q)
+    )
+  }
+
+  return entries
+}
+
+function renderGrid() {
+  emojiGrid.innerHTML = ''
+  const entries = getGridEntries()
+
+  if (entries.length === 0) {
+    emptyState.hidden = false
+    return
+  }
+  emptyState.hidden = true
+
+  for (const entry of entries) {
+    const btn = document.createElement('button')
+    btn.className = 'emoji-btn'
+    btn.textContent = resolveDisplayEmoji(entry)
+    btn.title = entry.name
+    btn.addEventListener('click', () => onEmojiClick(entry, btn))
+    emojiGrid.appendChild(btn)
+  }
+}
+
+// ─── Recents row (placeholder — filled in Task 11) ───────────────────────────
 function renderRecentsRow() {}
-function renderCategoryPills() {}
-function renderGrid() {}
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 function init() {

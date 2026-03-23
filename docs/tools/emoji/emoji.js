@@ -1,4 +1,14 @@
-export function getCategories(data) { return [] }
+export function getCategories(data) {
+  const seen = new Set()
+  const result = []
+  for (const item of data) {
+    if (!seen.has(item.category)) {
+      seen.add(item.category)
+      result.push(item.category)
+    }
+  }
+  return result
+}
 export function filterAndSearch(data, selectedCategories, query) { return [] }
 export function addToRecents(recentShortcodes, shortcode, maxCount = 30) { return [] }
 export function getRecentEmojis(data, recentShortcodes) { return [] }

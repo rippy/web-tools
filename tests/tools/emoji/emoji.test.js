@@ -165,4 +165,8 @@ describe('applyTone', () => {
   it('appends dark skin tone modifier', () => {
     expect(applyTone('👋', '🏿')).toBe('👋🏿')
   })
+
+  it('appends modifier to a non-tone-eligible emoji (caller responsibility to guard skinTones)', () => {
+    expect(applyTone('🍕', '🏽')).toBe('🍕🏽')
+  })
 })

@@ -137,11 +137,7 @@ function getGridEntries() {
   }
 
   if (searchQuery) {
-    const q = searchQuery.toLowerCase()
-    entries = entries.filter(e =>
-      e.name.toLowerCase().includes(q) ||
-      e.shortcode.toLowerCase().includes(q)
-    )
+    entries = filterAndSearch(entries, [], searchQuery)
   }
 
   return entries

@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function(){
+      var s=JSON.parse(localStorage.getItem('web-tools.settings')||'null')||{};
+      var dark=s.theme==='dark'||(s.theme!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches);
+      document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+      document.documentElement.style.setProperty('--font-family',s.font==='monospace'?"'Courier New',monospace":'system-ui,sans-serif');
+      document.documentElement.style.setProperty('--font-size',(s.fontSize||16)+'px');
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../common/theme.css">
   <title>Flip Text</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; }

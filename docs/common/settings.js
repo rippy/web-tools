@@ -8,6 +8,9 @@ const DEFAULTS = {
   font: 'system-ui',
   fontSize: 16,
   locationTracking: true,
+  currencySymbol: '$',
+  decimalSeparator: '.',
+  defaultTipPercent: 20,
 }
 
 const VALID_THEMES = ['system', 'light', 'dark']
@@ -33,6 +36,21 @@ export function set(patch) {
   }
   if ('locationTracking' in patch && typeof patch.locationTracking !== 'boolean') {
     throw new TypeError('Invalid locationTracking: must be a boolean')
+  }
+  if ('currencySymbol' in patch) {
+    const sym = patch.currencySymbol
+    if (typeof sym !== 'string' || sym.trim().length === 0 || [...sym].length > 4) {
+      throw new TypeError('Invalid currencySymbol: must be a non-empty string of ≤ 4 characters')
+    }
+  }
+  if ('decimalSeparator' in patch && patch.decimalSeparator !== '.' && patch.decimalSeparator !== ',') {
+    throw new TypeError('Invalid decimalSeparator: must be "." or ","')
+  }
+  if ('defaultTipPercent' in patch) {
+    const pct = patch.defaultTipPercent
+    if (typeof pct !== 'number' || ![15, 18, 20, 22].includes(pct)) {
+      throw new TypeError('Invalid defaultTipPercent: must be one of 15, 18, 20, 22')
+    }
   }
   const current = get()
   const updated = { ...current, ...patch }

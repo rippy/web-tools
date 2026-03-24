@@ -10,12 +10,30 @@ beforeEach(() => {
 
 describe('get()', () => {
   it('returns full defaults when nothing is stored', () => {
-    expect(settings.get()).toEqual({ schemaVersion: 1, theme: 'system', font: 'system-ui', fontSize: 16, locationTracking: true })
+    expect(settings.get()).toEqual({
+      schemaVersion: 1,
+      theme: 'system',
+      font: 'system-ui',
+      fontSize: 16,
+      locationTracking: true,
+      currencySymbol: '$',
+      decimalSeparator: '.',
+      defaultTipPercent: 20,
+    })
   })
 
   it('merges stored values over defaults', () => {
     localStorage.setItem('web-tools.settings', JSON.stringify({ theme: 'dark' }))
-    expect(settings.get()).toEqual({ schemaVersion: 1, theme: 'dark', font: 'system-ui', fontSize: 16, locationTracking: true })
+    expect(settings.get()).toEqual({
+      schemaVersion: 1,
+      theme: 'dark',
+      font: 'system-ui',
+      fontSize: 16,
+      locationTracking: true,
+      currencySymbol: '$',
+      decimalSeparator: '.',
+      defaultTipPercent: 20,
+    })
   })
 })
 
@@ -111,5 +129,67 @@ describe('locationTracking', () => {
 
   it('set({ locationTracking: "yes" }) throws TypeError', () => {
     expect(() => settings.set({ locationTracking: 'yes' })).toThrow(TypeError)
+  })
+})
+
+describe('currencySymbol', () => {
+  it('get() returns "$" by default', () => {
+    expect(settings.get().currencySymbol).toBe('$')
+  })
+
+  it('set({ currencySymbol: "€" }) persists correctly', () => {
+    settings.set({ currencySymbol: '€' })
+    expect(settings.get().currencySymbol).toBe('€')
+  })
+
+  it('throws TypeError for empty string', () => {
+    expect(() => settings.set({ currencySymbol: '' })).toThrow(TypeError)
+  })
+
+  it('throws TypeError for whitespace-only string', () => {
+    expect(() => settings.set({ currencySymbol: '   ' })).toThrow(TypeError)
+  })
+
+  it('throws TypeError for string longer than 4 characters', () => {
+    expect(() => settings.set({ currencySymbol: 'ABCDE' })).toThrow(TypeError)
+  })
+
+  it('accepts exactly 4 characters', () => {
+    settings.set({ currencySymbol: 'ABCD' })
+    expect(settings.get().currencySymbol).toBe('ABCD')
+  })
+})
+
+describe('decimalSeparator', () => {
+  it('get() returns "." by default', () => {
+    expect(settings.get().decimalSeparator).toBe('.')
+  })
+
+  it('set({ decimalSeparator: "," }) persists correctly', () => {
+    settings.set({ decimalSeparator: ',' })
+    expect(settings.get().decimalSeparator).toBe(',')
+  })
+
+  it('throws TypeError for invalid value', () => {
+    expect(() => settings.set({ decimalSeparator: ';' })).toThrow(TypeError)
+  })
+})
+
+describe('defaultTipPercent', () => {
+  it('get() returns 20 by default', () => {
+    expect(settings.get().defaultTipPercent).toBe(20)
+  })
+
+  it('set({ defaultTipPercent: 15 }) persists correctly', () => {
+    settings.set({ defaultTipPercent: 15 })
+    expect(settings.get().defaultTipPercent).toBe(15)
+  })
+
+  it('throws TypeError for value not in [15, 18, 20, 22]', () => {
+    expect(() => settings.set({ defaultTipPercent: 25 })).toThrow(TypeError)
+  })
+
+  it('throws TypeError when value is a string instead of number', () => {
+    expect(() => settings.set({ defaultTipPercent: '20' })).toThrow(TypeError)
   })
 })

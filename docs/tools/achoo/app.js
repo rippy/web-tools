@@ -15,10 +15,13 @@ const btnRefresh = document.getElementById('btn-refresh')
 let currentCoords = null
 let lastUpdated   = null
 let refreshTimer  = null
+let achooLayout   = null
+let tempUnit      = null
 
 // ─── Entry point ──────────────────────────────────────────────────────────────
 
 async function init() {
+  ;({ achooLayout, tempUnit } = settings.get())
   const achooState = state.get(STATE_KEY)
   if (achooState?.home) {
     currentCoords = { lat: achooState.home.lat, lng: achooState.home.lng }
@@ -50,7 +53,6 @@ function isHome() {
 
 async function loadData(locationName, home) {
   btnRefresh.disabled = true
-  const { tempUnit } = settings.get()
   const data = await fetchAchooData({ ...currentCoords, tempUnit })
   btnRefresh.disabled = false
 
@@ -66,7 +68,6 @@ async function loadData(locationName, home) {
 // ─── Rendering ────────────────────────────────────────────────────────────────
 
 function render(data, locationName, home) {
-  const { achooLayout, tempUnit } = settings.get()
   const unit     = tempUnit === 'C' ? '°C' : '°F'
   const windUnit = tempUnit === 'C' ? 'km/h' : 'mph'
 
@@ -156,7 +157,7 @@ function renderTabs(data, locationName, home, unit, windUnit) {
   }
   const tabs = [
     { key: 'weather',    label: '⛅ Weather' },
-    { key: 'airQuality', label: '💨 Air' },
+    { key: 'airQuality', label: '💨 Air Quality' },
     { key: 'allergens',  label: '🌿 Allergens' },
   ]
 

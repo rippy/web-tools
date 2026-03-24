@@ -11,10 +11,14 @@ const DEFAULTS = {
   currencySymbol: '$',
   decimalSeparator: '.',
   defaultTipPercent: 20,
+  achooLayout: 'scroll',
+  tempUnit: 'F',
 }
 
 const VALID_THEMES = ['system', 'light', 'dark']
 const VALID_FONTS = ['system-ui', 'monospace']
+const VALID_ACHOO_LAYOUTS = ['scroll', 'tabs']
+const VALID_TEMP_UNITS = ['F', 'C']
 
 export function get() {
   const stored = state.get(KEY) || {}
@@ -51,6 +55,12 @@ export function set(patch) {
     if (typeof pct !== 'number' || ![15, 18, 20, 22].includes(pct)) {
       throw new TypeError('Invalid defaultTipPercent: must be one of 15, 18, 20, 22')
     }
+  }
+  if ('achooLayout' in patch && !VALID_ACHOO_LAYOUTS.includes(patch.achooLayout)) {
+    throw new TypeError(`Invalid achooLayout: ${patch.achooLayout}. Must be one of: ${VALID_ACHOO_LAYOUTS.join(', ')}`)
+  }
+  if ('tempUnit' in patch && !VALID_TEMP_UNITS.includes(patch.tempUnit)) {
+    throw new TypeError(`Invalid tempUnit: ${patch.tempUnit}. Must be one of: ${VALID_TEMP_UNITS.join(', ')}`)
   }
   const current = get()
   const updated = { ...current, ...patch }

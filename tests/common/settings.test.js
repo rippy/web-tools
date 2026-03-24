@@ -19,6 +19,8 @@ describe('get()', () => {
       currencySymbol: '$',
       decimalSeparator: '.',
       defaultTipPercent: 20,
+      achooLayout: 'scroll',
+      tempUnit: 'F',
     })
   })
 
@@ -33,6 +35,8 @@ describe('get()', () => {
       currencySymbol: '$',
       decimalSeparator: '.',
       defaultTipPercent: 20,
+      achooLayout: 'scroll',
+      tempUnit: 'F',
     })
   })
 })
@@ -191,5 +195,45 @@ describe('defaultTipPercent', () => {
 
   it('throws TypeError when value is a string instead of number', () => {
     expect(() => settings.set({ defaultTipPercent: '20' })).toThrow(TypeError)
+  })
+})
+
+describe('achooLayout', () => {
+  it('get() returns achooLayout: "scroll" by default', () => {
+    expect(settings.get().achooLayout).toBe('scroll')
+  })
+
+  it('set({ achooLayout: "scroll" }) persists correctly', () => {
+    settings.set({ achooLayout: 'scroll' })
+    expect(settings.get().achooLayout).toBe('scroll')
+  })
+
+  it('set({ achooLayout: "tabs" }) persists correctly', () => {
+    settings.set({ achooLayout: 'tabs' })
+    expect(settings.get().achooLayout).toBe('tabs')
+  })
+
+  it('throws TypeError for invalid achooLayout', () => {
+    expect(() => settings.set({ achooLayout: 'grid' })).toThrow(TypeError)
+  })
+})
+
+describe('tempUnit', () => {
+  it('get() returns tempUnit: "F" by default', () => {
+    expect(settings.get().tempUnit).toBe('F')
+  })
+
+  it('set({ tempUnit: "F" }) persists correctly', () => {
+    settings.set({ tempUnit: 'F' })
+    expect(settings.get().tempUnit).toBe('F')
+  })
+
+  it('set({ tempUnit: "C" }) persists correctly', () => {
+    settings.set({ tempUnit: 'C' })
+    expect(settings.get().tempUnit).toBe('C')
+  })
+
+  it('throws TypeError for invalid tempUnit', () => {
+    expect(() => settings.set({ tempUnit: 'K' })).toThrow(TypeError)
   })
 })

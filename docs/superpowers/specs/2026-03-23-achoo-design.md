@@ -38,18 +38,19 @@ tests/tools/achoo/
 
 ## Global Settings Changes
 
-Two new fields added to the settings schema (additive; no schema version bump):
+Two new fields added to the settings schema (additive; no schema version bump).
+The two new fields added to the `DEFAULTS` object in `settings.js` are:
 
 ```json
 {
-  "schemaVersion": 1,
-  "theme": "system",
-  "font": "system-ui",
-  "fontSize": 16,
   "achooLayout": "scroll",
   "tempUnit": "F"
 }
 ```
+
+All existing default fields (`schemaVersion`, `theme`, `font`, `fontSize`,
+`locationTracking`, `currencySymbol`, `decimalSeparator`, `defaultTipPercent`)
+remain unchanged.
 
 **`achooLayout`** — `"scroll"` | `"tabs"`, default `"scroll"`.
 Controls whether Achoo displays all sections in a single scrollable page or in
@@ -89,19 +90,33 @@ The name is the reverse-geocoded result from the existing `geocoding.js` module.
 
 ## Location Flow
 
+Achoo does **not** use `capture.js` or `location-store.js`. Those modules
+manage visit-history entries; Achoo's home location is a single saved coordinate
+with no history tracking. Achoo calls `geolocation.js` and `geocoding.js`
+directly.
+
+```js
+import { getCurrentPosition } from '../../common/location/geolocation.js'
+import { reverseGeocode }     from '../../common/location/geocoding.js'
+```
+
 On every page load:
 
 1. Read `state.get("achoo")`. If `home` is present, use those coords — skip GPS.
-2. If no home is saved, call `getCurrentPosition()` from the existing
-   `geolocation.js`.
-   - On success: use the returned coords; show a "Set as home" button.
-   - On failure (denied, unavailable, timeout): show a GPS unavailable error
+2. If no home is saved, call `getCurrentPosition()` from `geolocation.js`.
+   `getCurrentPosition()` always resolves (never rejects) — it returns `null`
+   on all failure paths (permission denied, unavailable, timeout).
+   - If coords are returned: use them; show a "Set as home" button.
+   - If `getCurrentPosition()` returns `null`: show a GPS unavailable error
      state explaining that a home location is required. No data is fetched.
 3. Once coords are known, call `fetchAchooData()` and render.
 
-**"Set as home":** saves `{ lat, lng, name }` (name from `geocoding.js`) to
-`state.set("achoo", { home: ... })`. A "Clear home" control removes the saved
-home; next load will use GPS again.
+**"Set as home":** When the user taps "Set as home", call `reverseGeocode({lat, lng})`
+to get a display name, then save `{ lat, lng, name }` to
+`state.set("achoo", { home: ... })`. The "Set as home" button is disabled until
+the geocode resolves (success or failure). If `reverseGeocode` returns `null`,
+save with `name: "Unknown"`. A "Clear home" control removes the saved home;
+next load will use GPS again.
 
 **Home location badge:** when using a saved home location, a "Home ✓" badge
 appears near the location name. When on live GPS, a "Set as home" prompt
@@ -120,7 +135,9 @@ fetchAchooData({ lat, lng, tempUnit })
 ```
 
 Both Open-Meteo requests are fired in parallel via `Promise.all`. If either
-rejects or returns non-200, the function returns `null`.
+rejects or returns non-200, the function returns `null`. Returning `null` for
+any single-API failure is intentional — displaying partial data (e.g. weather
+without AQI) is out of scope.
 
 ### Weather endpoint
 
@@ -212,8 +229,9 @@ lives here — all data transformation is in `achoo-api.js`.
 
 **Rendering:**
 
-- Reads `settings.get()` to determine `achooLayout` and `tempUnit` before
-  rendering
+- Reads `settings.get()` to determine `achooLayout` and `tempUnit` once on
+  page load. Layout is not applied live — changing the setting in the home
+  panel takes effect on the next load of the Achoo page.
 - **Scroll layout:** weather hero section (blue tint) → AQI section →
   allergens section, all stacked vertically and scrollable
 - **Tabs layout:** a slim location strip above three tabs (⛅ Weather /
@@ -227,9 +245,9 @@ Allergens display both the level badge and the raw value (e.g.
 
 **Error states:**
 
-| Scenario | Display |
+| Condition | Behavior |
 | --- | --- |
-| GPS unavailable, no home set | Error message with instructions to save a home location |
+| GPS unavailable (`null`), no home set | Error message with instructions to save a home location |
 | `fetchAchooData()` returns `null` | Error message with ↺ retry link |
 | Loading in progress | Dim skeleton/loading message |
 
@@ -268,6 +286,12 @@ All tests mock `fetch` globally. `beforeEach` resets mocks.
 - WMO weather code maps to a non-empty description string
 
 ### `tests/common/settings.test.js` additions
+
+New test cases reuse the existing `beforeEach` setup (which clears localStorage
+and handles the `apply()` DOM side effect). No additional setup is needed.
+
+The existing `get()` test that asserts the full defaults object must be updated
+to include `achooLayout: "scroll"` and `tempUnit: "F"` in its expected shape.
 
 - `get()` returns `achooLayout: "scroll"` when field is absent from storage
 - `get()` returns `tempUnit: "F"` when field is absent from storage

@@ -163,3 +163,29 @@ tipBtns.forEach(btn => {
     refreshTipBtns(pct)
   })
 })
+
+// --- Achoo layout ---
+const achooLayoutBtns = document.querySelectorAll('[data-achoo-layout-btn]')
+function refreshAchooLayoutBtns(current) {
+  achooLayoutBtns.forEach(btn => btn.classList.toggle('selected', btn.dataset.achooLayoutBtn === current))
+}
+refreshAchooLayoutBtns(s.achooLayout)
+achooLayoutBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    settings.set({ achooLayout: btn.dataset.achooLayoutBtn })
+    refreshAchooLayoutBtns(btn.dataset.achooLayoutBtn)
+  })
+})
+
+// --- Temperature unit ---
+const tempUnitBtns = document.querySelectorAll('[data-temp-unit-btn]')
+function refreshTempUnitBtns(current) {
+  tempUnitBtns.forEach(btn => btn.classList.toggle('selected', btn.dataset.tempUnitBtn === current))
+}
+refreshTempUnitBtns(s.tempUnit)
+tempUnitBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    settings.set({ tempUnit: btn.dataset.tempUnitBtn })
+    refreshTempUnitBtns(btn.dataset.tempUnitBtn)
+  })
+})

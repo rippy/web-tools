@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){
+      var s=JSON.parse(localStorage.getItem('web-tools.settings')||'null')||{};
+      var dark=s.theme==='dark'||(s.theme!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches);
+      document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+      document.documentElement.style.setProperty('--font-family',s.font==='monospace'?"'Courier New',monospace":'system-ui,sans-serif');
+      document.documentElement.style.setProperty('--font-size',(s.fontSize||16)+'px');
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../../common/theme.css">
+  <title>Tip Calculator</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: var(--font-family);
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100dvh;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Top bar */
+    #top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+      flex-shrink: 0;
+    }
+    #top-bar a {
+      color: var(--color-link);
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+    #top-bar a:hover { text-decoration: underline; }
+    #top-bar .title { font-size: 0.9rem; font-weight: 600; }
+    #top-bar .spacer { width: 3.5rem; }
+
+    /* Bill input */
+    #bill-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: flex-end;
+      gap: 0.25rem;
+      padding: 0.6rem 1rem 0.4rem;
+      flex-shrink: 0;
+    }
+    #currency-label {
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--color-text-secondary);
+      line-height: 1;
+    }
+    #bill-input {
+      font-size: 2.6rem;
+      font-weight: 300;
+      color: var(--color-text);
+      background: transparent;
+      border: none;
+      outline: none;
+      text-align: right;
+      width: 8rem;
+      caret-color: var(--color-link);
+      font-family: inherit;
+    }
+
+    /* Numpad */
+    #numpad {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 0.4rem;
+      padding: 0.4rem;
+      min-height: 0;
+    }
+    .num-btn {
+      background: var(--color-surface-alt);
+      border: none;
+      border-radius: 10px;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--color-text);
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.1s;
+    }
+    .num-btn:hover { background: var(--color-surface); }
+    .num-btn:active { opacity: 0.7; }
+    #btn-backspace { font-size: 1.2rem; color: var(--color-text-muted); }
+
+    /* Tip section */
+    #tips-section {
+      border-top: 1px solid var(--color-border);
+      padding: 0.5rem 0.9rem 0.75rem;
+      flex-shrink: 0;
+    }
+    .tips-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .tip-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.2rem 0;
+      color: var(--color-text-muted);
+    }
+    .tip-row.default {
+      color: var(--color-text);
+      font-weight: 700;
+    }
+    .tip-pct { font-size: 0.85rem; }
+    .tip-amounts { font-size: 0.85rem; }
+    .tip-divider { height: 1px; background: var(--color-border); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="top-bar">
+      <a href="../../index.html">← Home</a>
+      <span class="title">Tip Calculator</span>
+      <span class="spacer"></span>
+    </div>
+
+    <div id="bill-row">
+      <span id="currency-label">$</span>
+      <input id="bill-input" type="text" inputmode="none" placeholder="0.00" autocomplete="off">
+    </div>
+
+    <div id="numpad">
+      <button class="num-btn" data-digit="1">1</button>
+      <button class="num-btn" data-digit="2">2</button>
+      <button class="num-btn" data-digit="3">3</button>
+      <button class="num-btn" data-digit="4">4</button>
+      <button class="num-btn" data-digit="5">5</button>
+      <button class="num-btn" data-digit="6">6</button>
+      <button class="num-btn" data-digit="7">7</button>
+      <button class="num-btn" data-digit="8">8</button>
+      <button class="num-btn" data-digit="9">9</button>
+      <button class="num-btn" data-digit="0">0</button>
+      <button class="num-btn" id="btn-decimal">.</button>
+      <button class="num-btn" id="btn-backspace">⌫</button>
+    </div>
+
+    <div id="tips-section">
+      <div class="tips-label">Tip amounts</div>
+      <div id="tip-rows"></div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

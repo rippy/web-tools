@@ -125,3 +125,41 @@ panel.addEventListener('toggle', async () => {
     // silently omit if fetch fails (e.g. local dev)
   }
 })
+
+// --- Currency symbol ---
+const inputCurrencySymbol = document.getElementById('input-currency-symbol')
+inputCurrencySymbol.value = s.currencySymbol
+inputCurrencySymbol.addEventListener('change', () => {
+  try {
+    settings.set({ currencySymbol: inputCurrencySymbol.value })
+  } catch {
+    inputCurrencySymbol.value = settings.get().currencySymbol
+  }
+})
+
+// --- Decimal separator ---
+const decimalBtns = document.querySelectorAll('[data-decimal-btn]')
+function refreshDecimalBtns(current) {
+  decimalBtns.forEach(btn => btn.classList.toggle('selected', btn.dataset.decimalBtn === current))
+}
+refreshDecimalBtns(s.decimalSeparator)
+decimalBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    settings.set({ decimalSeparator: btn.dataset.decimalBtn })
+    refreshDecimalBtns(btn.dataset.decimalBtn)
+  })
+})
+
+// --- Default tip percent ---
+const tipBtns = document.querySelectorAll('[data-tip-btn]')
+function refreshTipBtns(current) {
+  tipBtns.forEach(btn => btn.classList.toggle('selected', parseInt(btn.dataset.tipBtn, 10) === current))
+}
+refreshTipBtns(s.defaultTipPercent)
+tipBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const pct = parseInt(btn.dataset.tipBtn, 10)
+    settings.set({ defaultTipPercent: pct })
+    refreshTipBtns(pct)
+  })
+})

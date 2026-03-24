@@ -129,6 +129,27 @@
           <button class="toggle-btn" id="btn-location-off">Off</button>
         </div>
       </div>
+      <div class="settings-row">
+        <span class="settings-label">Currency</span>
+        <input id="input-currency-symbol" type="text" maxlength="4"
+               style="width:3.5rem;padding:0.25rem 0.4rem;border:1px solid var(--color-border);border-radius:4px;font-size:0.85rem;font-family:inherit;background:var(--color-input-bg);color:var(--color-text);">
+      </div>
+      <div class="settings-row">
+        <span class="settings-label">Decimal</span>
+        <div class="toggle-group">
+          <button class="toggle-btn" data-decimal-btn=".">. (period)</button>
+          <button class="toggle-btn" data-decimal-btn=",">, (comma)</button>
+        </div>
+      </div>
+      <div class="settings-row">
+        <span class="settings-label">Default tip</span>
+        <div class="toggle-group">
+          <button class="toggle-btn" data-tip-btn="15">15%</button>
+          <button class="toggle-btn" data-tip-btn="18">18%</button>
+          <button class="toggle-btn" data-tip-btn="20">20%</button>
+          <button class="toggle-btn" data-tip-btn="22">22%</button>
+        </div>
+      </div>
       <div id="location-permission-note" hidden
            style="font-size:0.8rem;color:var(--color-text-secondary);padding:0.25rem 0 0.25rem 0.5rem">
         Location access denied in browser settings
@@ -145,6 +166,7 @@
     <li><a href="tools/rot13/index.html">Caesar Cipher / Rot13</a></li>
     <li><a href="tools/flip-text/index.html">Flip Text</a></li>
     <li><a href="tools/emoji/index.html">Emoji Lookup</a></li>
+    <li><a href="tools/tip/index.html">Tip Calculator</a></li>
     <li><span>Meal Tracker</span></li>
     <li><span>Exercise Tracker</span></li>
     <li><span>Mood Check-in</span></li>
